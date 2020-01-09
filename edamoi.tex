@@ -1,0 +1,545 @@
+\documentclass[]{book}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Exploratory Data Analysis or `Data Mining'},
+            pdfauthor={Marc A.T. Teunis, PhD},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{natbib}
+\bibliographystyle{apalike}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Exploratory Data Analysis \emph{or} `Data Mining'}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Marc A.T. Teunis, PhD}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{2019-08-28}
+
+\usepackage{booktabs}
+\usepackage{amsthm}
+\makeatletter
+\def\thm@space@setup{%
+  \thm@preskip=8pt plus 2pt minus 4pt
+  \thm@postskip=\thm@preskip
+}
+\makeatother
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\hypertarget{prerequisites}{%
+\chapter{Prerequisites}\label{prerequisites}}
+
+\hypertarget{purpose-of-this-website}{%
+\section{Purpose of this website}\label{purpose-of-this-website}}
+
+This website is the accompanying website to the ``Exploratory Data Anlysis'' Course for the Master of Informatics of the Univeristy of Applied Sciences. It contains seven chapters that correpond to the seven so-called `labs' or `masterclasses' of the course. The course content and further structure of the course are explained in \ref{intro}. All methods described in this website and used in the course relate to the Language and Environment for Statistical Computing called \textbf{R} \citep{R-base}. To work more effeciently in R we will be using the most commonly used Integrated Development Environment for R: \href{https://www.rstudio.com}{\textbf{RStudio}}\citep{R-rstudio}.
+
+\hypertarget{r-packages}{%
+\section{R Packages}\label{r-packages}}
+
+When you install R for the first time, you only get a basic installation. This so-called base R includes the R core of the language but does not get you very far if you really want to do more complex data analytics. There are many so-called `packages' to add on to this base-R installation and for this course we use many of them. The code below retrieves the current amount of packages published on the Comprehensive R Archiving Network, which is a main resource for R-packages.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(rvest)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: xml2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pkgs <-}\StringTok{ }\KeywordTok{read_html}\NormalTok{(}\StringTok{"https://cran.r-project.org/web/packages/available_packages_by_name.html"}\NormalTok{)}
+\NormalTok{mylines <-}\StringTok{ }\NormalTok{pkgs }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"tr"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{xml_text}\NormalTok{()}
+
+\NormalTok{nb_pkgs <-}\StringTok{ }\KeywordTok{length}\NormalTok{(}\KeywordTok{which}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(mylines, nchar)}\OperatorTok{>}\DecValTok{5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+As can be discovered from the code above
+
+Other important resources for R-packages are:
+
+\begin{itemize}
+\tightlist
+\item
+  \href{https://www.bioconductor.org/}{BIOCONDUCTOR}.
+\item
+  \href{https://github.com}{Github}
+\item
+  \href{https://bitbucket.org/}{Bitbucket}
+\item
+  \href{https://ropensci.org/packages/}{ROpenSci}
+\end{itemize}
+
+A full list of packages that are needed for this course is available in the package appendix \ref{append}
+
+\hypertarget{getting-the-materials}{%
+\section{Getting the materials}\label{getting-the-materials}}
+
+To compile this website locally, you can clone the website repository from
+
+\url{https://github.com/uashogeschoolutrecht/edamoi_site}.
+
+Click the Build button to build the website on you local computer.
+This repository can also be used to acces the course materials directly in RStudio during the classes.
+
+\hypertarget{getting-r-and-rstudio}{%
+\section{Getting R and RStudio}\label{getting-r-and-rstudio}}
+
+During the course we will be working on a Cloud Computing Environment which provides webaccess to R and RStudio via a Virtual Machine. This machine runs a server edition of RStudio and has the latest R version and all the required packages available. In order to access the server you will need credentials, which you will recieve before the course starts. This is a convenient way to use R in a course and during the course we will only use this environment. This is to ensure reproducibility and prevents a lot of trouble shooting from your side and the teacher's side.
+
+If you want to use R and RStudio locally on your laptop (the teacher will not support this during the course), this is where you can download the software from:
+
+\href{https://www.rstudio.com/products/rstudio/download/}{RStudio}
+
+\href{https://cran.r-project.org/}{R}
+
+If you want to use R after the course, this is what you will need to do because the accessibility to the RStudio server will only be guaruateed untill a month after the course has finished. During the course, I will show you how to manage getting files to and from the server using an FTP client.
+
+\hypertarget{bring-your-own-or-byod}{%
+\section{\texorpdfstring{Bring your own or \texttt{BYOD}!}{Bring your own or BYOD!}}\label{bring-your-own-or-byod}}
+
+During the course we will use a lot of different datasets that are available directly from R, in R-packages or from open data sources on the internet. If you want to bring you own data to practice with you can and this is encouraged! Please be aware that I may want to share your data and/or analysis (issues) with the rest of the participants, so please bring only data for which this is allowed.
+
+\hypertarget{the-bookdown-package}{%
+\section{\texorpdfstring{The \texttt{\{bookdown\}} package}{The \{bookdown\} package}}\label{the-bookdown-package}}
+
+This website was created using the \texttt{\{bookdown\}} package written by Yihui Xie. The package can be downloaded from CRAN. For more information see the \href{https://bookdown.org/yihui/bookdown/}{documentation}.
+
+The \texttt{\{bookdown\}} package can be installed from CRAN or Github:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{install.packages}\NormalTok{(}\StringTok{"bookdown"}\NormalTok{)}
+\CommentTok{# or the development version}
+\CommentTok{# devtools::install_github("rstudio/bookdown")}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{intro}{%
+\chapter{Introduction}\label{intro}}
+
+\hypertarget{exploratory-data-analysis}{%
+\section{Exploratory Data Analysis}\label{exploratory-data-analysis}}
+
+The process of Exploratory Data Analysis (EDA) is not a formal strict process. It involves interative cycles of \texttt{loading}, \texttt{cleaning}, \texttt{wrangling}, \texttt{visualizing}, \texttt{communicating} data and patterns in the data. The process of EDA is directed towards gaining insight in the data in basically any way you can. It can involve a number of statical approaches that are sometimes collectively called IDA (Initial Data Analysis), which is the the description and check if undelying assumptions for any formal statitical modelling are met. Usually the formal statistical inference is out of scope of the EDA process, although we will see examples in which statical modelling can help us perform EDA better.
+
+Because it is a not-so-strict inerative process there is no formal manual on which steps to peform in the EDA process. You could consider doing EDA more as being in a certain state-of-mind. To help you overcome this rather abstract way of looking at this process, several authors have created a check list to aid performing EDA in a more structured way. Here I will go over such a check list, but bare in minf that is only an aid and no formal manual:
+
+\textbf{When doing EDA you should always keep an open mind to deviate from the checklist, skip a check-box or add one yourself.}
+
+\hypertarget{eda-checklist}{%
+\section{EDA checklist}\label{eda-checklist}}
+
+``If a checklist is good enough for pilots to use every flight, it's good enough for data scientists to use with every dataset.'' A quote from Daniel Bourke on \href{https://towardsdatascience.com/a-gentle-introduction-to-exploratory-data-analysis-f11d843b8184}{Towards Data Science}
+
+When starting EDA consider:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  What question(s) are you trying to solve (or prove wrong)?
+\item
+  What kind of data do you have and how do you treat different types?
+\item
+  What's missing from the data and how do you deal with it?
+\item
+  Where are the outliers and why should you care about them?
+\item
+  How can you add, change or remove features to get more out of your data?
+\end{enumerate}
+
+I will go over each in more detail in @ref(lab5\_eda). If you want to get on with a first example to have some practice go directly to @ref(eda\_case)
+
+\hypertarget{the-tidyverse-packages}{%
+\section{\texorpdfstring{The \texttt{\{tidyverse\}} packages}{The \{tidyverse\} packages}}\label{the-tidyverse-packages}}
+
+\hypertarget{inference-and-modelling}{%
+\section{Inference and Modelling}\label{inference-and-modelling}}
+
+\hypertarget{r-a-language-and-environment-for-statistical-computing}{%
+\section{R: A Language and Environment for Statistical Computing}\label{r-a-language-and-environment-for-statistical-computing}}
+
+\hypertarget{getting-help-in-r}{%
+\section{Getting help in R}\label{getting-help-in-r}}
+
+\hypertarget{resources-for-learning}{%
+\section{Resources for learning}\label{resources-for-learning}}
+
+\hypertarget{course-contents}{%
+\chapter{Course Contents}\label{course-contents}}
+
+\hypertarget{data-mining-course}{%
+\section{Data Mining Course}\label{data-mining-course}}
+
+This course is about ``Exploratory Data Analysis and Initial Data Analysis''
+
+\href{https://en.wikipedia.org/wiki/Exploratory_data_analysis}{Wikipedia definition}
+
+\begin{verbatim}
+In statistics, exploratory data analysis (EDA) is an approach to analyzing data sets to summarize their main characteristics, often with visual methods. A statistical model can be used or not, but primarily EDA is for seeing what the data can tell us beyond the formal modeling or hypothesis testing task. Exploratory data analysis was promoted by John Tukey to encourage statisticians to explore the data, and possibly formulate hypotheses that could lead to new data collection and experiments. EDA is different from initial data analysis (IDA),[1] which focuses more narrowly on checking assumptions required for model fitting and hypothesis testing, and handling missing values and making transformations of variables as needed. EDA encompasses IDA
+\end{verbatim}
+
+\hypertarget{course-aims}{%
+\section{Course aims}\label{course-aims}}
+
+\begin{itemize}
+\tightlist
+\item
+  EDA is not a formal procedure, getting the right mind set
+\item
+  Learn tools in R to GET, CLEAN, EXPLORE and MODEL data
+\item
+  Acquire R skills for the complete EDA cycle; object oriented and functional programming\\
+\item
+  Visualize data
+\item
+  Explore assumptions (IDA)
+\item
+  Using R for Reproducible Research
+\end{itemize}
+
+\hypertarget{course-contents-1}{%
+\section{Course contents}\label{course-contents-1}}
+
+Each course masterclass or so-called `lab' will carry forward a specific theme related to Exploratory Data Analysis. In this course you will exclusively work with the Programming Environment \texttt{R} in the Integrated Development Environment \texttt{RStudio}. There will be no need to install any software on your laptop, because we will be using a cloud computing solution. This offers flexibility and speed. I will show you where to get the required software. In case that you would be wanting to install your own environment locally.
+
+In this course you will get in-depth knowledge on how to use R in conjunction with RStudio to \texttt{IMPORT}, \texttt{INVESTIGATE}, \texttt{CLEAN}, \texttt{VISUALIZE}, \texttt{EXPLORE}, \texttt{MODEL} and \texttt{COMMUNICATE} data and conclusions about data.
+
+To this end, I devided an number of logically connected topics together in seven \texttt{labs}. Each lab has several interative cycles of theory and exercises. During each lab, I will explain a small amount of topics after which the course participants will have the opportunity to practice with exercises.
+
+\hypertarget{byod-bring-your-own-data}{%
+\section{BYOD; Bring Your Own Data}\label{byod-bring-your-own-data}}
+
+During this course you will have the opportunity to bring your own data as case example. Please think about which data you will be able to (freely) share with me and your fellow paticipants.
+
+\hypertarget{lab-contents}{%
+\section{Lab Contents}\label{lab-contents}}
+
+Below, I will shortly summarize what we will be covering in each lab (seven in total for the complete course).
+
+\hypertarget{lab-1-introduction-to-r-and-rstudio}{%
+\subsection{Lab 1: Introduction to R and RStudio}\label{lab-1-introduction-to-r-and-rstudio}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Getting the course materials from github.com
+\item
+  Creating objects in R
+\item
+  RStudio introduction
+\item
+  Object Class; vectors, dataframes, lists
+\item
+  Vector types
+\item
+  Getting help
+\item
+  Plots
+\item
+  Data examples
+\end{enumerate}
+
+\hypertarget{lab-2-visualize-explore-data}{%
+\subsection{Lab 2: Visualize \& Explore Data}\label{lab-2-visualize-explore-data}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Build in datasets
+\item
+  Using the grammar of graphics with \texttt{\{ggplot2\}}
+\item
+  Plot types
+\item
+  \texttt{geom\_...} and \texttt{aes()}
+\item
+  Adding dimensions to a plot
+\item
+  Solving overplotting
+\item
+  Plot annotation and labels
+\item
+  Saving plots
+\item
+  Examples of \texttt{\{shiny\}} apps
+\end{enumerate}
+
+\hypertarget{lab-3-data-wrangling-functional-programming}{%
+\subsection{Lab 3: Data Wrangling \& Functional Programming}\label{lab-3-data-wrangling-functional-programming}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Using \texttt{\{dplyr\}} for data wrangling
+\item
+  The \texttt{\{dplyr\}} verbs
+\item
+  Loops and \texttt{map} family of functions
+\item
+  Scripts and the \texttt{source} function
+\end{enumerate}
+
+\hypertarget{lab-4-importing-data-getting-open-data}{%
+\subsection{Lab 4: Importing data \& Getting (Open) Data}\label{lab-4-importing-data-getting-open-data}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Open data sources
+\item
+  Finding data
+\item
+  Importing data into R (.csv, .tsv, .txt, .json, .xml, .xls(x)
+\item
+  Using APIs (Twitter, Kaggle, Google, CBS)
+  \url{https://medium.com/@traffordDataLab/querying-apis-in-r-39029b73d5f1}
+\end{enumerate}
+
+\hypertarget{lab-5-exploratory-data-analysis-or-the-ppdac-cycle}{%
+\subsection{\texorpdfstring{Lab 5: Exploratory Data Analysis \emph{or} The PPDAC Cycle}{Lab 5: Exploratory Data Analysis or The PPDAC Cycle}}\label{lab-5-exploratory-data-analysis-or-the-ppdac-cycle}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The process of EDA
+\item
+  Problem-Plan-Data-Analysis-Conclusion (PPDAC) Cycle
+\item
+  Missingness
+\item
+  Distibutions
+\item
+  Finding patterns
+\item
+  Graph types
+\item
+  Multidimensional data
+\item
+  Principal Components
+\end{enumerate}
+
+\hypertarget{lab-6-exploring-assumptions-models}{%
+\subsection{Lab 6: Exploring Assumptions \& Models}\label{lab-6-exploring-assumptions-models}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Why Assumptions?
+\item
+  Distributions (Gaussian, Poisson, Uniform, Binomial)
+\item
+  Regression
+\item
+  Model output ( \texttt{\{broom\}})
+\item
+  Managing many models
+\item
+  Linear and Generalized Linear models
+\item
+  A few machine learning examples in R (\texttt{\{caret\}})
+\end{enumerate}
+
+\hypertarget{lab-7-communication-reproducible-research-rmarkdown-and-r-packages}{%
+\subsection{Lab 7: Communication: Reproducible Research, RMarkdown and R-packages}\label{lab-7-communication-reproducible-research-rmarkdown-and-r-packages}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  RMarkdown
+\item
+  The `RMarkdown First' Principle
+\item
+  Using Git/Github together with R/Rstudio
+\item
+  Open Science
+\item
+  \texttt{\{bookdown\}} / \texttt{\{pagedown\}} and \texttt{\{blogdown\}} packages
+\item
+  \texttt{\{usethis\}} for creating R-packages
+\end{enumerate}
+
+\hypertarget{eda_case}{%
+\chapter{EDA Case Example - The Curious Case of the H. Shipman Murders}\label{eda_case}}
+
+``Thanks to David Spiegelhalter for pointing me to this nice example for my teching. I hope you allow me to `borrow' it from you''\citep{spiegelhalter2019}
+
+\hypertarget{the-case}{%
+\section{The case}\label{the-case}}
+
+\hypertarget{the-checklist}{%
+\section{The checklist}\label{the-checklist}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  What question(s) are you trying to solve (or prove wrong)?
+\item
+  What kind of data do you have and how do you treat different types?
+\item
+  What's missing from the data and how do you deal with it?
+\item
+  Where are the outliers and why should you care about them?
+\item
+  How can you add, change or remove features to get more out of your data?
+\end{enumerate}
+
+\hypertarget{section}{%
+\section{}\label{section}}
+
+\hypertarget{append}{%
+\chapter{Appendix}\label{append}}
+
+\hypertarget{packages}{%
+\section{Packages}\label{packages}}
+
+The packages that you will need for the course can be installed with the following command
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{## read list of course packages:}
+
+\NormalTok{pkgs <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(here}\OperatorTok{::}\KeywordTok{here}\NormalTok{(}\StringTok{"course_packages.txt"}\NormalTok{), }\DataTypeTok{stringsAsFactors =} \OtherTok{FALSE}\NormalTok{) }
+\NormalTok{list <-}\StringTok{ }\KeywordTok{as.list}\NormalTok{(pkgs}\OperatorTok{$}\NormalTok{X...list.of.course.packages)}
+\KeywordTok{lapply}\NormalTok{(list, install.packages)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{references}{%
+\chapter{References}\label{references}}
+
+\bibliography{book.bib,packages.bib,packages\_manual.bib}
+
+
+\end{document}

@@ -1,0 +1,109 @@
+# Lab6B: Many Models {#lab6bmanymodels} 
+
+Remember this demo:
+## A case for history
+Let's look at a relevant question and see of we can again go over the 
+PPDAC cycle. From the gapminder animation we have learnt that historic events can have a profound effect on life expectancy and income. Most countries show a gradual increase over time for their life expectancy and their income, but we already noticed strong differences between continent. Let's focus on Africa for the next investigation.
+
+The central `PROBLEM` here:
+Which African countires show strong fluctuations on their life expectancy and income and which show a gradual increase?
+
+To answer this problem we need a `PLAN`. It seems a good idea to isolate the data for africa and somehow plot trends of life expectancy and income over time. Maybe we can reduce the dimensions by calculation of the product of life expectancy and income. Let's call this metric the `WelfareIndex`. We devide by 10000 to normalise and te get numbers that we can work with. 
+
+$WelfareIndex = \frac{(LifeExpectancy * Income)} {1000}$
+
+**DISCUSS: Which `DATA` are we going to use and how are we going to get it?**
+
+Now we are ready to get going:
+
+#### Getting the right subset of the data
+We are focusing on Africa, so it makes sense to subset the data (filter) for those cases that involve Africa. 
+
+```{r}
+library(tidyverse)
+library(dslabs)
+library(toolboxr)
+africa <- gapminder %>%
+  dplyr::filter(continent == "Africa")
+  
+```
+
+#### Creating a new variable called `welfare_index`
+For each year this index is calculated, we are removing one dimension by cathcing two varibles in one.
+```{r}
+africa <- africa %>%
+  mutate(welfare_index = (life_expectancy*gdp)/1000)
+
+```
+
+#### Let's make a plot to see if this new metric works out
+```{r}
+africa %>%
+  ggplot(aes(x = year, y = welfare_index)) +
+  geom_line(aes(group = country, colour = country), 
+            show.legend = FALSE, size = 1) 
+```
+
+The countries at the bottom are a bit squished up. A transformation of the y-scale could help
+```{r}
+africa %>%
+  ggplot(aes(x = year, y = log10(welfare_index))) +
+  geom_line(aes(group = country, colour = country), 
+            show.legend = FALSE, size = 1) 
+```
+
+This yields an interesting view on the data: Most countries in Africa follow a comparable upwards trend for the `welfare_index` over time. There a a few exeptions. Think about how you would approach the problem of getting the data for those countries that show a deviating trend from the rest. 
+
+**EXERCISE**
+
+## Getting linear model coefficients for each country
+We nest the data for each African country by using the `nest()` function from the `{tidyr`} package.
+```{r}
+
+africa_nested <- africa %>%
+  dplyr::group_by(country) %>%
+  nest()
+
+names(africa_nested$data) <- africa_nested$country 
+
+## to get lm coefficients
+## dummy
+.data = africa_nested$data[[1]]
+
+get_lm <- function(.data){
+  
+  model <- lm(welfare_index ~ year, data = .data)
+  params <- model %>% broom::tidy()  
+
+  x <- summary(model) 
+ r <- x$r.squared 
+  return(r)
+}
+
+africa_nested <- africa_nested %>%
+  mutate(r_squared_lm = map(data, get_lm))
+
+africa_nested <- africa_nested %>%
+  mutate(r = as.numeric(r_squared_lm))
+  
+fluctuations <- africa_nested %>%
+  dplyr::filter(r < 0.75) 
+
+
+fluctuations %>%
+  ggplot(aes(x = reorder(as_factor(country), r), y = r)) +
+  geom_point() +
+  rotate_axis_labels(axis = "x", angle = 45) + 
+  ylab("R-squared") +
+  xlab("African Country")
+
+ggsave("fluctuations.svg", height = 7)
+
+
+africa %>%
+  dplyr::filter(country %in% fluctuations$country) %>%
+  ggplot(aes(x = year, y = log10(welfare_index))) +
+  geom_line(aes(group = country, colour = country), 
+            show.legend = TRUE, size = 1) 
+
+```
