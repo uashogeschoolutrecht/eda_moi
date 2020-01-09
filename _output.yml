@@ -1,0 +1,11 @@
+bookdown::gitbook:
+  toc_depth: 1
+  css: style.css
+  config:
+    toc:
+      before: |
+        <li><a href="./">Exploratory Data Analysis</a></li>
+      after: |
+        <li><a href="https://github.com/uashogeschoolutrecht/edamoi_site" target="blank">Published with bookdown</a></li>
+    edit: https://github.com/uashogeschoolutrecht/edamoi_site/edit/master/%s
+    download: ["pdf", "epub"]
