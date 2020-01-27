@@ -72,7 +72,7 @@ If we design a datatable that would provide data with which we could answer the 
 The data would need to include at least:
 
  - A list with 'suspected' victims
- - The age at dead of each victim
+ - The age at death of each victim
  - The gender of the victim
 
 With information on these three variables we would be able to solve at least:
@@ -90,14 +90,14 @@ Now that we defined the problem and we have come up with a plan to solve it, we 
 [Here is a link to the original source](https://webarchive.nationalarchives.gov.uk/20090808221518/http://www.the-shipman-inquiry.org.uk/fr_casesbyyear.asp?year=74&from=r)
 
 ## Load the Shipman murders data 
-dataset derived from: https://github.com/dspiegel29/ArtofStatistics [@spiegelhalter2019]
+Dataset derived from: https://github.com/dspiegel29/ArtofStatistics [@spiegelhalter2019]
 
-To load the data into R you can run the following command. The data are in csv format: 
+To load the data into R you can run the following command. The data is in csv format: 
 
 (ref:csvformat)
 
 And are stored in the Global Environment of your R-session as `shipman_murders`
-You can access this variable by typing it's name in the `Console` or inspecting it in the RStudio interactive viewer under the `Environment` tab. 
+You can access this variable by typing its name in the `Console` or inspecting it in the RStudio interactive viewer under the `Environment` tab. 
 
 ```{r}
 shipman_murders <- read_csv(
@@ -119,12 +119,12 @@ When perfoming EDA consider:
  1. Where are the outliers and why should you care about them?
  1. How can you add, change or remove features to get more out of your data?
  1. Do you need additional data from other sources to relate to the dataset under scrutany?
- 1. Are underlying statitical assumptions met / how is data distribution looking?
+ 1. Are underlying statistical assumptions met / how is data distribution looking?
  1. What (exploratory) models apply or fit well to the data?
  1. What is the undelying (experimental) design?
  1. Is there multi-colinearity?
 
-If we review the list above we can already can check a number of items from the list that we have taken care off. Let's take a look at the data first
+If we review the list above we can already can check a number of items from the list that we have taken care of. Let's take a look at the data first
 
 ```{r, eval=FALSE}
 DT::datatable(shipman_murders)
@@ -132,7 +132,7 @@ DT::datatable(shipman_murders)
 
 If you are viewing this book in a browser you should see an interactive table. Take 2 minutes to study the data and 2 additional minutes to discuss what you see with one of your fellow course participants.
 
-Try accessing the variable called `shipman_murders` by typing it's name in the Console. If all goes well this is what you see:
+Try accessing the variable called `shipman_murders` by typing its name in the Console. If all goes well this is what you see:
 
 ```{r, echo=FALSE}
 shipman_murders
@@ -146,7 +146,7 @@ Now that we have the data loaded into R, let's see if we can answer the first of
 
 We could just guess from the table that the `Name` variable identifies the victim and considerig that we have 215 observations, can we conclude that there are 215 people in this list? That would indeed lead us to conclude that the number of 215 victims mentioned on the Wiki page is correct. Can you think of one or more important conditions for the data that need to be met in order for this to be the correct conclusion? 
 
-One important condition could be that there are now duplicated names in the dataset. If we want to confirm there are not, we could take a look at all 215 records and try to remember if we see duplicated names. If we look at this list often enough, this would problably work, but takes quite some time and is error prone.
+One important condition could be that there are no duplicated names in the dataset. If we want to confirm there are not, we could take a look at all 215 records and try to remember if we see duplicated names. If we look at this list often enough, this would problably work, but takes quite some time and is error prone.
 
 Now that we have the data in R, why not use The Power of R to shed light on this issue.
 
@@ -177,7 +177,7 @@ duplicated(shipman_murders$name) %>% which(arr.ind = TRUE) %>% length()
 
 ```
 
-Let's conclude that indeed there are 215 unique names in the dataset and that no duplicates exist. So we can answer the first question on how many people Shipman killed with `215` people. This number was mentioned on the Wiki as well. (_Can you think of an additional check for duplicated names before we move on?_) 
+Let's conclude that indeed there are 215 unique names in the dataset and that no duplicates exist. So we can answer the first question on how many people Shipman killed with `215`, This number was mentioned on the Wiki as well. (_Can you think of an additional check for duplicated names before we move on?_) 
 
 There are still a number of assumptions that underly this statement and when doing data-analysis it is good practice to clearly and very explicitly state these assumptions. 
 We will first look at the other 2 questions remaining and at the end of this chapter, I will summarize some explicit assumptions to the conclusion of the complete analysis.
@@ -234,7 +234,7 @@ knitr::kable(gender_table)
  
 ```
  
-From the little table above we can concluded that Shipman indeed murdered more females than males, about `r round(178/37, digits = 0)` times as much  
+From the little table above we can conclude that Shipman indeed murdered more females than males, about `r round(178/37, digits = 0)` times as many.  
 
 ## Now let's look at a bar graph representing this table
 ```{r}
@@ -279,7 +279,7 @@ shipman_murders %>%
              colour = "red", 
              size = 1) +
   theme_bw() +
-  ggtitle("Age distributions in femals, \n dashed line is the median, solid line the mean age")
+  ggtitle("Age distributions in females, \n dashed line is the median, solid line the mean age")
 ```
 
 ## Distribution for both genders

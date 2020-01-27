@@ -25,14 +25,11 @@ Each course masterclass or so-called 'lab' will carry forward a specific theme r
   
 In this course you will get in-depth knowledge on how to use R in conjunction with RStudio to `IMPORT`, `INVESTIGATE`, `CLEAN`, `VISUALIZE`, `EXPLORE`, `MODEL` and `COMMUNICATE` data and conclusions about data. 
   
-To this end, I devided an number of logically connected topics together in seven `labs`. Each lab has several interative cycles of theory and exercises. During each lab, I will explain a small amount of topics after which the course participants will have the opportunity to practice with exercises.   
+To this end, I divided an number of logically connected topics together in seven `labs`. Each lab has several interactive cycles of theory and exercises. During each lab, I will explain a small amount of topics after which the course participants will have the opportunity to practice with exercises.   
   
 ## BYOD; Bring Your Own Data  
   
 During this course you will have the opportunity to bring your own data as case example. Please think about which data you will be able to (freely) share with me and your fellow paticipants. 
-
-## Iterative and JIT learning
-
 
 ## Lab Contents
 Below, I will shortly summarize what we will be covering in each lab (seven in total for the complete course).
@@ -142,7 +139,7 @@ Chapter \@ref(lab7communicatereproduce)
 ## Exercises
 Each masterclass/lab contains a number of exercises. Most lessons have exercises in between the demos and explanations and at the end of each lessons, more exercises are included.
 
-In order for you to get the most out of this course it is pivotal to go over each exercise and try to solve each challenge strictly from within RStudio. 
+In order for you to get the most out of this course it is important to go over each exercise and try to solve each challenge strictly from within RStudio. 
 The easiest way to make an exercise is to copy the text of the exrcise from the Bookdown website into an RMarkdown file and place R-code chunks in between containing the answers. Store each Rmd file for each lesson seperately in a convenient folder called "answers" in your course project folder.
 
 The R code containg the demos is available for each masterclass in the github repository: https://github.com/uashogeschoolutrecht/exploratory_data

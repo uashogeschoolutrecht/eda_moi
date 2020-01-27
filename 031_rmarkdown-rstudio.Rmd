@@ -15,7 +15,7 @@ Markdown is a plain text format that allows for common typesetting features incl
 - Text formatting (bold, italic, etc.)
 - Links
 - Tables
-- In-lined images
+- In-line images
 
 Without the need for spending time typesetting which is tedious and usually unnecessary.
 So if we want those kinds of things, we might want to use Markdown.

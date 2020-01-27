@@ -9,11 +9,7 @@ Code can be recognized by a code chunck:
 _start code chunk_
 
 ` ```{r} `
-
-code that does something
-
 `average <- mean(runif(100))`
-
 ` ``` `
 
 _end code chunk_
