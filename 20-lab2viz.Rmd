@@ -124,12 +124,13 @@ names(gapminder)
 
 #### Missingness {-}
 ```{r}
-naniar::vis_miss(gapminder) + citrulliner::theme_individual() + toolboxr::rotate_axis_labels(axis = "x", angle = 90)
+naniar::vis_miss(gapminder) + 
+  toolboxr::rotate_axis_labels(axis = "x", angle = 90)
 
 ggsave(filename = "missing_gapminder.svg", height = 11, width = 10)
 
-naniar::gg_miss_var(gapminder) +
-  citrulliner::theme_individual()
+naniar::gg_miss_var(gapminder) 
+
 naniar::gg_miss_case(gapminder)
 ```
 

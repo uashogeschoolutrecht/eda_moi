@@ -632,17 +632,3 @@ Follow the steps below:
  1. Save the function definition file
  1. Return to the edamoi bookdown project/website.
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-    

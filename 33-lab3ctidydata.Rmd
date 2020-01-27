@@ -1,13 +1,13 @@
 # Lab 3C; Tidy Data {#lab3ctidydata}
 
+## Credits
+The contents of this chapter are (partly) reproduced from [@r4ds]
+
 ## Introduction
 
  * In this lesson, you will learn a consistent way to structure your data in R, in a framework called __tidy data__. 
  * Getting your data into this format requires some upfront work, but that work pays off in the long term. 
  * Once you have tidy data and the tidy tools provided by packages in the tidyverse and others, you will spend much less time munging data from one representation to another, allowing you to spend more time on the analytic questions at hand.
-
-## Reference
-Part of the work in this lesson is adapted from [@r4ds]
 
 ## `{tidyr}` package
 
@@ -16,12 +16,12 @@ Part of the work in this lesson is adapted from [@r4ds]
 If you'd like to learn more about the underlying theory, you might enjoy the *Tidy Data* paper published in the Journal of Statistical Software, <http://www.jstatsoft.org/v59/i10/paper>.
 
 ## Prerequisites
-
 In this chapter we'll focus on tidyr, a package that provides a bunch of tools to help tidy up your messy datasets. tidyr is a member of the core tidyverse.
 
 ```{r packages, message = FALSE}
 library(tidyverse)
 ```
+
 ```{r, echo=FALSE}
 path_to_tidyr_sticker <- file.path(
   here::here(
@@ -103,8 +103,15 @@ table1 %>%
   count(year, wt = cases)
 ```
 
-## Visualize changes over time
-```{r}
+## **EXERCISE 1** Visualize changes over time {-}
+
+A) Create a plot from `table1` tuberculosis data, showing the number of cases from each country.
+
+B) Now plot the incidence (number of cases per 10,000 people) for each country.
+
+C) What can you conclude from the plots in exercise 1A) and 1B)
+
+```{r, include=FALSE}
 library(ggplot2)
 ggplot(table1, aes(year, cases)) + 
   geom_line(aes(group = country), colour = "grey50") + 
@@ -150,6 +157,22 @@ knitr::include_graphics(file.path(
 ```{r}
 table4b %>% 
   gather(`1999`, `2000`, key = "year", value = "population")
+```
+
+## **EXERCISE 2** Gathering columns {-}
+The data file "./data/messy_excel.xlsx" is not very tidy. Open the file in Excel. Discuss with you neighbour how you would tidy the data in this file, without changing anything in the Excel file. Write down your plan. try to develop a stepwise protocol that includes code-snippets and/or pseudo code.
+
+**TIPS**
+ 
+ 1. You can define a range to be parsed in the readxl package
+ 1. You will need gather some columns in the data
+ 1. You might want to parse the file 2 times with different ranges to get all the data into R
+ 1. First try to parse the file as it is to see what R makes of the file and try to design (in Excel if you want) the end result that you would like to achieve.
+
+_This is a difficult exercise and it will take you some time to figure out how to achieve this, take the time to look for additional online information_
+
+```{r, include=FALSE}
+## see demo "readxl"
 ```
 
 ## Joining tables
@@ -269,7 +292,7 @@ stocks %>%
   gather(year, return, `2015`:`2016`, na.rm = TRUE)
 ```
 
-## Explicit misisng values "complete()"
+## Explicit missing values "complete()"
 Another important tool for making missing values explicit in tidy data is `complete()`:
 
 ```{r}
@@ -282,16 +305,16 @@ stocks %>%
 `complete()` takes a set of columns, and finds all unique combinations. It then ensures the original dataset contains all those values, filling in explicit `NA`s where necessary.
 
 ## Forward carrying
-There's one other important tool that you should know for working with missing values. Sometimes when a data source has primarily been used for data entry, missing values indicate that the previous value should be carried forward:
+Sometimes when a data source has primarily been used for data entry, missing values indicate that the previous value should be carried forward:
 
 ## Carry-forward example
 ```{r}
 (treatment <- tribble(
   ~ person,            ~ treatment, ~response,
-  "Derrick Whitmore",  1,           7,
+  "Hans Anders",       1,           7,
   NA,                  2,           10,
   NA,                  3,           9,
-  "Katherine Burke",   1,           4,
+  "Alber Heijn",       1,           4,
   NA,                  2,           8,
   NA,                  3,           12
 ))
@@ -305,14 +328,15 @@ treatment %>%
   fill(person)
 ```
 
-## **EXERCISES**
 
-## Inspecting tidyness
+## **EXERCISE 3** Inspecting tidyness {-}
 
-1A) Using prose, describe how the variables and observations are organised in each of the sample tables: 
+3A) Describe how the variables and observations are organised in each of the sample tables: 
 `table1`, `table2`, `table3`, `table4a`, `table4b`.
 
-1B) Compute the `rate` for `table2`, and `table4a` + `table4b`. 
+3B) Compute the `rate` for `table2`, and `table4a` + `table4b`. 
+
+**STEPS**
 
 You will need to perform four operations:
 
@@ -369,7 +393,7 @@ table4_union
 
 Which representation is easiest to work with? Which is hardest? Why?
 
-## Plotting tidy data
+## EXERCISE 2: Plotting tidy data {-}
 
 2A)  Recreate the plot showing change in cases over time using `table2`
 instead of `table1`. What do you need to do first?
@@ -401,6 +425,8 @@ cases_over_time
       gather(1999, 2000, key = "year", value = "cases")
 ```
 
+## EXERCISE 3: Wide to long; Spreading and Gathering {-}
+
 3A)  Tidy the simple tibble below. Do you need to spread or gather it?
 ```{r, echo=TRUE, include=FALSE}
 
@@ -429,12 +455,12 @@ preg_tidy
 names(preg_tidy)
 
 preg_females <- preg_tidy %>%
-  filter(pregnant == "yes" & count == "female_count") %>%
+  dplyr::filter(pregnant == "yes" & count == "female_count") %>%
   summarise(females = sum(number)) 
 preg_females
 
 females <- preg_tidy %>%
-  filter(count == "female_count") %>%
+  dplyr::filter(count == "female_count") %>%
   summarise(females = sum(number)) 
 females
 
@@ -448,18 +474,20 @@ females
 names(preg_tidy)
 
 males <- preg_tidy %>% na.omit() %>%
-  filter(count == "male_count") %>%
+  dplyr::filter(count == "male_count") %>%
   summarise(males = sum(number)) 
 males
 
 preg_males <- preg_tidy %>% na.omit() %>%
-  filter(pregnant == "yes" & count == "male_count") %>%
+  dplyr::filter(pregnant == "yes" & count == "male_count") %>%
   summarise(females = sum(number)) 
 preg_males
 
 ## of course there are nog pregnant males
 
 ```
+
+## EXERCISE 4: Addiotional operations {-}
 
 4A) What do the `extra` and `fill` arguments do in `separate()`? Experiment with the various options for the following two toy datasets.
     
@@ -473,7 +501,7 @@ separate(x, c("one", "two", "three"))
 
 4B) Compare and contrast the functions `separate()` and `extract()`.  Why are there three variations of separation (by position, by separator, and with groups), but only one unite?
 
-# Bonus question
+## EXERCISE 5: A Case {-}
 
 5A) Tidy the following dataset: "./data/messydata_5a.xlsx"
 The data represents Mariages during the four seasons for a number of years in regions in Germany. 
@@ -495,7 +523,7 @@ Use the function from {forcats} `forcats::fct_recode()` to achieve this. This fi
  the help for the function `dplyr::bind_rows()`. You will have to use this to convert the list of sheets into one dataframe.
 - The first two sheets of the Excel file contain mistakes and errors
 
-### Read data
+### Read data {-}
 ```{r, echo=TRUE}
 library(readxl)
 
@@ -632,14 +660,14 @@ marriageperyear %>%
 
 ```
 
-5C Visual analysis
+5C) Visual analysis
 Compare the marriages of 1990, 2003 and 2014 and colour them by season
 
 **TIPS:**
  - Filter data by the years 1990, 2003 and 2014
  - Group it by year and season and add up the values
 
-```{r, include=FALSE}
+```{r, include=FALSE, eval=FALSE}
 marriageperyearnseason <- tidy_mariages %>%
   dplyr::filter(year %in% c("1990", "2003", "2014")) %>%
   group_by(year, season) %>% 
@@ -647,8 +675,8 @@ marriageperyearnseason <- tidy_mariages %>%
   dplyr::summarise(value = sum(number_mariages)) 
 
 # ggplot the filtered data
-ggplot(data = marriageperyearnseason, aes(x = timestamp, y = value, 
-                                          fill = factor(variable), order = variable)) +  
+ggplot(data = marriageperyearnseason, 
+       aes(x = year, y = value)) +  
 geom_bar(stat = "identity") +
 theme_minimal() +
 xlab("Year") + 
@@ -658,16 +686,15 @@ scale_y_continuous(name="Marriages",
 guides(fill=guide_legend(title="season", reverse = T)) +
 ggtitle("Marriages per Year and season") 
 
-
-# Compare the number of marriages in 2014 per state and colourize them by season
+# Compare the number of marriages in 2014 per state and colour them by season
 # filter data by the year 2014 and group it by season and state, add up the values
-marriageperstate14 <- data_restructed %>%
-  filter(timestamp %in% c(2014)) %>%
-  group_by(variable, State) %>% 
-  dplyr::summarise(value = sum(value)) 
+marriageperstate14 <- tidy_mariages %>%
+  dplyr::filter(timestamp %in% c(2014)) %>%
+  group_by(number_mariages, state) %>% 
+  dplyr::summarise(total = sum(as.numeric(number_mariages))) 
 
 # stacked barplot with ggplot (incl. dashed meanline)
-meanlabel <- (sum(marriageperstate14$value)/16)-2000 # y-coordinate of label for meanline
+meanlabel <- (sum(marriageperstate14$number_mariages)/16)-2000 # y-coordinate of label for meanline
 
 ggplot(data = marriageperstate14, aes(x = State, y = value, 
                                       fill = factor(variable), order = variable)) +  
@@ -690,7 +717,7 @@ size = 4, hjust = 1) # add text to mean line
 
 ```
 
-## Case Study
+## Case Study {-}
 
 To finish off the chapter, let's pull together everything you've learned to tackle a realistic data tidying problem. The `tidyr::who` dataset contains tuberculosis (TB) cases broken down by year, country, age, gender, and diagnosis method. The data comes from the *2014 World Health Organization Global Tuberculosis Report*, available at <http://www.who.int/tb/country/data/download/en/>.
 

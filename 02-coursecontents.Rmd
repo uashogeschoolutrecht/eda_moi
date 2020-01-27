@@ -56,6 +56,13 @@ Chapter \@ref(lab1bintror)
  1. Plots
  1. Data examples
 
+### Lab 1c: Dataframes, lists and matrices  
+Chapter \@ref(lab1crecursivevectors)
+
+ 1. Dataframes
+ 1. Lists
+ 1. Matrices
+
 ### Lab 2: Visualize & Explore Data
 Chapter \@ref(lab2viz)
 
@@ -70,23 +77,30 @@ Chapter \@ref(lab2viz)
  1. Saving plots
  1. Examples of `{shiny}` apps
 
-### Lab 3: Data Wrangling & Functional Programming 
-Chapter \@ref(lab3wrangling)
+### Lab 3a: Data Wrangling  
+Chapter \@ref(lab3awrangling)
 
  1. Using `{dplyr}` for data wrangling
  1. The `{dplyr}` verbs
- 1. Writing functions
- 1. Loops and `map` family of functions
- 1. Scripts and the `source` function
+ 1. Data wrangling in combination with `{ggplot2}`
 
+### Lab 3b: Functional Programming 
 Chapter \@ref(lab3bfunctions)
 
+ 1. What is a function
+ 1. Writing function
+ 1. Function documentation
+ 1. Loops and `map` family of functions
+ 1. Scripts and the `source` function
  1. Why write function
  1. Function elements (name/arguments, body, return)
  1. Function documentation, Roxygen comments
  1. Writing error / warning /  messages
  
-### Lab 4: Importing data & Getting (Open) Data
+### Lab 3c: Tidy data
+Chapter \@ref(lab3ctidydata)
+ 
+### Lab 4a: Importing data 
 Chapter \@ref(lab4aimportingdata)
 
  1. Paths
@@ -94,13 +108,13 @@ Chapter \@ref(lab4aimportingdata)
  1. Excel and other 'foreign' formats
  1. Reading from a zipfile/url
 
+### ### Lab 4b: Getting Open Data  
 Chapter \@ref(lab4bopendata)
 
  1. Open data sources
  1. Finding data
  1. Importing data into R (.csv, .tsv, .txt, .json, .xml, .xls(x)
  1. Using APIs (Twitter, Kaggle, Google, CBS)
- https://medium.com/@traffordDataLab/querying-apis-in-r-39029b73d5f1
  1. Accessing databases
 
 ### Lab 5: Exploratory Data Analysis _or_ The PPDAC Cycle
@@ -115,36 +129,40 @@ Chapter \@ref(lab5eda)
  1. Multidimensional data
  1. Principal Components
  
-### Lab 6: Exploring Assumptions & Models  
+### Lab 6a: Exploring Assumptions & Models  
 Chapter \@ref(lab6amodels)
 
  1. Why Assumptions?
  1. Distributions (Gaussian, Poisson, Uniform, Binomial)
  1. Regression
  1. Model output ( `{broom}`)
+1. A few machine learning examples in R (`{caret}`)
+
  
+### Lab 6b: Using many models in EDA 
 Chapter \@ref(lab6bmanymodels)
 
  1. Managing many models
  1. Linear and Generalized Linear models
- 1. A few machine learning examples in R (`{caret}`)
  
-### Lab 7: Communication: Reproducible Research, RMarkdown and R-packages
-Chapter \@ref(lab7communicatereproduce)
+### Lab 7a: Text mining and R-packages
+Chapter \@ref(lab7atextmining)
+
+ 1. Text mining
+ 1. Building a corpus
+ 1. Word cloud
+ 1. Text classification and clustering
+
+### Lab 7b: Developing R packages
 
  1. RMarkdown 
  1. The 'RMarkdown First' Principle
- 1. Using Git/Github together with R/Rstudio
- 1. Open Science
- 1. `{bookdown}` / `{pagedown}` and `{blogdown}` packages 
  1. `{usethis}` for creating R-packages
  
 ## Exercises
-Each masterclass/lab contains a number of exercises. Most lessons have exercises in between the demos and explanations and at the end of each lessons, more exercises are included.
+Each masterclass/lab contains a number of exercises. Most lessons have exercises in between the demos and explanations. Usually at the end of each lessons, more exercises are included.
 
 In order for you to get the most out of this course it is pivotal to go over each exercise and try to solve each challenge strictly from within RStudio. 
-The easiest way to make an exercise is to copy the text of the exrcise from the Bookdown website into an RMarkdown file and place R-code chunks in between containing the answers. Store each Rmd file for each lesson seperately in a convenient folder called "answers" in your course project folder.
+The easiest way to make an exercise is to copy the text of the exrcise from the Bookdown website into an RMarkdown file and place R-code chunks in between containing the answers or to use the Rmd source documents from Github directly. Store each Rmd file for each lesson seperately in a convenient folder called "exercises" in your course project folder.
 
-The R code containg the demos is available for each masterclass in the github repository: https://github.com/uashogeschoolutrecht/exploratory_data
-
-
+The R code containg the demos and the answers will be made available for each lab in the github repository: https://github.com/uashogeschoolutrecht/exploratory_data_masterclasses

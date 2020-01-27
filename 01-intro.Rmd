@@ -101,11 +101,11 @@ There are many resources for learning R and doing Data Science with R. One was a
 A non-exhaustive list is provided in \@ref(resources) and is meant to head you in the right direction. Finding the proper learning reasource that will solve you specific 'Analytics' issue is up to you and part of the fun. Google is defenitively a good mentor to guid you through this process! 
 
 ### **EXERCISE** {-}
-Using the function `installed.package()` and running the code below. Try to figure out how many packages are installed on the RSudio server instance that you have logged into.
+Using the function `installed.package()` and running the code below. Try to figure out how many packages are installed on the RSudio server instance that you have logged onto.
 
 Copy-paste the code below into your R Console and run the code
 
-```{r}
+```{r, results='hide'}
 library(tidyverse)
 pkgs <- installed.packages() %>%
   as_tibble() 

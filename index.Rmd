@@ -8,7 +8,7 @@ bibliography: [references.bib]
 biblio-style: apalike
 link-citations: yes
 always_allow_html: yes
-github-repo: uashogeschoolutrecht/edamoi_site
+github-repo: uashogeschoolutrecht/edamoi
 description: "This is the accompanying website for the Masterclasses 'Exploratory Data Analysis _or_ 'Data Mining' of the Hogeschool Utrecht Master of Informatics"
 ---
 
@@ -24,11 +24,13 @@ knitr::write_bib(c(
 # Prerequisites
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4)
+knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4,
+                      warning = FALSE,
+                      error = FALSE, message = FALSE)
 ```
 
 ## Purpose of this website
-This website is the accompanying website to the "Exploratory Data Analysis" Course for the Master of Informatics of the Univeristy of Applied Sciences. Next to the seven chapters that correpond to the seven so-called 'labs' or 'masterclasses' of the course, it contains introductory and supplemantal materials. The course content and further structure of the course are explained in \@ref(course_contents). All methods described in this website and used in the course relate to the Language and Environment for Statistical Computing called [**R**](https://cran.r-project.org/) [@R-base]. To work more effeciently with R we will be using the most commonly used Integrated Development Environment for R: [**RStudio**](https://www.rstudio.com) [@R-rstudio]. 
+This website is the accompanying website to the "Exploratory Data Analysis" Course for the Master of Informatics of the Univeristy of Applied Sciences. Next to the seven chapters that correpond to the seven so-called 'labs' or 'masterclasses' of the course, it contains introductory and supplemantal materials. The course content and further structure of the course are explained in \@ref(coursecontents). All methods described in this website and used in the course relate to the Language and Environment for Statistical Computing called [**R**](https://cran.r-project.org/) [@R-base]. To work more effeciently with R we will be using the most commonly used Integrated Development Environment for R: [**RStudio**](https://www.rstudio.com) [@R-rstudio]. 
 
 ## R Packages
 When you install R for the first time, you only get a basic installation. This so-called `base-R` includes the R core of the language but does not get you very far if you really want to do more complex data analytics. There are many so-called 'packages' to add on to this base-R installation and for this course we use many of them. The code below retrieves the current amount of packages published on the Comprehensive R Archiving Network, which is a main resource for R-packages. 
@@ -44,7 +46,9 @@ source(here::here("code", "r_packages_graph.R"))
 ## assigning a plot object 
 pkgs_plot <- plot_packages()
 ## saving plot to disk plot
-ggsave(filename = here::here("images", "rpackages_trend.svg"), plot = pkgs_plot)
+ggsave(filename = here::here("images", "rpackages_trend.svg"), 
+       plot = pkgs_plot,
+       width = 5, height = 5)
 
 ```
 
@@ -55,7 +59,7 @@ knitr::include_graphics(path = here::here("images", "rpackages_trend.svg"))
 
 How many R-packages are available from CRAN on the date that this website was last updated: `r Sys.Date()` 
 
-```{r}
+```{r, fig.width=10, fig.height=10}
 library(rvest)
 
 pkgs <- read_html("https://cran.r-project.org/web/packages/available_packages_by_name.html")
@@ -98,7 +102,7 @@ If you want to use R after the course, this is what you will need to do because 
 
 ## Bring your own data (`BYOD`)!
 
-(ref:byod) During the course we will use a lot of different datasets that are available directly from R, in R-packages or from open data sources on the internet. If you want to bring your own data to practice with you can and this is encouraged! Please be aware that I may want to share your data and/or analysis (issues) with the rest of the participants, so please bring only data for which this is allowed.   
+During the course we will use a lot of different datasets that are available directly from R, in R-packages or from open data sources on the internet. If you want to bring your own data to practice with you can and this is encouraged! Please be aware that I may want to share your data and/or analysis (issues) with the rest of the participants, so please bring only data for which this is allowed.   
 
 ## The `{bookdown}` package
 This website was created using the `{bookdown}` [@R-bookdown] package written by Yihui Xie. The package can be downloaded from CRAN. For more information see the [documentation](https://bookdown.org/yihui/bookdown/).

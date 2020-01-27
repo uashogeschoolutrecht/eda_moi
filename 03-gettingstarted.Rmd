@@ -1,5 +1,11 @@
 # Getting Started {#gettingstarted}
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4,
+                      warning = FALSE,
+                      error = FALSE, message = FALSE)
+```
+
 ## Preface
 
 This is an R-Markdown document. It is an example of literate programming and it illustrates how we can combine code, text and output. It addresses the issue "Write code for humans, not for computers" very nicely.
@@ -21,6 +27,8 @@ _end code chunk_
 To run the code chunks: set the cursor between the start ` ```{r} ` and the end 
 ` ``` ` of the chunk and press Ctrl, Shift, Enter, or choose "Run" in the top-right lint
 
+## To start a new script you can look under File -> Ne File -> RMarkdown or R Script. You will see a lot of other options as well. In this course we will not address these.
+
 ## Getting started
 
 ## R & RStudio
@@ -34,9 +42,19 @@ Throughout this course you will be working with the open source programs R and R
 ```{r, eval = FALSE} 
 devtools::install_github("uasghogeschoolutrecht/gitr") 
 ```
-## Getting the materials for the course (R scripts):
 
- 1. Go the following url: https://github.com/uashogeschoolutrecht/exploratory_data
+## Getting the materials for the course (R scripts):
+```{r, include=FALSE}
+urls <- read_csv(
+        here::here(
+                "urls"
+        )
+)
+
+urls[1,1] %>% as.character() 
+```
+
+ 1. Go the following url: `r urls[1,1]`
  2. Copy the url address to the clipboard
  3. Start a new RStudio Project `File` -> `New Project`
  4. Select `Version Control` -> `Git` 
@@ -47,7 +65,12 @@ devtools::install_github("uasghogeschoolutrecht/gitr")
 
 The complete course guide and theory to the course + exercises are available at:
 
-http://bioconductor.hudatascience.nl/exploratory_data
+`r urls[1,1]`
+
+The accompanying Bookdown page to this course can be found at:
+
+`r urls[2,1]`
+
 
 ## Cloud server for RStudio
 During the course, we will be using a preinstalled version of the RStudio-IDE (integrated development environment). This IDE version runs on a remote UBUNTU 18.x Linux server and has most of the packages that are needed to follow the course. You can login at the communicated server address and with the credentials supplied at the beginning of the course. 

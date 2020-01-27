@@ -1,4 +1,0 @@
-## list of course packages
-tidyverse
-usethis
-bookdown
