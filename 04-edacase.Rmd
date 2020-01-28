@@ -93,10 +93,8 @@ Now that we defined the problem and we have come up with a plan to solve it, we 
 dataset derived from: https://github.com/dspiegel29/ArtofStatistics [@spiegelhalter2019]
 
 To load the data into R you can run the following command. The data are in csv format: 
-
-(ref:csvformat)
-
-And are stored in the Global Environment of your R-session as `shipman_murders`
+After running the command below the Shipman murders dataset will be stored in 
+in the Global Environment of your R-session as `data.frame` called `shipman_murders`
 You can access this variable by typing it's name in the `Console` or inspecting it in the RStudio interactive viewer under the `Environment` tab. 
 
 ```{r}
@@ -124,9 +122,9 @@ When perfoming EDA consider:
  1. What is the undelying (experimental) design?
  1. Is there multi-colinearity?
 
-If we review the list above we can already can check a number of items from the list that we have taken care off. Let's take a look at the data first
+If we review the list above we can already check a number of items from the list that we have taken care off. Let's take a look at the data first
 
-```{r, eval=FALSE}
+```{r}
 DT::datatable(shipman_murders)
 ```
 

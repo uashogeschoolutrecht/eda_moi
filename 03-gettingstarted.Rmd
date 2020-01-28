@@ -32,7 +32,7 @@ To run the code chunks: set the cursor between the start ` ```{r} ` and the end
 ## Getting started
 
 ## R & RStudio
-Throughout this course you will be working with the open source programs R and RStudio. RStudio is an integrated development environment (IDE) that allows you to use R in an interactive (and graphical) way, write your scripts/code and manage your workspace. R and Rstudio are already pre-installed on the course laptops, but for home use can be downloaded for free from http://www.r-project.org and http://www.rstudio.com.
+Throughout this course you will be working with the open source programs R and RStudio. RStudio is an integrated development environment (IDE) that allows you to use R in an interactive (and graphical) way, write your scripts/code and manage your workspace. We will use R and RStudio in a High Performace Cloud environment, hosted by SURFsara. Credentials to logon to the RStudio Server will be shared before the start of the course. 
 
 ## Github account and setting github credentials in RStudio
 
@@ -67,13 +67,12 @@ The complete course guide and theory to the course + exercises are available at:
 
 `r urls[1,1]`
 
-The accompanying Bookdown page to this course can be found at:
+The accompanying Bookdown page (html webpage) to this course can be found at:
 
 `r urls[2,1]`
 
-
 ## Cloud server for RStudio
-During the course, we will be using a preinstalled version of the RStudio-IDE (integrated development environment). This IDE version runs on a remote UBUNTU 18.x Linux server and has most of the packages that are needed to follow the course. You can login at the communicated server address and with the credentials supplied at the beginning of the course. 
+During the course, we will be using a preinstalled version of the RStudio-IDE (integrated development environment). This IDE version runs on a remote UBUNTU 18.04 Linux server and has most of the packages that are needed to follow the course. You can login at the communicated server address and with the credentials supplied at the beginning of the course. 
 
 The advantage of cloud servers is that the users do not need to install anything on their own laptops. They will be able to access the IDE, using their preferred web-browser on their computer. 
 
@@ -134,3 +133,18 @@ Free material on learning R is very broadly available on the web. You can start 
 http://r4ds.had.co.nz/index.html
 
 the author Hadley Wickham is an excellent data scientist, speaker and developer at RStudio and the brain behind the "tidyverse" 
+
+## Installing additional packages and the `library()` function
+Sometimes, when running a command in R you will get this error:
+
+### Installing packages
+
+`Error in library(tensorflow) : there is no package called ‘tensorflow’`
+
+This means that the package that you are trying to use is not installed. You can install the package (in the case of the warning above `{tensorflow}` a deep learning package) with:
+
+`intall.packages('tensorflow')`. By default, R will check in the repositories that you set by `setRepositories()` if this package is available for download.
+
+###
+If you 
+

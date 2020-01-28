@@ -1,5 +1,7 @@
 # Lab 2b; Literate Programming with RMarkdown {#rmarkdown}
 
+_This chapter is best read from the `21-lab2brmarkdown.Rmd` source file on github_
+
 ## Credits:
 https://nceas.github.io/sasap-training/materials/reproducible_research_in_r_fairbanks/index.html
 
@@ -153,7 +155,7 @@ output:
 - RStudio is a great way to author RMarkdown documents
 - Later on in this workshop, we'll see how to deal with citations so we can write academic manuscripts
 
-## **EXERCISE**
+## **EXERCISE** {-}
 
  1. Find a relevant dataset  that you recently found or are busy with at the moment
  1. Write a short Rmd report where you LOAD and VISUALIZE (create at least 3 different graphs) the data in an Rmd report.

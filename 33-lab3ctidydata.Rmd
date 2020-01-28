@@ -355,9 +355,9 @@ You will need to perform four operations:
  - Table 4a contains the cases, table 4b contains the populations
  - For joining the tables 4a and 4b you can use the `dplyr::left_join()` function. See `help("dplyr")` or `?dplyr` for more information.
 
-table2
-```{r, include=FALSE}
 
+```{r, include=FALSE}
+# table2
 library(tidyr)
 library(dplyr)
 table2 <- table2
@@ -368,8 +368,9 @@ table2_tidy <- table2 %>%
 table2_tidy
 ```
 
-table 4a + 4b
+
 ```{r, include=FALSE}
+# table 4a + 4b
 ## ANSWER 4a + 4b
 table4a <- tidyr::table4a
 table4b <- tidyr::table4b
@@ -393,9 +394,9 @@ table4_union
 
 Which representation is easiest to work with? Which is hardest? Why?
 
-## EXERCISE 2: Plotting tidy data {-}
+## **EXERCISE 4** Plotting tidy data {-}
 
-2A)  Recreate the plot showing change in cases over time using `table2`
+4A)  Recreate the plot showing change in cases over time using `table2`
 instead of `table1`. What do you need to do first?
 
 ```{r, include=FALSE}
@@ -419,15 +420,15 @@ cases_over_time
 
 ```
 
-2B) Why does the code below fail, can you fix it?
+4B) Why does the code below fail, can you fix it?
 ```{r, error = TRUE, echo=TRUE}
     table4a %>% 
       gather(1999, 2000, key = "year", value = "cases")
 ```
 
-## EXERCISE 3: Wide to long; Spreading and Gathering {-}
+## **EXERCISE 5** Wide to long; Spreading and Gathering {-}
 
-3A)  Tidy the simple tibble below. Do you need to spread or gather it?
+5A)  Tidy the simple tibble below. Do you need to spread or gather it?
 ```{r, echo=TRUE, include=FALSE}
 
     preg <- tribble(
@@ -449,7 +450,7 @@ preg_tidy <- preg %>%
 preg_tidy
 ```
 
-3B) Calculate the percentage of females that are pregnant, of all females in the dataset. 
+5B) Calculate the percentage of females that are pregnant, of all females in the dataset. 
 ```{r, include=FALSE}
 ## answer 3b
 names(preg_tidy)
@@ -468,8 +469,8 @@ females
 
 ```
 
-3C) How many males are there in the dataset? How many of them are pregnant ;-)
-```{r}
+5C) How many males are there in the dataset? How many of them are pregnant ;-)
+```{r, include=FALSE}
 ## answer 3c
 names(preg_tidy)
 
@@ -487,9 +488,9 @@ preg_males
 
 ```
 
-## EXERCISE 4: Addiotional operations {-}
+## **EXERCISE 6** Additional operations {-}
 
-4A) What do the `extra` and `fill` arguments do in `separate()`? Experiment with the various options for the following two toy datasets.
+6A) What do the `extra` and `fill` arguments do in `separate()`? Experiment with the various options for the following two toy datasets.
     
 ```{r, eval = FALSE}
 tibble(x = c("a,b,c", "d,e,f,g", "h,i,j")) %>% 
@@ -499,11 +500,11 @@ tibble(x = c("a,b,c", "d,e", "f,g,i")) %>%
 separate(x, c("one", "two", "three"))
 ```
 
-4B) Compare and contrast the functions `separate()` and `extract()`.  Why are there three variations of separation (by position, by separator, and with groups), but only one unite?
+6B) Compare and contrast the functions `separate()` and `extract()`.  Why are there three variations of separation (by position, by separator, and with groups), but only one unite?
 
-## EXERCISE 5: A Case {-}
+## **EXERCISE 7** A messy case {-}
 
-5A) Tidy the following dataset: "./data/messydata_5a.xlsx"
+7A) Tidy the following dataset: "./data/messydata_5a.xlsx"
 The data represents Mariages during the four seasons for a number of years in regions in Germany. 
 
 Note: Germany has 16 states. When you load the data you will notice that the coding of the factor variable "State" is not consistent. You will need to correct tihs coding in order for the data to be tidy.
@@ -642,7 +643,7 @@ write_csv(tidy_mariages, path = path)
 
 ```
 
-5B) Start analyzing your tidy data
+7B) Start analyzing your tidy data
 
  - How many marriages are there per year in each German "Bundesland"?
  - Visualize your findings in a plot
@@ -660,7 +661,7 @@ marriageperyear %>%
 
 ```
 
-5C) Visual analysis
+7C) Visual analysis
 Compare the marriages of 1990, 2003 and 2014 and colour them by season
 
 **TIPS:**
@@ -717,7 +718,7 @@ size = 4, hjust = 1) # add text to mean line
 
 ```
 
-## Case Study {-}
+## Case Demo
 
 To finish off the chapter, let's pull together everything you've learned to tackle a realistic data tidying problem. The `tidyr::who` dataset contains tuberculosis (TB) cases broken down by year, country, age, gender, and diagnosis method. The data comes from the *2014 World Health Organization Global Tuberculosis Report*, available at <http://www.who.int/tb/country/data/download/en/>.
 
@@ -830,20 +831,20 @@ who %>%
   separate(sexage, c("sex", "age"), sep = 1)
 ```
 
-### Exercises
+### **Exercise 8** Some questions about the WHO case demo
 
-1.  In this case study we set `na.rm = TRUE` just to make it easier to
+8A) In this case study we set `na.rm = TRUE` just to make it easier to
     check that we had the correct values. Is this reasonable? Think about
     how missing values are represented in this dataset. Are there implicit
     missing values? What's the difference between an `NA` and zero? 
 
-1.  What happens if you neglect the `mutate()` step?
+8B) What happens if you neglect the `mutate()` step?
     (`mutate(key = stringr::str_replace(key, "newrel", "new_rel"))`)
 
-1.  I claimed that `iso2` and `iso3` were redundant with `country`. 
+8C) We claimed that `iso2` and `iso3` were redundant with `country`. 
     Confirm this claim.
 
-1.  For each country, year, and sex compute the total number of cases of 
+8D) For each country, year, and sex compute the total number of cases of 
     TB. Make an informative visualisation of the data.
 
 
