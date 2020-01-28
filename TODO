@@ -1,3 +1,17 @@
+## fix repo:
+
+revert to commit: 33d406ee4121a4104ff41e8e82f635d3a6a3de78
+https://www.atlassian.com/git/tutorials/undoing-changes/git-revert
+Clone master to devel
+Remove large files via:
+
+https://help.github.com/en/github/managing-large-files/removing-files-from-a-repositorys-history#removing-a-file-that-was-added-in-an-earlier-commit
+
+Merge master to devel
+Merge victor to devel
+
+
+
 TODO:
 Hoofdstuk 6 - Regel 133 staat dat er een interactive table zou moeten zijn, die is er niet.
 
