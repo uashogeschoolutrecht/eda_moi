@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Packages for this chapter
-For the materials in this chapter we need to load the tidyverse package suite. You will get a warning message stating something about masking of functions. I will explain this in Chapter \@ref(lab3wranglingfunctions) when we discuss writing our own functions in R. 
+For the materials in this chapter we need to load the tidyverse package. You will get a warning message stating something about masking of functions. I will explain this in Chapter \@ref(lab3wranglingfunctions) when we discuss writing our own functions in R. 
 
 ```{r}
 library(tidyverse)
@@ -182,7 +182,7 @@ all(q == qq)
 __**Write code for humans AND computers, be explicit!**__
 
 ### R is a functional programming language
-Functional programming is basically programming by the use of functions. Many of the functions you will use are pre-exisiting and present either in the base R installation (R-base) or in add-ons called `packages` in R-lingo.
+Functional programming is basically programming by using functions. Many of the functions you will use are pre-exisiting and present either in the base R installation (R-base) or in add-ons called `packages` in R-lingo.
 
 Every operation in R is a `function call` with which you execute a function on zero or more arguments. As an example we look at the build-in function in R-base called `mean()`. When we want to learn more about this function and how to use it, we can use the `help()` function or the `?` which is a short-cut for the `help()` function. Let's call `help()` on the `mean()` function.
 
@@ -205,7 +205,7 @@ If we want to know what the arguments are that can be entered into the function 
  
 Let's look at them in detail. 
 
- The description for `x` states that `x` is defined as an R object. Clearly we do not yet know what kind of R object there are bu from the description of `x` can make out a few examples: `x` can be a numeric, a logical, a date, a date-time or time interval object. Later in this chapter these objects are explained in more detail, but it is rather intuitive that mean at least can take an object consisting of numbers. Below we create an object x, containing 10 random numbers that are sampled from a normal distribution (using a function call to `rnorm()`). 
+ The description for `x` states that `x` is defined as an R object. Clearly we do not yet know what kind of R object there are but from the description of `x` can make out a few examples: `x` can be a numeric, a logical, a date, a date-time or time interval object. Later in this chapter these objects are explained in more detail, but it is rather intuitive that mean at least can take an object consisting of numbers. Below we create an object x, containing 10 random numbers that are sampled from a normal distribution (using a function call to `rnorm()`). 
  
 ```{r}
 set.seed(123)
@@ -218,7 +218,7 @@ If we want to apply mean to this vector `x` of 10 numbers we can do so by callin
 mean(x)
 ```
 
-When we look at the second and third argument we can deduce that the second argument `trim` takes any value between 0 and 0.5 and that this argument defines a truncation of the vector `x`, before the mean is calculated. Here, I show what trim = 0.2 does to our average of `x`
+When we look at the second and third argument we can deduce that the second argument `trim` takes any value between 0 and 0.5 and that this argument defines a truncation of the vector `x`, before the mean is calculated. Here, I show what trim = 0.1 does to our average of `x`
 The trimmed mean is calculated on an **ordered** (from smallest to largest value) vector `x`  
 
 ```{r}
@@ -239,7 +239,7 @@ The last argument of `mean()` is `na.rm`. If we look at the descrition we can le
 Below two NA values are added to our vector x at position 3 and 6.
 
 ```{r}
-x[c(3,6)] = NA
+x[c(3,6)] <- NA
 x
 ```
 
@@ -270,7 +270,7 @@ c(xm, mean(x, trim = 0.10))
 
 Now that we know how to get help for an R function and how to read the help documentation, it is time to explore R further.
 
-From the above example we learnt that knowing the type and class of a dota object is important for using a function on that data object. Therefore, below we will review some of the the most important data objects and how they are interrelated. It is important to generally know about the different data typres and classes. It will save, but not completely prevent you from making common mistakes and errors in R
+From the above example we learnt that knowing the type and class of a data object is important for using a function on that data object. Therefore, below we will review some of the the most important data objects and how they are interrelated. It is important to generally know about the different data typres and classes. It will save, but not completely prevent you from making common mistakes and errors in R
 
 ## R objects
 R is also an object oriented language. This means that data-structures are stored in objects. Objects have a `class` and can consist of one (or in some classes) more data `types`. Below I will review different object classes and types. The use of class and type can be confusing. Relevant for scripting is that you understand the basic differences between different objects.
@@ -293,7 +293,7 @@ digraph rmarkdown {
 ", engine = "circo")
 ```
 
-`Atomic vectors` and `Lists` can be subdevided and I will explain below the most important R objects. The graph below shows the main object categories, classes and their types. Lists in R are sometimes  collectively called `Recursive vectors` because they are build from (multiple) atomic vectors.
+`Atomic vectors` and `Lists` can be subdivided and I will explain below the most important R objects. The graph below shows the main object categories, classes and their types. Lists in R are sometimes  collectively called `Recursive vectors` because they are build from (multiple) atomic vectors.
 
 Below we see the two categories `Atomic` and `Recursive` vectors subdived.
 ```{r, fig.cap="All important R objects in one graph"}
@@ -315,7 +315,7 @@ digraph rmarkdown {
 ", engine = "circo")
 ```
 
-Stricking is that a `dataframe` in R is special list. Where R-lists can contain different types of vectors of different lenghts, dataframes can contain different types of vectors with **the same** length; A dataframe is alway rectangular. `Tibble` is just a special dataframe with nice printing options. Matrices and arrays are build on top of atomic vectors. We will later see how this works. Dates, Date-Time and Factors are S3 vectors; a special class of R-objects and named 'S3' for historical reasons.
+Striking is that a `dataframe` in R is special list. Where R-lists can contain different types of vectors of different lenghts, dataframes can contain different types of vectors with **the same** length; A dataframe is alway rectangular. `Tibble` is just a special dataframe with nice printing options. Matrices and arrays are build on top of atomic vectors. We will later see how this works. Dates, Date-Time and Factors are S3 vectors; a special class of R-objects and named 'S3' for historical reasons.
 
 ### Data Types
 The most simple objects in R are single values. They can be of different class and type. Single objects are commonly vectors of length 1, consisting of one class and holding one type of data. 
@@ -447,7 +447,7 @@ see: https://cran.r-project.org/web/packages/vctrs/vignettes/s3-vector.html and 
 
 We will see coercion happen as we examine different types of vectors and combining them below.
 
-Combining values (or vectors) or `c`reating them from scratch can be achieved by using the `c()` function. Because combining vactors with `c()` can give suprising results, in Chapter \@ref(lab3wranglingfunctions) we will also learn about using the `vec_c()` function from the `{vctrs}` package for creating 'type-stable' functions. 
+Combining values (or vectors) or `c`reating them from scratch can be achieved by using the `c()` function. Because combining vectors with `c()` can give surprising results, in Chapter \@ref(lab3wranglingfunctions) we will also learn about using the `vec_c()` function from the `{vctrs}` package for creating 'type-stable' functions. 
 
 ### Combining data types
 What happens if we combine different types of data in one vector?
@@ -472,7 +472,7 @@ sum(is.na(vector_with_true_NAs))
 sum(vector) 
 ```
 
-You can add/subtract/devide or use other arithmetic functions on numeric vectors
+You can add/subtract/divide or use other arithmetic functions on numeric vectors
 ```{r} 
 a <- c(1,3,5,7,9)
 b <- c(2,4,6,8)
@@ -487,7 +487,7 @@ z3
 ```
 
 
-**DISCUSS** Mind the `Warning message: In a - b : longer object length is not a multiple of shorter object length`. Discuss with your neighbour what this means. Try experimenting with increasing or decreasing the number of elements in the vectors above. What does this warning say about how mathmatical operations work in R?  
+**DISCUSS** Mind the `Warning message: In a - b : longer object length is not a multiple of shorter object length`. Discuss with your neighbour what this means. Try experimenting with increasing or decreasing the number of elements in the vectors above. What does this warning say about how mathematical operations work in R?  
 
 ```{r}
 z4 <- sum(a)
@@ -520,9 +520,9 @@ hundred <- rnorm(100)
 head(hundred)
 ```
 
-To get the third and then the first ten elements of the `hundred` vector
+To get the third and then the first ten elements of the `hundred` vector. Note that R starts counting at 1 and not at 0 for the elements in a vector.
 ```{r}
-hundred[1]
+hundred[3]
 hundred[c(1:10)]
 ```
 So you see from this example: we can use a vector to index a vector. Let's elaborate on that.
@@ -706,7 +706,7 @@ mean(vec_14, na.rm = TRUE)
 ### 4. Vector indices {-}
 In this chapter we saw how to use the `[]` on a vector.
 
- 1. Pull out all values that round down to 1.0 in vector `vec_1` **HINT use `as.integer()` than create a logical index, then use the logical index to get to your answer**
+ 1. Pull out all values that round down to 1.0 in vector `vec_1` **HINT use `as.integer()` then create a logical index, then use the logical index to get to your answer**
  1.
 
 ```{r, }

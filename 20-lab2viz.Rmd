@@ -14,12 +14,12 @@ Here we talk about EDA and we discuss visualization as a means to generate hypot
 
 **The EDA visualization stages:** 
 
- 1. `Characteristics`; Variable types, number of data points, patterns, grouping information etc. Usually this is done by creating plots showing all data available or a random sample if you have really a lot of data. Creating plots for missing values can be a good first step. A next step is creating scatter plots.
- 1. `Distributions`; By looking at distributions you can generate hypothesis about the nature of sampling of the data, whether there are outliers, whether distriibutions are skewed or whether a transformation is feasible
- 1. `Outliers`; No matter what you hear about removing outliers, never do it whitout solid understanding of your data and the reason why an outlier exists. Outliers can be discovered using box-plots, distribution plots or scatter plots (individual points)
+ 1. `Characteristics`; Variable types, number of data points, patterns, grouping information etc. Usually this is done by creating plots showing all data available or a random sample if you have a lot of data. Creating plots for missing values can be a good first step. A next step is creating scatter plots.
+ 1. `Distributions`; By looking at distributions you can generate hypothesis about the nature of sampling of the data, whether there are outliers, whether distributions are skewed or whether a transformation is feasible
+ 1. `Outliers`; No matter what you hear about removing outliers, never do it without solid understanding of your data and the reason why an outlier exists. Outliers can be discovered using box-plots, distribution plots or scatter plots (individual points)
  1. `Sorting`; There can be a logical hierarchy in the data when variables are sorted according others
- 1. `Trends`; Trends sometimes require you to subset the data or generate summary data based on grouping variables. This means that part of the data is not visible anymore, but if performed well, it will also reveal new information. Removing data for the sake of summarizing and keeping data for the sake of completeness are in delicate balance. Again this is an interative process 
- 1. `Models`; Once hypothesis are generated and patterns have been identified it is time to try some models on the data. Visualizing models and their paramters is part of checking model quality and fit to the data 
+ 1. `Trends`; Trends sometimes require you to subset the data or generate summary data based on grouping variables. This means that part of the data is not visible anymore, but if performed well, it will also reveal new information. Removing data for the sake of summarizing and keeping data for the sake of completeness are in delicate balance. Again this is an iterative process 
+ 1. `Models`; Once hypothesis are generated and patterns have been identified it is time to try some models on the data. Visualizing models and their parameters is part of checking model quality and fit to the data 
  1. `Formal`; Visualizations are usually included in scientific publications, reports, websites etc. The requirements for these are usually different and more formal, from the ones in the previous stages.
 
 ```{r, fig.cap="Visualizing stages for EDA", echo=FALSE}
@@ -75,7 +75,7 @@ data(package="dslabs") %>% print()
 ```
 
 ### ggplot2 {-}
-For this demo on visualizations we will use the ggplot2 package. It was build with the grammar of graphics in mind. It is a versatile and much-used package. Much documentation can be found online and there are many extensions and other packages that build upon `{ggplot2}`. It is one of three plotting systems in R. The other two which we will hardly use in this course are `base` plotting and `{lattice}`.
+For this demo on visualizations we will use the ggplot2 package. It was build with the grammar of graphics in mind. It is a versatile and much-used package. Much documentation can be found online and there are many extensions and other packages that build upon `{ggplot2}`. It is one of three plotting systems in R. The other two are `base` plotting and `{lattice}`. However we will hardly use those two in this course.
 
 The ggplot hexagon:
 ```{r, echo=FALSE}
@@ -158,7 +158,7 @@ gapminder %>%
 ggpairs()
 ```
 
-This is a busy graph and for this Gapminder dataset not so informative bu parts of it can be useful as a next step to zoom in at with additional graphs. In Chapter \@ref(eda) we will see further examples of automated EDA. 
+This is a busy graph and for this Gapminder dataset not so informative but parts of it can be useful as a next step to zoom in at with additional graphs. In Chapter \@ref(eda) we will see further examples of automated EDA. 
 
 #### Looking at two variables with a scatter plots {-}
 ```{r}
@@ -177,7 +177,7 @@ This is a very dense plot showing 'overplotting. We can fix this in several ways
  1. Add noise (`"jitter"`) to points
  1. Facetting - create panels for 'categorical' or so-called 'factor' variables in R
  1. Summarize the data
- 1. Displaying a model / relationship that represents the data (and not sho the actual data itself) 
+ 1. Displaying a model / relationship that represents the data (and not show the actual data itself) 
  1. Or any combination of the above strategies
  1. Sometimes choosing a alternative plot-type can also help (for example `geom_tiles()` which can be used for creating heatmaps)
 
@@ -368,7 +368,7 @@ predicted_df <- data.frame(gapminder_pred = predict(lm, gapminder),
 ```
 
 Add model to plot
-In chapter \@ref(assumptionsmodels) we will see how to handle multiple models. For instance: imagine you want to creat a mode for each country seperately over time. Can you think of an application for such models?
+In chapter \@ref(assumptionsmodels) we will see how to handle multiple models. For instance: imagine you want to creat a model for each country separately over time. Can you think of an application for such models?
 ```{r}
 model_plot <- gapminder %>% 
   ggplot(aes(x = fertility,
@@ -562,7 +562,7 @@ gapminder %>%
 ```
 
 ### Summarizing time series data {-}
-What happened in 1999/2010? The dat shows a dip.
+What happened in 1999/2010? The data shows a dip.
 ```{r}
 gapminder$continent %>% as_factor() %>% levels()
 gapminder %>% 
@@ -593,7 +593,7 @@ gapminder %>%
   
 ```
 
-In such cases it can be helpfull to add some noise to the points (`position = "jitter"`) to reduce overlapping. This can be a powerfull approach, especially when combined with setting `alpha()`
+In such cases it can be helpful to add some noise to the points (`position = "jitter"`) to reduce overlapping. This can be a powerful approach, especially when combined with setting `alpha()`
 ```{r}
 gapminder %>% 
   dplyr::filter(continent == "Americas" |
@@ -784,7 +784,7 @@ So apparantly there are two data points that are way off from the rest of the di
 ### Identify the outliers {-}
 ```{r}
 heights_data %>%
-  dplyr::filter(height > 100)
+  dplyr::filter(height >= 100)
 ```
 
 ### Boxplot with outliers removed {-}
@@ -805,7 +805,7 @@ heights_data %>%
 ```
 
 ### New frequency distribution
-Now let's plot a new distribution plot, this time we plot density, leaving the outlier out
+Now let's plot a new distribution plot, this time we plot density, excluding the outliers.
 ```{r}
 heights_data %>%
   dplyr::filter(height < 100) %>%
@@ -847,7 +847,7 @@ library(readxl)
 ```
 
 ### `{ggplot2}` {-}
-As shown in the demo, the {ggplot2} package is a very strong tool to make plots. It is somewhat more difficult to master than other plotting systems in R, but it is much stronger and much, much more versatile.
+As shown in the demo, the {ggplot2} package is a very strong tool to make plots. It is somewhat more difficult than other plotting systems in R, but it is much stronger and much, much more versatile.
 
 In order to force you to study ggplot syntax, you will have to create plots in this exercise using {ggplot2} syntax only!!
 
@@ -997,7 +997,7 @@ tb_data_selected <- tb_burden %>%
     year,
     e_inc_num,
     e_mort_exc_tbhiv_num,
-    e_pop_num,
+    e_pop_num
   )
 
 ```
@@ -1005,7 +1005,7 @@ tb_data_selected <- tb_burden %>%
 #### 2C) Data dictionary {-}
 Load the data dictionary into R ("/data/messy/TB_data_dictionary_2016-12-08_messy.csv")
 
-Use `dplyr::filter()` together with the `%in%` operator to pull out the descriptions of the variables from the data dictionary. Do all the variables have a discription?
+Use `dplyr::filter()` together with the `%in%` operator to pull out the descriptions of the variables from the data dictionary. Do all the variables have a description?
 
 ```{r, echo=TRUE}
 dictionary <- read_csv("./data/messy/TB_data_dictionary_2016-12-08.csv")
@@ -1020,7 +1020,7 @@ dplyr::filter(dictionary, variable_name %in% names(tb_data_selected))
 Use the tuberculosis dataset from exercise 2.
 
 ### 3A) All data {-}
-Plot the total number of Tuberculosis cases (y axis), for each country, for each year (x axis. Think about how to solve the overplotting this creates. How do you display country?
+Plot the total number of tuberculosis cases (y axis), for each country, for each year (x axis. Think about how to solve the overplotting this creates. How do you display country?
 
 Which country has the highest number of annual TB cases?
 
@@ -1155,8 +1155,8 @@ joined_data %>%
   geom_histogram(aes(fill = g_whoregion), bins = 50)
 ```
 
-#### 5B) Turn the code of the histgrams into code that plots frequency polynomes
-Maybe do a log transformation on the incidence and/or gdp? Use factes for the years.
+#### 5B) Turn the code of the histograms into code that plots frequency polynomes
+Maybe do a log transformation on the incidence and/or gdp? Use facets for the years.
 
 **TIPS**
  
@@ -1202,7 +1202,7 @@ chicks <- datasets::ChickWeight
  - Are all the variables of the right type?
  - Which variables are categorical?
  - Which are numeric?
- - Change grouping/categorical variables to facors if neccesary(`chicks$var <- as_factor(chicks$var)`)
+ - Change grouping/categorical variables to factors if necessary(`chicks$var <- as_factor(chicks$var)`)
  
 ```{r, 6a, options_exercises}
 head(chicks)
@@ -1306,7 +1306,7 @@ From the above plot it is still hard to see the trends in the data.
  - Summarize the data for each diet and make a plot on the summarized data. 
  - Again put `time` on the x-axis and the mean of the chick weight on the y-axis. 
  - Add appropriate labels to the plot, and a title.
- - Add regression curves (`geom_smooth(method = "lm"`) to the plot.
+ - Add regression curves (`geom_smooth(method = "lm")`) to the plot.
 
 __Draw a conclusion: Which diet do you think shows the strongest effect on weight-gain over time in the investigated chicks?__
 
@@ -1346,7 +1346,7 @@ Loading Microsoft Office Excel files.
 The data for this exercise can be found in:
 `"./data/Animals.xls"`
 
-It is an Miscrosoft Excel file containing brain and body weight of a number of animals: http://mste.illinois.edu/malcz/DATA/BIOLOGY/Animals.html 
+It is an Microsoft Excel file containing brain and body weight of a number of animals: http://mste.illinois.edu/malcz/DATA/BIOLOGY/Animals.html 
 
 DESCRIPTION:
 Average brain and body weights for 27 species of land animals.
@@ -1374,7 +1374,7 @@ You may use any function you like, but you are not allowed to transform the data
  - Rember to use `library` to load the required package(s)
  - The first row that contains data is the "Mountain Beaver" observation
  - Remember that in some functions you can also set `header = FALSE`
- - The variables in this dataset need to be `animal`, `body_weigth` and `brain_weigth` and IN THAT ORDER! These are the so-called `names` of the dataframe and can be set or checked using the function `names()`
+ - The variables in this dataset need to be `animal`, `body_weight` and `brain_weight` and IN THAT ORDER! These are the so-called `names` of the dataframe and can be set or checked using the function `names()`
  - Remember `dplyr::select`, `dplyr::filter()`, `dplyr::group_by`, `dplyr::summarize()`
  
 ```{r, 7a,  options_exercises}
@@ -1415,7 +1415,7 @@ skip = 1)
 ```
 
 #### 7B) Variable names {-}
-The `names` of a dataframe can be found or set with `names(dataframe)`. Try setting the names for the `animal` dataframe to `animal`, `body_weigth` and `brain_weigth` and IN THAT ORDER. 
+The `names` of a dataframe can be found or set with `names(dataframe)`. Try setting the names for the `animal` dataframe to `animal`, `body_weight` and `brain_weight` and IN THAT ORDER. 
 
 
 ```{r, 7b, options_exercises}
@@ -1465,7 +1465,7 @@ animals_readxl %>%
 ```
 
 #### 7E) Plots {-} 
-Create a plot that shows the realtionship between `body_weigth` and `brain_weight`. Create a dot plot, that shows this relationship.
+Create a plot that shows the realtionship between `body_weight` and `brain_weight`. Create a dot plot, that shows this relationship.
 
 **TIPs**
  
@@ -1484,7 +1484,7 @@ plot
 ```
 
 #### 7F) Removing ouliers {-} 
-On the basis of the plot above, construct a new plot that eliminates the data point for the animal "Brachiosaurus". What can you conclude from the relationship between body weigth and brain weigth, from this new plot? 
+On the basis of the plot above, construct a new plot that eliminates the data point for the animal "Brachiosaurus". What can you conclude from the relationship between body weight and brain weight, from this new plot? 
 
 ```{r, 7f, options_exercises}
 no_brachio <- animals_readxl %>% 
@@ -1514,7 +1514,7 @@ plot
 ```
 
 #### 7H) What can you conclude from the 2G plot {-}
-What happens to the relation between body_weigt and brain_weight if you excluse all dinosaurs ("Brachiosaurus", "Diplodocus" and "Triceratops") from the dataset?
+What happens to the relation between body_weight and brain_weight if you excluse all dinosaurs ("Brachiosaurus", "Diplodocus" and "Triceratops") from the dataset?
 **Write a short conclusion on this plot.**
 
 ```{r, 7h, options_exercises}

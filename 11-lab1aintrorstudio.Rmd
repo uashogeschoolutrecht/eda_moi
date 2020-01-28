@@ -18,7 +18,7 @@ Several good tutorials on starting with RStudio:
 
 ## Preview releases (daily builds)
 For the brave and impatient:
-RStudio releases it's daily builds (test versions) on:
+RStudio releases its daily builds (test versions) on:
 
 https://www.rstudio.com/products/rstudio/download/preview/
 
@@ -35,7 +35,7 @@ More cheatsheets that can of help to complement the contents of the course:
 
 
 ## RStudio IDE
-Below we will show you a few tricks to be more productive with the RStudio IDE sofware. Figure \@ref(fig:rstudiointerface) shows the RStudio Interface on my computer when writing this website. The four windows that we use to interactively work with R are indicated by the big yellow numbers 1 to 4.
+Below we will show you a few tricks to be more productive with the RStudio IDE software. Figure \@ref(fig:rstudiointerface) shows the RStudio Interface on my computer while writing this website. The four windows that we use to work interactively with R are indicated by the big yellow numbers 1 to 4.
 
 ```{r, rstudiointerface, fig.cap="The RStudio IDE interface. You can see the four windows here. They are explained below"}
  knitr::include_graphics(path = here::here("images", "rstudio_interface.png"))
@@ -44,7 +44,7 @@ Below we will show you a few tricks to be more productive with the RStudio IDE s
 
 ## The RStudio IDE Windows. 
 
- 1. The **Script Editor Window**. If you use the default settings you will see This window appear in position 1 (figure \@ref(fig:rstudiointerface)) This is where you view the contents of files, and open and edit new script files. If no script editor is visible, but you only see something like below:
+ 1. The **Script Editor Window**. If you use the default settings you will see this window appear in position 1 (figure \@ref(fig:rstudiointerface)) Here you can view the contents of files, and open and edit new script files. If no script editor is visible, but you only see something like below:
  
  ```
  R version 3.6.1 (2019-07-05) -- "Action of the Toes"
@@ -64,14 +64,14 @@ Below we will show you a few tricks to be more productive with the RStudio IDE s
  Type 'q()' to quit R.
 
  ``` 
- Try openening a new R-Script by clicking `File` -> `New File` -> `R Script`. The new file will open up in the top-left window.
+ Try opening a new R-Script by clicking `File` -> `New File` -> `R Script`. The new file will open up in the top-left window.
  
  1. The Next window is the **Development** window to the right (position 2 in figure \@ref(fig:rstudiointerface)) contains the `Environment` and other `Development` tabs (like `Git` and `Build`). This window will show all the named variables that are avaialable in the _current_ RSession. Clicking the little broom-stick icon will clear the environment. Some of the other tabs in this window (e.g. `Build`), we will encounter in chapters \@ref(lab3wranglingfunctions) and \@ref(lab7communicatereproduce).
  
- 1. The third window is the **Navigation** window. This window shows the files on your local storage (A kind of File Explorer) and we will also access the help documentation from this window. Importantly, plots and interactive views will also appear in window 3.
+ 1. The third window is the **Navigation** window. This window shows the files on your local storage (a kind of File Explorer) and we will also access the help documentation from this window. Importantly, plots and interactive views will also appear in window 3.
  
- 1. The fourth window is the **Terminals** window. Mostly we will use the `Console` to either directly give a command to R or view the output of a comand. The tab that is named `Terminal` is actually the `Bash` terminal. On the server this Terminal provides access to the operating system of the server (`r x <- sessionInfo(); x$running`). In the Terminal you can inspect files directly by using the `head` command or execute other `Bash` commands. Having an R Console and a Linux Terminal available in one application makes RStudio execeptionally suitable for developing packages for R. 
- An Additional feature of this window is the `Jobs` pane. This enables you to run R-scripts as background jobs. This allows you to continue working on a script, while executing another script simultaneously, without crashing R of your computer.  
+ 1. The fourth window is the **Terminals** window. Mostly we will use the `Console` to either directly give a command to R or view the output of a command. The tab that is named `Terminal` is actually the `Bash` terminal. On the server this Terminal provides access to the operating system of the server (`r x <- sessionInfo(); x$running`). In the Terminal you can inspect files directly by using the `head` command or execute other `Bash` commands. Having an R Console and a Linux Terminal available in one application makes RStudio execeptionally suitable for developing packages for R. 
+An additional feature of this window is the `Jobs` pane. This enables you to run R-scripts as background jobs. This allows you to continue working on a script, while executing another script simultaneously, without crashing R of your computer.  
 
 To start a new `Terminal`: `Tools` -> `Terminal` -> `New Terminal`
 Try it below and copy (Ctrl + C), paste (Shift + Insert) the following Bash code in your new `Terminal`
@@ -83,22 +83,22 @@ head -30 data/allijn.tsv
 ```
 
 ## Global Settings 
-To adapt the apearance of your editor, provide a LaTeX interpreter, or set a mirror for CRAN you go to `Tools` -> `Global Options`
+To adapt the appearance of your editor, provide a LaTeX interpreter, or set a mirror for CRAN you go to `Tools` -> `Global Options`
 
 To change the theme: `Tools` -> `Global Options` -> `Appearance` -> Choose an `Editor Theme` that is appealing to you. Dark background is most relaxing for your eyes.
 
 Edit the setting that forces output to inline in RMarkdown documents under the `R Markdown` panel. Uncheck the "Show output in-line for all RMarkdown documents" -> Click `Apply`. 
 
 ## Restarting R 
-If you are really stuck. If R hangs, restart R by: `Session` -> `Restart R`
-If login into the RStudio Server fails, sent me an email, I will reset your account for you
+If you are really stuck it is possible to restart R. If R hangs, restart R by: `Session` -> `Restart R`
+If login into the RStudio Server fails, send me an email, I will reset your account for you
 
 ## Code style and reformat
 Writing computer code needs to adhere to convention, in R specically for humans reading the code. R does not care about indentations or white lines or braces on the wrong line. But adhering to a style convention makes code easier for humans to consume. For more on code style for R: 
 
 [tidyverse style guide](https://style.tidyverse.org/)
 
-If your code looks like a mess: Select your code -> click `Code` and than `Reformat Code`, it will change youR life
+If your code looks like a mess: Select your code -> click `Code` and than `Reformat Code`, it will change your life.
  1. If you find the inline output in Rmarkdown files (output will apear under the code chunk) as annoying as me: Click `Tools` -> `Global Options` -> select the `R Markdown` tab, than uncheck the checkbox for "Show output inline for all RMarkdown documents" 
 
 ## Shortcut keys
@@ -125,11 +125,12 @@ To read data RStudio has an interactive help:
 Choose `File` -> `Import Dataset` -> `From Text (readr)` or the appropriate file type
 
  - Choose the file that you want to import under the `Browse` button
- - An interactive Console will appear, choose the right settings such as headers on/off, delimiter etc. 
- - Much like in the import function from Excel you will see a preview of the datatable.  - In the bottom right corner the appropriate R code is displayed. 
+ - An interactive console will appear, choose the right settings such as headers on/off, delimiter etc. 
+ - Much like in the import function from Excel you will see a preview of the datatable.  
+ - In the bottom right corner the appropriate R code is displayed. 
  - You can copy that code to the clipboard and paste it into a script.
  - Now execute the script and the datafile loads. 
- - If you want you can first adapt the variable name that is chosen to store the datframe in
+ - If you want you can first adapt the variable name that is chosen to store the dataframe in
 
 ## Try load data
 Try to load the datafile "/data/kiemingen.xlsx" the way described above.

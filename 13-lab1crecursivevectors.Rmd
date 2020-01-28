@@ -16,13 +16,13 @@ The R vectors above are so called `atomic vectors`. They are the 'atoms' of R, t
 The recursive vectors are:
 
  * List
- * Dataframe: as special kind of list
- * Tibble: as special kind of dataframe
+ * Dataframe: a special kind of list
+ * Tibble: a special kind of dataframe
 
 Below I will explain the difference
 
 ## The Dataframe
-The dataframe is the most widely used data structure. If you use R for doing analysis of data, this is the datstructure that you will use the most, by far!
+The dataframe is the most widely used data structure. If you use R for analyzing of data, this is the datstructure that you will use the most by far!
 
 To understand the dataframe we can best look at a named-vector.
 An object in R has a value and can have attibutes. One of the most convenient attributes is the name of each element in a vector, which is collectively called the `names` attribute
@@ -68,10 +68,10 @@ numbers[c(-5,5)]
 ```
 
 ## The dataframe
-Now that we understand the named vector we can expand this idea by creating several vectors with elements. These are then as the columns of the dataframe. One prerequisite of a `dataframe` is that all columns must have equal `length`. Individual columns of a datframe can have different data types. Remember that a vector can only contain one datatype. 
+Now that we understand the named vector we can expand this idea by creating several vectors with elements. These are then as the columns of the dataframe. One prerequisite of a `dataframe` is that all columns must have equal `length`. Individual columns of a dataframe can have different data types. Remember that a vector can only contain one datatype. 
 ```{r}
 
-## indivual vectors
+## individual vectors
 age = c(24, 27, 19, 34)
 sex = c("F","F","M", "M")
 weight = c(64, 55, 80, 70)
@@ -214,7 +214,7 @@ matrix_lgl <- matrix(data = rep(c(TRUE, FALSE, TRUE), times = 20),
   print()
 ```
 
-A matrix is basically a vector, with attributes that contain it's dimensions
+A matrix is basically a vector, with attributes that contain its dimensions
 ```{r}
 matrix_num[1:10]
 attributes(matrix_num)
@@ -297,7 +297,7 @@ knitr::purl("hands_ons/part1_intro_to_rstudio_and_r.Rmd", output = "./hands_ons/
  
 https://uk.sagepub.com/en-gb/eur/discovering-statistics-using-r/book236067%20
 
-## For more on learning R, start e.g. with:
+## For more on learning R, start with:
 
 http://www.statsteachr.org/ or
 
@@ -307,7 +307,7 @@ https://www.youtube.com/watch?v=ACWuV16tdhY&index=21&list=PLqzoL9-eJTNBDdKgJgJza
 
 https://www.youtube.com/watch?v=kvmSAXhX9Hs&index=29&list=PLqzoL9-eJTNBDdKgJgJzaQcY6OXmsXAHU 
 
-and the rest of Mike Marin's lectures, that are also a really great way to start learning R.
+and the rest of Mike Marin's lectures, those are also a really great way to start learning R.
 Or try datacamp.com
 
 ## EXERCISES
