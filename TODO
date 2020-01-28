@@ -13,32 +13,6 @@ Merge victor to devel
 
 
 TODO:
-Hoofdstuk 6 - Regel 133 staat dat er een interactive table zou moeten zijn, die is er niet.
-
-Hoofdstuk 6 - regel 254 kapt halverwege een zin af.
- - Hoofdstuk 7 Lab 1A: Regel 115 is mij niet duidelijk. Voor mij is een Rmd iets anders dan een r-script (een .R file).
- - Hoofdstuk 8 Lab 1B: Regel 523 toegevoegd dat R bij 1 begint te tellen en niet bij 0. 
- - Hoofdstuk 9 Lab 1C: Regel 13: Er zijn geen atomic vectors above waaraan gerefereerd wordt.
- - Hoofdstuk 9 Lab 1C: Misschien mijn eigen achtergrond, maar ik vond dataframes intuïtief begrijpelijk, named vectors blijven vaag. Een dataframe is vergelijkbaar met een tabel in een database, of met een fatsoenlijke excel tabel. Voor mensen die een meer data achtergrond hebben is dat logischer dan de basis in R. Mensen met meer programmeerachtergrond zullen deze uitleg beter snappen.
-
- - Hoofdstuk 9 Lab 1C: Ik heb in mijn leven met R nog nooit een list gebruikt voor data-analyse. Misschien is het goed om dat deel optioneel te maken. Idem met matrices.
-
- - Hoofdstuk 9 Lab 1C: Regel 191. Een matrix kan meer bevatten dan alleen numeric values in R, dat laat je zelf ook zien. 
- - Hoofdstuk 10 Lab 2: Super nitpicky, maar op regel 787 zou ik een filter van >= 100 gebruiken ipv >100, als je verder met <100 werkt. Anders zouden =100 gevallen buiten beide analyses vallen, en dat kan in de toekomst verwarrend zijn.
-
-
-
-
-
-
- 
- 
-http://database2.hudatascience.nl:8080/edamoi/reader/ 
- 
- 
- 
- 
- 
 
  - Add chapter on Rmarkdown
  - add chapter on using Git with RStudio (or maybe put it in RSTudio chapter?)
