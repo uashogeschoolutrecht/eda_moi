@@ -1,3 +1,5 @@
 url,description
-https://github.com/uashogeschoolutrecht/eda_moi, github_repo
+https://github.com/uashogeschoolutrecht/eda_moi, github_repo (private develop repo)
 http://database2.hudatascience.nl:8080/edamoi/reader/, bookdown_project
+https://github.com/uashogeschoolutrecht/exploratory_data_materclasses, github_repo (public - answers)
+

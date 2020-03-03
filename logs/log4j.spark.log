@@ -1,69 +1,70 @@
-20/01/15 14:50:08 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
-20/01/15 14:50:09 INFO SparkContext: Running Spark version 2.4.3
-20/01/15 14:50:09 WARN SparkConf: Note that spark.local.dir will be overridden by the value set by the cluster manager (via SPARK_LOCAL_DIRS in mesos/standalone/kubernetes and LOCAL_DIRS in YARN).
-20/01/15 14:50:09 INFO SparkContext: Submitted application: sparklyr
-20/01/15 14:50:09 INFO SecurityManager: Changing view acls to: marct
-20/01/15 14:50:09 INFO SecurityManager: Changing modify acls to: marct
-20/01/15 14:50:09 INFO SecurityManager: Changing view acls groups to: 
-20/01/15 14:50:09 INFO SecurityManager: Changing modify acls groups to: 
-20/01/15 14:50:09 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(marct); groups with view permissions: Set(); users  with modify permissions: Set(marct); groups with modify permissions: Set()
-20/01/15 14:50:09 INFO Utils: Successfully started service 'sparkDriver' on port 60099.
-20/01/15 14:50:10 INFO SparkEnv: Registering MapOutputTracker
-20/01/15 14:50:10 INFO SparkEnv: Registering BlockManagerMaster
-20/01/15 14:50:10 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
-20/01/15 14:50:10 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
-20/01/15 14:50:10 INFO DiskBlockManager: Created local directory at C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\blockmgr-00843d9b-4166-4703-bf0a-15929b5bd167
-20/01/15 14:50:10 INFO MemoryStore: MemoryStore started with capacity 912.3 MB
-20/01/15 14:50:10 INFO SparkEnv: Registering OutputCommitCoordinator
-20/01/15 14:50:10 WARN Utils: The configured local directories are not expected to be URIs; however, got suspicious values [C:/Users/marct/AppData/Local/spark/spark-2.4.3-bin-hadoop2.7/tmp/local]. Please check your configured local directories.
-20/01/15 14:50:10 INFO Utils: Successfully started service 'SparkUI' on port 4040.
-20/01/15 14:50:10 INFO SparkUI: Bound SparkUI to 127.0.0.1, and started at http://127.0.0.1:4040
-20/01/15 14:50:10 INFO SparkContext: Added JAR file:/C:/Users/marct/OneDrive/OLD/Documenten/R/win-library/3.6/sparklyr/java/sparklyr-2.4-2.11.jar at spark://127.0.0.1:60099/jars/sparklyr-2.4-2.11.jar with timestamp 1579096210333
-20/01/15 14:50:10 INFO Executor: Starting executor ID driver on host localhost
-20/01/15 14:50:10 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 60140.
-20/01/15 14:50:10 INFO NettyBlockTransferService: Server created on 127.0.0.1:60140
-20/01/15 14:50:10 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
-20/01/15 14:50:10 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 127.0.0.1, 60140, None)
-20/01/15 14:50:10 INFO BlockManagerMasterEndpoint: Registering block manager 127.0.0.1:60140 with 912.3 MB RAM, BlockManagerId(driver, 127.0.0.1, 60140, None)
-20/01/15 14:50:10 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 127.0.0.1, 60140, None)
-20/01/15 14:50:10 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 127.0.0.1, 60140, None)
-20/01/15 14:50:10 INFO SharedState: loading hive config file: file:/C:/Users/marct/AppData/Local/spark/spark-2.4.3-bin-hadoop2.7/conf/hive-site.xml
-20/01/15 14:50:10 INFO SharedState: Setting hive.metastore.warehouse.dir ('C:/Users/marct/AppData/Local/spark/spark-2.4.3-bin-hadoop2.7/tmp/hive') to the value of spark.sql.warehouse.dir ('C:/Users/marct/AppData/Local/spark/spark-2.4.3-bin-hadoop2.7/tmp/hive').
-20/01/15 14:50:10 INFO SharedState: Warehouse path is 'C:/Users/marct/AppData/Local/spark/spark-2.4.3-bin-hadoop2.7/tmp/hive'.
-20/01/15 14:50:11 INFO StateStoreCoordinatorRef: Registered StateStoreCoordinator endpoint
-20/01/15 14:50:13 INFO SparkContext: Starting job: collect at utils.scala:44
-20/01/15 14:50:13 INFO DAGScheduler: Got job 0 (collect at utils.scala:44) with 1 output partitions
-20/01/15 14:50:13 INFO DAGScheduler: Final stage: ResultStage 0 (collect at utils.scala:44)
-20/01/15 14:50:13 INFO DAGScheduler: Parents of final stage: List()
-20/01/15 14:50:13 INFO DAGScheduler: Missing parents: List()
-20/01/15 14:50:13 INFO DAGScheduler: Submitting ResultStage 0 (MapPartitionsRDD[4] at map at utils.scala:41), which has no missing parents
-20/01/15 14:50:13 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 6.0 KB, free 912.3 MB)
-20/01/15 14:50:14 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 3.4 KB, free 912.3 MB)
-20/01/15 14:50:14 INFO BlockManagerInfo: Added broadcast_0_piece0 in memory on 127.0.0.1:60140 (size: 3.4 KB, free: 912.3 MB)
-20/01/15 14:50:14 INFO SparkContext: Created broadcast 0 from broadcast at DAGScheduler.scala:1161
-20/01/15 14:50:14 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 0 (MapPartitionsRDD[4] at map at utils.scala:41) (first 15 tasks are for partitions Vector(0))
-20/01/15 14:50:14 INFO TaskSchedulerImpl: Adding task set 0.0 with 1 tasks
-20/01/15 14:50:14 INFO TaskSetManager: Starting task 0.0 in stage 0.0 (TID 0, localhost, executor driver, partition 0, PROCESS_LOCAL, 7893 bytes)
-20/01/15 14:50:14 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
-20/01/15 14:50:14 INFO Executor: Fetching spark://127.0.0.1:60099/jars/sparklyr-2.4-2.11.jar with timestamp 1579096210333
-20/01/15 14:50:14 INFO TransportClientFactory: Successfully created connection to /127.0.0.1:60099 after 21 ms (0 ms spent in bootstraps)
-20/01/15 14:50:14 INFO Utils: Fetching spark://127.0.0.1:60099/jars/sparklyr-2.4-2.11.jar to C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-5a3b90bd-b941-4fd7-8390-8782741b2618\userFiles-6caf9b0f-05ea-405d-a8fb-f7426a817aae\fetchFileTemp4631482073571578157.tmp
-20/01/15 14:50:14 INFO Executor: Adding file:/C:/Users/marct/AppData/Local/spark/spark-2.4.3-bin-hadoop2.7/tmp/local/spark-5a3b90bd-b941-4fd7-8390-8782741b2618/userFiles-6caf9b0f-05ea-405d-a8fb-f7426a817aae/sparklyr-2.4-2.11.jar to class loader
-20/01/15 14:50:15 INFO CodeGenerator: Code generated in 201.3718 ms
-20/01/15 14:50:15 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 970 bytes result sent to driver
-20/01/15 14:50:15 INFO TaskSetManager: Finished task 0.0 in stage 0.0 (TID 0) in 625 ms on localhost (executor driver) (1/1)
-20/01/15 14:50:15 INFO TaskSchedulerImpl: Removed TaskSet 0.0, whose tasks have all completed, from pool 
-20/01/15 14:50:15 INFO DAGScheduler: ResultStage 0 (collect at utils.scala:44) finished in 1.463 s
-20/01/15 14:50:15 INFO DAGScheduler: Job 0 finished: collect at utils.scala:44, took 1.518754 s
-20/01/15 14:50:16 INFO SparkContext: Invoking stop() from shutdown hook
-20/01/15 14:50:16 INFO SparkUI: Stopped Spark web UI at http://127.0.0.1:4040
-20/01/15 14:50:16 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
-20/01/15 14:50:16 INFO MemoryStore: MemoryStore cleared
-20/01/15 14:50:16 INFO BlockManager: BlockManager stopped
-20/01/15 14:50:16 INFO BlockManagerMaster: BlockManagerMaster stopped
-20/01/15 14:50:16 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
-20/01/15 14:50:16 WARN SparkEnv: Exception while deleting Spark temp dir: C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-5a3b90bd-b941-4fd7-8390-8782741b2618\userFiles-6caf9b0f-05ea-405d-a8fb-f7426a817aae
-java.io.IOException: Failed to delete: C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-5a3b90bd-b941-4fd7-8390-8782741b2618\userFiles-6caf9b0f-05ea-405d-a8fb-f7426a817aae\sparklyr-2.4-2.11.jar
+20/03/03 10:28:56 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+20/03/03 10:28:58 INFO SparkContext: Running Spark version 2.4.3
+20/03/03 10:28:58 WARN SparkConf: Note that spark.local.dir will be overridden by the value set by the cluster manager (via SPARK_LOCAL_DIRS in mesos/standalone/kubernetes and LOCAL_DIRS in YARN).
+20/03/03 10:28:58 INFO SparkContext: Submitted application: sparklyr
+20/03/03 10:28:58 INFO SecurityManager: Changing view acls to: marct
+20/03/03 10:28:58 INFO SecurityManager: Changing modify acls to: marct
+20/03/03 10:28:58 INFO SecurityManager: Changing view acls groups to: 
+20/03/03 10:28:58 INFO SecurityManager: Changing modify acls groups to: 
+20/03/03 10:28:58 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(marct); groups with view permissions: Set(); users  with modify permissions: Set(marct); groups with modify permissions: Set()
+20/03/03 10:28:58 INFO Utils: Successfully started service 'sparkDriver' on port 61930.
+20/03/03 10:28:58 INFO SparkEnv: Registering MapOutputTracker
+20/03/03 10:28:58 INFO SparkEnv: Registering BlockManagerMaster
+20/03/03 10:28:58 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+20/03/03 10:28:58 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+20/03/03 10:28:58 INFO DiskBlockManager: Created local directory at C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\blockmgr-7206a79a-8baf-4092-9cab-51d2f441bf22
+20/03/03 10:28:58 INFO MemoryStore: MemoryStore started with capacity 912.3 MB
+20/03/03 10:28:58 INFO SparkEnv: Registering OutputCommitCoordinator
+20/03/03 10:28:58 WARN Utils: The configured local directories are not expected to be URIs; however, got suspicious values [C:/Users/marct/AppData/Local/spark/spark-2.4.3-bin-hadoop2.7/tmp/local]. Please check your configured local directories.
+20/03/03 10:28:58 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+20/03/03 10:28:58 INFO SparkUI: Bound SparkUI to 127.0.0.1, and started at http://127.0.0.1:4040
+20/03/03 10:28:58 INFO SparkContext: Added JAR file:/C:/Users/marct/OneDrive/OLD/Documenten/R/win-library/3.6/sparklyr/java/sparklyr-2.4-2.11.jar at spark://127.0.0.1:61930/jars/sparklyr-2.4-2.11.jar with timestamp 1583227738652
+20/03/03 10:28:58 INFO Executor: Starting executor ID driver on host localhost
+20/03/03 10:28:58 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 61971.
+20/03/03 10:28:58 INFO NettyBlockTransferService: Server created on 127.0.0.1:61971
+20/03/03 10:28:58 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+20/03/03 10:28:58 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 127.0.0.1, 61971, None)
+20/03/03 10:28:58 INFO BlockManagerMasterEndpoint: Registering block manager 127.0.0.1:61971 with 912.3 MB RAM, BlockManagerId(driver, 127.0.0.1, 61971, None)
+20/03/03 10:28:58 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 127.0.0.1, 61971, None)
+20/03/03 10:28:58 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 127.0.0.1, 61971, None)
+20/03/03 10:28:59 INFO SharedState: loading hive config file: file:/C:/Users/marct/AppData/Local/spark/spark-2.4.3-bin-hadoop2.7/conf/hive-site.xml
+20/03/03 10:28:59 INFO SharedState: Setting hive.metastore.warehouse.dir ('C:/Users/marct/AppData/Local/spark/spark-2.4.3-bin-hadoop2.7/tmp/hive') to the value of spark.sql.warehouse.dir ('C:/Users/marct/AppData/Local/spark/spark-2.4.3-bin-hadoop2.7/tmp/hive').
+20/03/03 10:28:59 INFO SharedState: Warehouse path is 'C:/Users/marct/AppData/Local/spark/spark-2.4.3-bin-hadoop2.7/tmp/hive'.
+20/03/03 10:29:00 INFO StateStoreCoordinatorRef: Registered StateStoreCoordinator endpoint
+20/03/03 10:29:02 INFO CodeGenerator: Code generated in 313.7837 ms
+20/03/03 11:29:46 INFO SparkContext: Starting job: collect at utils.scala:44
+20/03/03 11:29:46 INFO DAGScheduler: Got job 0 (collect at utils.scala:44) with 1 output partitions
+20/03/03 11:29:46 INFO DAGScheduler: Final stage: ResultStage 0 (collect at utils.scala:44)
+20/03/03 11:29:46 INFO DAGScheduler: Parents of final stage: List()
+20/03/03 11:29:46 INFO DAGScheduler: Missing parents: List()
+20/03/03 11:29:46 INFO DAGScheduler: Submitting ResultStage 0 (MapPartitionsRDD[4] at map at utils.scala:41), which has no missing parents
+20/03/03 11:29:46 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 6.0 KB, free 912.3 MB)
+20/03/03 11:29:46 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 3.4 KB, free 912.3 MB)
+20/03/03 11:29:46 INFO BlockManagerInfo: Added broadcast_0_piece0 in memory on 127.0.0.1:61971 (size: 3.4 KB, free: 912.3 MB)
+20/03/03 11:29:46 INFO SparkContext: Created broadcast 0 from broadcast at DAGScheduler.scala:1161
+20/03/03 11:29:46 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 0 (MapPartitionsRDD[4] at map at utils.scala:41) (first 15 tasks are for partitions Vector(0))
+20/03/03 11:29:46 INFO TaskSchedulerImpl: Adding task set 0.0 with 1 tasks
+20/03/03 11:29:46 INFO TaskSetManager: Starting task 0.0 in stage 0.0 (TID 0, localhost, executor driver, partition 0, PROCESS_LOCAL, 7893 bytes)
+20/03/03 11:29:46 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+20/03/03 11:29:46 INFO Executor: Fetching spark://127.0.0.1:61930/jars/sparklyr-2.4-2.11.jar with timestamp 1583227738652
+20/03/03 11:29:46 INFO TransportClientFactory: Successfully created connection to /127.0.0.1:61930 after 23 ms (0 ms spent in bootstraps)
+20/03/03 11:29:46 INFO Utils: Fetching spark://127.0.0.1:61930/jars/sparklyr-2.4-2.11.jar to C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-f3cd18c3-d2f2-4c49-91e4-491e91f99923\userFiles-ca399a8e-1997-4980-a95e-56047701f7d7\fetchFileTemp4071678724005537765.tmp
+20/03/03 11:29:47 INFO Executor: Adding file:/C:/Users/marct/AppData/Local/spark/spark-2.4.3-bin-hadoop2.7/tmp/local/spark-f3cd18c3-d2f2-4c49-91e4-491e91f99923/userFiles-ca399a8e-1997-4980-a95e-56047701f7d7/sparklyr-2.4-2.11.jar to class loader
+20/03/03 11:29:47 INFO CodeGenerator: Code generated in 8.485 ms
+20/03/03 11:29:47 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 970 bytes result sent to driver
+20/03/03 11:29:47 INFO TaskSetManager: Finished task 0.0 in stage 0.0 (TID 0) in 336 ms on localhost (executor driver) (1/1)
+20/03/03 11:29:47 INFO TaskSchedulerImpl: Removed TaskSet 0.0, whose tasks have all completed, from pool 
+20/03/03 11:29:47 INFO DAGScheduler: ResultStage 0 (collect at utils.scala:44) finished in 0.598 s
+20/03/03 11:29:47 INFO DAGScheduler: Job 0 finished: collect at utils.scala:44, took 0.721154 s
+20/03/03 11:55:27 INFO SparkContext: Invoking stop() from shutdown hook
+20/03/03 11:55:27 INFO SparkUI: Stopped Spark web UI at http://127.0.0.1:4040
+20/03/03 11:55:27 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
+20/03/03 11:55:27 INFO MemoryStore: MemoryStore cleared
+20/03/03 11:55:27 INFO BlockManager: BlockManager stopped
+20/03/03 11:55:27 INFO BlockManagerMaster: BlockManagerMaster stopped
+20/03/03 11:55:27 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
+20/03/03 11:55:27 WARN SparkEnv: Exception while deleting Spark temp dir: C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-f3cd18c3-d2f2-4c49-91e4-491e91f99923\userFiles-ca399a8e-1997-4980-a95e-56047701f7d7
+java.io.IOException: Failed to delete: C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-f3cd18c3-d2f2-4c49-91e4-491e91f99923\userFiles-ca399a8e-1997-4980-a95e-56047701f7d7\sparklyr-2.4-2.11.jar
 	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:144)
 	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:118)
 	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:128)
@@ -87,12 +88,15 @@ java.io.IOException: Failed to delete: C:\Users\marct\AppData\Local\spark\spark-
 	at org.apache.spark.util.SparkShutdownHookManager.runAll(ShutdownHookManager.scala:188)
 	at org.apache.spark.util.SparkShutdownHookManager$$anon$2.run(ShutdownHookManager.scala:178)
 	at org.apache.hadoop.util.ShutdownHookManager$1.run(ShutdownHookManager.java:54)
-20/01/15 14:50:16 INFO SparkContext: Successfully stopped SparkContext
-20/01/15 14:50:16 INFO ShutdownHookManager: Shutdown hook called
-20/01/15 14:50:16 INFO ShutdownHookManager: Deleting directory C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-5a3b90bd-b941-4fd7-8390-8782741b2618\userFiles-6caf9b0f-05ea-405d-a8fb-f7426a817aae
-20/01/15 14:50:16 ERROR ShutdownHookManager: Exception while deleting Spark temp dir: C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-5a3b90bd-b941-4fd7-8390-8782741b2618\userFiles-6caf9b0f-05ea-405d-a8fb-f7426a817aae
-java.io.IOException: Failed to delete: C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-5a3b90bd-b941-4fd7-8390-8782741b2618\userFiles-6caf9b0f-05ea-405d-a8fb-f7426a817aae\sparklyr-2.4-2.11.jar
+20/03/03 11:55:27 INFO SparkContext: Successfully stopped SparkContext
+20/03/03 11:55:27 INFO ShutdownHookManager: Shutdown hook called
+20/03/03 11:55:27 INFO ShutdownHookManager: Deleting directory C:\Users\marct\AppData\Local\Temp\spark-6599314d-b682-4b49-8ecc-7933805dcaad
+20/03/03 11:55:27 INFO ShutdownHookManager: Deleting directory C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-f3cd18c3-d2f2-4c49-91e4-491e91f99923
+20/03/03 11:55:27 ERROR ShutdownHookManager: Exception while deleting Spark temp dir: C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-f3cd18c3-d2f2-4c49-91e4-491e91f99923
+java.io.IOException: Failed to delete: C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-f3cd18c3-d2f2-4c49-91e4-491e91f99923\userFiles-ca399a8e-1997-4980-a95e-56047701f7d7\sparklyr-2.4-2.11.jar
 	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:144)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:118)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:128)
 	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:118)
 	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:128)
 	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:118)
@@ -115,13 +119,10 @@ java.io.IOException: Failed to delete: C:\Users\marct\AppData\Local\spark\spark-
 	at org.apache.spark.util.SparkShutdownHookManager.runAll(ShutdownHookManager.scala:188)
 	at org.apache.spark.util.SparkShutdownHookManager$$anon$2.run(ShutdownHookManager.scala:178)
 	at org.apache.hadoop.util.ShutdownHookManager$1.run(ShutdownHookManager.java:54)
-20/01/15 14:50:16 INFO ShutdownHookManager: Deleting directory C:\Users\marct\AppData\Local\Temp\spark-334b799f-f006-4375-9138-6c9512757bdd
-20/01/15 14:50:16 INFO ShutdownHookManager: Deleting directory C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-5a3b90bd-b941-4fd7-8390-8782741b2618
-20/01/15 14:50:16 ERROR ShutdownHookManager: Exception while deleting Spark temp dir: C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-5a3b90bd-b941-4fd7-8390-8782741b2618
-java.io.IOException: Failed to delete: C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-5a3b90bd-b941-4fd7-8390-8782741b2618\userFiles-6caf9b0f-05ea-405d-a8fb-f7426a817aae\sparklyr-2.4-2.11.jar
+20/03/03 11:55:27 INFO ShutdownHookManager: Deleting directory C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-f3cd18c3-d2f2-4c49-91e4-491e91f99923\userFiles-ca399a8e-1997-4980-a95e-56047701f7d7
+20/03/03 11:55:27 ERROR ShutdownHookManager: Exception while deleting Spark temp dir: C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-f3cd18c3-d2f2-4c49-91e4-491e91f99923\userFiles-ca399a8e-1997-4980-a95e-56047701f7d7
+java.io.IOException: Failed to delete: C:\Users\marct\AppData\Local\spark\spark-2.4.3-bin-hadoop2.7\tmp\local\spark-f3cd18c3-d2f2-4c49-91e4-491e91f99923\userFiles-ca399a8e-1997-4980-a95e-56047701f7d7\sparklyr-2.4-2.11.jar
 	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:144)
-	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:118)
-	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:128)
 	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:118)
 	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:128)
 	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:118)
