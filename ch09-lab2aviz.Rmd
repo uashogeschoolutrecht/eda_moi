@@ -233,11 +233,34 @@ gapminder %>%
 
 A) On the basis of the above picture: Create an EDA plan to investigate whether the population growth rate is different between Africa and Asia in general. How would you approach this? Create a stepwise plan, describe the PPDAC cycle
 
+```{r, include=FALSE}
+## PPDAC: problem, plan, data, analysis, conclusion(s)
+## problem: Is the rate in population growth different between Africa and Asia
+## plan: Get data for growth of population over the past 10 years, from most (if not all) countries of the continents Africa and Asia, check the integrety of the data, clean if neccessary, check missing values, check validity of the source of the data, check minimal and maximal values, generate summary statistics
+## data: use Gapminder dataset in the `{dslabs}` or `{gapminder}` R package (any other ideas?).
+## Analysis: see partly under plan for initial steps: Filter data for continents Africa and Asia, summarize data for continents, plot population size to time (years), analyze data with a regression model (linear regression?, exponential?), Determine fit and slope paramters form the models. Perform comparisons of models for best fit. Analyze if slopes are different between continents, how? Maybe two way ANOVA? or repeated measures, multilevel? 
+## Conclusions: draw conclusions about growth rate (slope paramter is proxy for growth rate)
+
+
+
+
+```
+
 B) How would you formally 'prove' that growth rates between Africa and Asia in general are the same or different? What statitical model do you think is appropriate. What are the underlying assumptions for your model(s)?
+```{r, include=FALSE}
+## see answer above (regression, multilevel analysis of variance), normally distributed residuals, homoscedasticity (equal variance)
+```
+
 
 C) How would you, using the same strategy as under 1A) and 1B) subset the data for African countries that have deviating growth rate differences from the overall trend.
+```{r, include=FALSE}
+## look at the fit for linear or exponential regression models (r-squared), countries with population growth curves that display a very poor fit are deviating. 
+```
 
-D) Can you create a plan to create a graph showing the general overall growth rate over the years for all continents in the `gapminder` dataset? What kind of data-wrangling operation is neccessary to create such a graph (what kind of summary of the data do you need and how would you group the data). Make a conceptual datatable that shows the endproduct. (we will come back to this exercise in Chapters \@ref(lab6amodels) and \@ref(lab3awrangling) . 
+D) Can you create a plan to create a graph showing the general overall growth rate over the years for all continents in the `gapminder` dataset? What kind of data-wrangling operation is neccessary to create such a graph (what kind of summary of the data do you need and how would you group the data). Make a conceptual datatable that shows the endproduct. (we will come back to this exercise in Chapters \@ref(lab6amodels) and \@ref(lab3awrangling).
+```{r}
+## see above but for every continent, how would you keep all the models built for all countries together?
+```
 
 **Extend the filter to exclude more data** 
 ```{r}

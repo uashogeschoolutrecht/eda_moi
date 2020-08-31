@@ -39,11 +39,23 @@ Writing a function that replaces
 `a designated number or string` for `NA` (the R-way of indicating a missing value)
 
 ```{r}
-replace_x_for_na <- function(x){
+
+## dummies
+x <- c(999, 7767, 999, -999)
+na_indicator <- "test"
+
+replace_x_for_na <- function(x, na_indicator){
   
-  x[x == -999] <- NA
-  return(x)
+  x[x == na_indicator] <- NA
+  string <- "done!"
+  return(list(x, string))
+
 }
+
+test <- c(999, -999, 7, 8)
+
+replace_x_for_na(x = test, na_indicator = 999)
+
 ```
 
 Apply this function to one column of our data-frame `df`
@@ -453,6 +465,7 @@ What does the `...` do?
 ## Try out
 The code below illustrates what this function does. Running the following chunk adds the function to the Global Environment. 
 ```{r}
+
 rotate_axis_labels <- function(axis = NULL, 
                                angle = NULL, 
                                h_just = 1,
@@ -504,19 +517,32 @@ gapminder::gapminder %>%
              y = lifeExp)) +
   geom_point() +
   rotate_axis_labels(axis = "X", 
-                     angle = 33)
+                     angle = 60)
 
 
 ## adapt label offset and use ... to change colour and font face to bold
+
+plot_gapminder_le_vs_country <- function(continent, year){
+
 gapminder::gapminder %>%
-  dplyr::filter(continent == "Europe", year == 1972) %>%
+  dplyr::filter(continent == continent, year == year) %>%
   ggplot(aes(x = country,
              y = lifeExp)) +
   geom_point() +
   rotate_axis_labels(axis = "X", 
                      angle = 90,
                      h_just = 1, 
-                     v_just = 0.11, colour = "red", size = 11, face = "bold")
+                     v_just = 0.11, colour = "red", size = 9, face = "bold")
+
+}
+
+plot_gapminder_le_vs_country(continent = "Africa", year = 1972)
+plot_gapminder_le_vs_country(continent = "Europe", year = 1972)
+
+
+
+
+
 
 ```
 Note that I demonstrate the use of `...` in the code above, with:

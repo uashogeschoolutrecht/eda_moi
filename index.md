@@ -1,0 +1,114 @@
+--- 
+title: "Exploratory Data Analysis _or_ 'Data Mining'"
+author: "Marc A.T. Teunis, PhD"
+date: "2020-08-31 12:46:09"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+bibliography: [references.bib]
+biblio-style: apalike
+link-citations: yes
+always_allow_html: yes
+github-repo: uashogeschoolutrecht/edamoi
+description: "This is the accompanying website for the Masterclasses 'Exploratory Data Analysis _or_ 'Data Mining' of the Hogeschool Utrecht Master of Informatics"
+---
+
+
+
+# Prerequisites
+
+
+
+## Purpose of this website
+This website is the accompanying website to the "Exploratory Data Analysis" Course for the Master of Informatics of the Univeristy of Applied Sciences. Next to the seven chapters that correpond to the seven so-called 'labs' or 'masterclasses' of the course, it contains introductory and supplemantal materials. The course content and further structure of the course are explained in \@ref(coursecontents). All methods described in this website and used in the course relate to the Language and Environment for Statistical Computing called [**R**](https://cran.r-project.org/) [@R-base]. To work more effeciently with R we will be using the most commonly used Integrated Development Environment for R: [**RStudio**](https://www.rstudio.com) [@R-rstudio]. 
+
+## R Packages
+When you install R for the first time, you only get a basic installation. This so-called `base-R` includes the R core of the language but does not get you very far if you really want to do more complex data analytics. There are many so-called 'packages' to add on to this base-R installation and for this course we use many of them. The code below retrieves the current amount of packages published on the Comprehensive R Archiving Network, which is a main resource for R-packages. 
+
+By using a webscraping approach we can extract the statitistics on published packages from the CRAN website. Below, I sho a plot created from this scraped data and a small piece of R-code that retrieves the absolute number of R-packages available on the day that this website was last updated.   
+
+The number of packages has increased enormously over the past 5 years. The graph below shows the progress in the number of packages available from CRAN.
+
+The function that creates the graph is loaded with the `source()` function.
+
+
+```r
+source(here::here("code", "r_packages_graph.R"))
+## assigning a plot object 
+pkgs_plot <- plot_packages()
+## saving plot to disk plot
+ggsave(filename = here::here("images", "rpackages_trend.svg"), 
+       plot = pkgs_plot,
+       width = 5, height = 5)
+```
+
+
+```r
+## include plot in document
+knitr::include_graphics(path = here::here("images", "rpackages_trend.svg"))
+```
+
+![](C:/Users/mteunis/workspaces/eda_moi/images/rpackages_trend.svg)<!-- -->
+
+How many R-packages are available from CRAN on the date that this website was last updated: 2020-08-31 
+
+
+```r
+library(rvest)
+
+pkgs <- read_html("https://cran.r-project.org/web/packages/available_packages_by_name.html")
+mylines <- pkgs %>% 
+    html_nodes("tr") %>%
+    xml_text()
+
+nb_pkgs <- length(which(sapply(mylines, nchar)>5))
+
+print(paste("There are", nb_pkgs, "packages available in CRAN as of", Sys.Date()))
+```
+
+```
+## [1] "There are 16182 packages available in CRAN as of 2020-08-31"
+```
+
+Other important resources than CRAN for R-packages are:
+
+ - [BIOCONDUCTOR](https://www.bioconductor.org/).
+ - [Github](https://github.com)
+ - [Bitbucket](https://bitbucket.org/)
+ - [ROpenSci](https://ropensci.org/packages/)
+
+A full list of packages that are needed for this course is available in the package appendix \@ref(appendix) 
+
+## Getting the materials
+To compile this website locally, you can clone the website repository from 
+
+https://github.com/uashogeschoolutrecht/edamoi_site. 
+
+Click the Build button to build the website on you local computer. 
+This repository can also be used to acces the course materials directly in RStudio during the classes.
+
+## Getting R and RStudio
+During the course we will be working on a Cloud Computing Environment which provides webaccess to R and RStudio via a Virtual Machine. This machine runs a server edition of RStudio and has the latest R version and all the required packages available. In order to access the server you will need credentials, which you will recieve before the course starts. This is a convenient way to use R in a course and during the course we will only be using this environment. This is to ensure reproducibility and prevents a lot of trouble shooting from your side and the teacher's side.
+
+If you want to use R and RStudio locally on your laptop (the teacher will not support this during the course), this is where you can download the software from:
+
+[RStudio](https://www.rstudio.com/products/rstudio/download/) 
+
+[R](https://cran.r-project.org/)
+
+If you want to use R after the course, this is what you will need to do because the accessibility to the RStudio server will only be guaruateed untill a month after the course has finished. During the course, I will show you how to manage getting files to and from the server using an FTP client, so that you can make backups of your data and exercises if you want or use the server environment to practice with your own data and code.
+
+## Bring your own data (`BYOD`)!
+
+During the course we will use a lot of different datasets that are available directly from R, in R-packages or from open data sources on the internet. If you want to bring your own data to practice with you can and this is encouraged! Please be aware that I may want to share your data and/or analysis (issues) with the rest of the participants, so please bring only data for which this is allowed.   
+
+## The `{bookdown}` package
+This website was created using the `{bookdown}` [@R-bookdown] package written by Yihui Xie. The package can be downloaded from CRAN. For more information see the [documentation](https://bookdown.org/yihui/bookdown/).
+
+The `{bookdown}` package can be installed from CRAN or Github:
+
+
+```r
+install.packages("bookdown")
+# or the development version
+# devtools::install_github("rstudio/bookdown")
+```
