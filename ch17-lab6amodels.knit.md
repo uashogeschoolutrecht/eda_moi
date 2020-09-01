@@ -2,9 +2,27 @@
 
 
 
+## Packages
+
+```r
+library(tidyverse)
+```
+
+
 ## References
 Input for content of this chapter was derived from [@dsur], [@apm], [@rethinking], [adventr], Applied Predictive Modelling from Max Kuhn and
 https://cran.r-project.org/web/packages/dlookr/vignettes/EDA.html and https://tylerburleigh.com/blog/surviving-the-titanic-with-r-caret/
+
+https://www.geo.fu-berlin.de/en/v/soga/Basics-of-statistics/Continous-Random-Variables/The-Standard-Normal-Distribution/The-Standard-Normal-Distribution-An-Example/index.html
+
+http://msenux2.redwoods.edu/MathDept/R/StandardNormal.php
+
+http://www.cookbook-r.com/Manipulating_data/Changing_the_order_of_levels_of_a_factor/
+
+http://rstudio-pubs-static.s3.amazonaws.com/78857_86c2403ca9c146ba8fcdcda79c3f4738.html
+
+
+
 
 ## Contents of Lab 6
 
@@ -32,6 +50,20 @@ There are many good works on statistics and R. Three books stand out and provide
 We will also examine some of the official statistical applications of R in lab 6b and 6c
 
 ## Packages
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

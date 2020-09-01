@@ -27,8 +27,6 @@ http://www.cookbook-r.com/Manipulating_data/Changing_the_order_of_levels_of_a_fa
 http://rstudio-pubs-static.s3.amazonaws.com/78857_86c2403ca9c146ba8fcdcda79c3f4738.html
 
 
-
-
 ## Contents of Lab 6
 
  - Lab 6a Exploring distributions
@@ -140,7 +138,7 @@ sd(normals$value)
 normals %>%
 ggplot(aes(x=value)) + 
   stat_function(fun = dnorm, colour = "red", size = 1) +
-  xlim(c(-4, 4))
+  xlim(c(-4, 4)) 
   
 ```
 
@@ -161,7 +159,7 @@ ggplot(aes(x=value)) +
 D) Why are the mean and sd of the simulated data (`value` variable in the `normals` dataframe not exactly equal to 0 and 1 respectively?
 
 ## Investigating your own data
-To see if your own data is approaching a normal distribution we can start with plotting the density distribution of your dependent variable.
+To see if your own data is approaching a normal distribution we can start with plotting the density distribution of your dependent variable. Let's assume (I know it is hard) that we collect data on a number of cars ;-). On the basis of the data for miles per gallon we would like to get a prediction how these data would look if they would follow a normal distribution.
 
 ```{r}
 ggplot(mtcars, aes(x = mpg)) +
@@ -184,17 +182,23 @@ ggplot(mtcars, aes(x = mpg)) +
                    colour = "red")
 ```
 
-Here we can see that the `miles per gallon (mpg)` variable somewhat deviates from the the expected curve. The curve that is displayed shows some additional observation between 25 and 35 mpg that were not 'predicted' by the normal distribution curve. The actual mean is also somewhat lower than the 'predicted' mean 
+Here we can see that the `miles per gallon (mpg)` variable somewhat deviates from the the expected curve. The red curve that is displayed shows some additional observation between 25 and 35 mpg that were not 'predicted' by the normal distribution curve. The actual mean is also somewhat higher than the 'predicted' mean. We call this 'scewing'. Here the observations are skewed to the right. The actual mean lies to the right of the predicted mean. 
 
+As long as the deviation is 'not to big' we can safely assume normality. 
+
+**Preparing data for statistical analysis or predictive modeling always means that you have to study the data distributions. Each modeling or inference technique has assumptions that more or less influence the usefulness of the method (an the validity of the conclusions), if these assumptions are violated.
+
+We will later see that there are also formal ways of checking normality with a statistical test, but always look at the graphs too!
 
 ### ---- EXERCISE END ---- {-} 
 
 ## Using normal distribution in practice
 The mtcars dataset is all well for examples but not very exciting and we leave it behind now.
-Let's look at a real world example where a number of 'features' (you could also call them predictors) were collected from a larger number of students. 
-The dataset was derived from [Hartmann, K., Krois, J., Waske, B. (2018): E-Learning Project SOGA: Statistics and Geospatial Data Analysis. Department of Earth Sciences, Freie Universitaet Berlin.](https://www.geo.fu-berlin.de/en/v/soga/)
 
-### <mark>**EXERCISE 1; The Standard Normal Distribution**</mark> {-} 
+Let's look at a real world example where a number of 'features' (you could also call them predictors) were collected from a larger number of students. 
+This dataset was derived from [Hartmann, K., Krois, J., Waske, B. (2018): E-Learning Project SOGA: Statistics and Geospatial Data Analysis. Department of Earth Sciences, Freie Universitaet Berlin.](https://www.geo.fu-berlin.de/en/v/soga/)
+
+### <mark>**EXERCISE 2; Using distributions to do predictions**</mark> {-} 
 
 Assuming a variable follows a normal distribution leaves us with the possibility to assess the probability for which a certain value (or range of values) for x is to be observed, under the assumption of normality. This maybe sounds a bit cryptic, but I will show you an example. After that we will move on to use the normal distribution to compare if the means of two distributions are the same or different.  
 
@@ -203,12 +207,95 @@ The students dataset can be found via this url: `https://userpage.fu-berlin.de/s
 
 A) Download the data and load it into a tibble called `data_students`
 ```{r, include=FALSE}
-students <- read.csv("https://userpage.fu-berlin.de/soga/200/2010_data_sets/students.csv")
+data_students <- read.csv("https://userpage.fu-berlin.de/soga/200/2010_data_sets/students.csv")
 ```
 
 B) Explore the variable names a write a short data-journal on which is what (we will need this for later use)
+```{r}
+names(data_students)
+```
 
-C) Explore the `height` variable of the `students
+C) Explore the `height`, `weight`, `age` and `gender` variables individually and their relationship using at least a scatter plot with color aesthetics and facets if necessary. Especially study the data distributions for height.
+```{r, echo=FALSE}
+## correlation between height and weight
+data_students %>%
+  ggplot(aes(x = height, y = weight)) +
+  geom_point()
+
+## correlation between weight and age
+data_students %>%
+  ggplot(aes(x = weight, y = age)) +
+  geom_point()
+
+## gender over weight and height
+data_students %>%
+  ggplot(aes(x = height, y = weight)) +
+  geom_point(aes(colour = gender))
+
+## data distributions of height
+data_students %>%
+  ggplot(aes(x = height)) +
+  geom_density()
+
+## data distributions of height; split by gender
+data_students %>%
+  ggplot(aes(x = height)) +
+  geom_density(aes(colour = gender))
+
+
+```
+
+
+D) Generate a histogram of all the values in the `height`variable. Overlay this histogram with a predicted normal distribution.
+```{r}
+
+data_students %>%
+ggplot(aes(x = height)) +
+  stat_function(
+    fun = dnorm,
+    args = with(data_students, c(mean = mean(height), sd = sd(height)))) + 
+  scale_x_continuous("Height") +
+  geom_density(aes(y=..density..),      
+                   binwidth = 1,
+                   colour = "red")
+```
+
+
+E) Generate a histogram of the values in the `height`variable, by `gender` using color aesthetics. Overlay these histograms for their theoretical normal distributions.
+
+**TIP**
+
+ - Create two separate dataframes for the male and the femal data
+ - Adopt the code above where we used the mtcars dataset to plot the actual and predicted (normal) distribution for males and female in a plot. Assign colors to discriminate between the sexes.
+
+```{r}
+
+data_males <- data_students %>%
+  dplyr::filter(gender == "Male")
+
+data_females <- data_students %>%
+  dplyr::filter(gender == "Female")
+
+data_students %>%
+ggplot(aes(x = height)) +
+  stat_function(
+    fun = dnorm,
+    args = with(data_males, c(mean = mean(height), sd = sd(height))),
+    colour = "darkblue") +
+  stat_function(
+    fun = dnorm,
+    args = with(data_females, c(mean = mean(height), sd = sd(height))),
+    colour = "darkred") + 
+  scale_x_continuous("Height") +
+  geom_density(aes(colour = gender))
+```
+
+F) Show the distribution for height split by gender in a histogram.
+
+G) What is your conclusion on the total and split by gender distributions for the height variable in the `data_students` dataset?
+
+
+
 
 
 
