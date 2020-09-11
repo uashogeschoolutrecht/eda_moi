@@ -1,11 +1,17 @@
 # Lab 4B; Open data & Getting data {#lab4bopendata}
 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       error = FALSE,
                       message = FALSE,
                       fig.width = 5, fig.height = 3)
+```
+
+## Packages
+```{r}
+library(tidyverse)
 ```
 
 
@@ -255,11 +261,14 @@ http://geog.uoregon.edu/bartlein/courses/geog490/week04-netCDF.html
 
 A) Load the above data from georg into R.
 You need to manually download the netcdf file first
-```{r}
+```{r, eval=FALSE}
 library(ncdf4)
-url <- "http://geog.uoregon.edu/GeogR/data/raster/cru10min30_tmp.nc"
-download.file(url = url, destfile = "test.nc", mode = "wb")
-ncin <- nc_open("test.nc")
+# url <- "http://geog.uoregon.edu/GeogR/data/raster/cru10min30_tmp.nc"
+# download.file(url = url, destfile = "test.nc", mode = "wb")
+ncin <- nc_open(
+  here::here(
+  "data",  
+  "test.nc"))
 ncin
 
 ```
@@ -267,7 +276,7 @@ ncin
 B) Follow the tutorial at: http://geog.uoregon.edu/bartlein/courses/geog490/week04-netCDF.html. Read until (not including) paragraph: "4 Data frame-to-array conversion(rectangular to raster)"
 
 C) Get the annual mean per monthfor all longitudes and latitudes, for the complete dataset, no missing values
-```{r, include=FALSE}
+```{r, include=FALSE, eval=FALSE}
 lon <- ncvar_get(ncin,"lon")
 nlon <- dim(lon)
 head(lon)
@@ -338,7 +347,7 @@ head(tmp_df03)
 
 D) What is the temperature pattern (make a graph) for lon = "4.75", lat =	"52.25"
 You will need to use 'gather()' to reshape the data first to a stacked format
-```{r, include=FALSE}
+```{r, include=FALSE, eval=FALSE}
 tmp_df03 %>%
   dplyr::filter(lon == "4.75", lat == "52.25") %>%
   gather(tmpJan:tmpDec, key = "month", value = "temp") %>%
@@ -358,7 +367,7 @@ E) Review the chapter ["Factors"](https://r4ds.had.co.nz/factors.html) of "R for
  - use the dataframe `tmp_df03` from the step at for this question.
  - maybe use `forcats::fct_relevel()` in conjunction with `dplyr::mutate()`?
  
-```{r, include=FALSE}
+```{r, include=FALSE, eval=FALSE}
 names(tmp_df03)
 tmp_df03_new <- tmp_df03 %>%
   dplyr::filter(lon == "4.75", lat == "52.25") %>%

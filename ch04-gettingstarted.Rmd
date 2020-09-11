@@ -6,6 +6,12 @@ knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4,
                       error = FALSE, message = FALSE)
 ```
 
+## Packages
+```{r}
+library(tidyverse)
+```
+
+
 ## Preface
 
 This is an R-Markdown document. It is an example of literate programming and it illustrates how we can combine code, text and output. It addresses the issue "Write code for humans, not for computers" very nicely.

@@ -10,17 +10,24 @@
 #Using ``` ` ``` to reference names that contain 'digits' or other 'special characters'
 #```{r, good_variable_reference}
 
+pertussis_data <- readr::read_csv(
+  here::here(
+    "data",
+    "CISID_pertussis_10082018.csv"
+  ), comment = "#")
+
+
 pertussis_data_tidy <- pertussis_data %>% 
-  gather(`1980`:`2018`, 
+  tidyr::gather(`1980`:`2018`, 
          key = "year", 
          value = "annual_pertussis_cases") %>%
   ## rename X1 / x2 columns
-  rename(key = X1,
+  dplyr::rename(key = X1,
          country = X2) %>%
-  mutate(annual_pertussis_cases = as.integer(annual_pertussis_cases)) %>%
+  dplyr::mutate(annual_pertussis_cases = as.integer(annual_pertussis_cases)) %>%
   # we pretend that the measurement for the year was reported on January 1st the next  year.
-  mutate(year = lubridate::ymd(year, truncated = 2L)) %>%
-  mutate(year = lubridate::floor_date(year, unit = "year"))
+  dplyr::mutate(year = lubridate::ymd(year, truncated = 2L)) %>%
+  dplyr::mutate(year = lubridate::floor_date(year, unit = "year"))
 
 # pertussis_data_tidy
 #```
@@ -37,5 +44,5 @@ pertussis_data_tidy <- pertussis_data_tidy %>%
 
 pertussis_data_tidy$year %>%
   as.character() %>%
-  as_factor() %>% levels()
+  forcats::as_factor() %>% levels()
 #```

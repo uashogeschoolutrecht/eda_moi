@@ -1,3 +1,4 @@
+
 get_dependencies <- function(){
 
 library(tidyverse)
@@ -36,6 +37,21 @@ get_rmd_dependencies <- function(path){
   reqlibs <- stringr::str_replace_all(string = reqlibs,
                                       pattern = "`",
                                       replacement = "")
+  
+  reqlibs <- stringr::str_replace_all(string = reqlibs,
+                                      pattern = "'",
+                                      replacement = "")
+  
+  reqlibs <- stringr::str_replace_all(string = reqlibs,
+                                      pattern = "suppressWarnings.*",
+                                      replacement = "")
+  
+  reqlibs <- stringr::str_replace_all(string = reqlibs,
+                                      pattern = "suppressWarnings.*",
+                                      replacement = "")
+  
+  
+  
 
   reqlibs
 
@@ -43,6 +59,7 @@ get_rmd_dependencies <- function(path){
 }
 
 purrr::map(all_rmd, get_rmd_dependencies)
+
 packages <- map(as.list(all_rmd), get_rmd_dependencies) %>%
   unlist() %>%
   unique() %>%
@@ -50,17 +67,21 @@ packages <- map(as.list(all_rmd), get_rmd_dependencies) %>%
 
 return(packages)
 
-
-#install_sytem_wide <- function(package_name){
-
-#  pacman::p_install(package = package_name, lib = .libPaths()[2])
-
-#}
-
-## Login as sudo root user and start R
-
 }
 
+
+
+get_dependencies() %>% 
+  enframe() %>%
+  arrange(value) -> dependencies
+
+
+write_lines(dependencies$value, path = "DEPENDENCIES.txt")
+
+walk(
+  .x = dependencies$value,
+  .f = pacman::p_install
+)
 
 
 

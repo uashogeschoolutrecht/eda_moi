@@ -4,6 +4,12 @@
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Packages
+```{r}
+library(tidyverse)
+```
+
+
 ## RStudio IDE
 RStudio is an Integrated Development Environment that helps you be more productive with R. To use RStudio you need to first install R itself:
 

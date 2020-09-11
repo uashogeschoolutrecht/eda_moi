@@ -1,5 +1,11 @@
 # Lab 3B: Functional Programming {#lab3bfunctions}
 
+## Packages
+```{r}
+library(tidyverse)
+```
+
+
 ## A case example
 
 **DISCUSS WITH YOUR NEIGHBOUR**
@@ -47,9 +53,10 @@ na_indicator <- "test"
 replace_x_for_na <- function(x, na_indicator){
   
   x[x == na_indicator] <- NA
-  string <- "done!"
-  return(list(x, string))
+ # string <- "done!"
+  return(x)
 
+  
 }
 
 test <- c(999, -999, 7, 8)
@@ -61,17 +68,14 @@ replace_x_for_na(x = test, na_indicator = 999)
 Apply this function to one column of our data-frame `df`
 ```{r}
 df$a
-replace_x_for_na(df$a)
+replace_x_for_na(df$a, na_indicator = "-999")
 ```
 
 Apply our function to our whole `df`
 ```{r}
-df_new <- purrr::modify_if(df, is.numeric, replace_x_for_na)
-df_new
-
 ## or using the pipe %>%
 df_new_pipe <- df %>%
-  purrr::modify_if(is.numeric, replace_x_for_na) 
+  purrr::modify_if(is.numeric, replace_x_for_na, na_indicator = "-999") 
 df_new_pipe
 ```
 

@@ -35,7 +35,6 @@ knitr::include_graphics(path_to_tidyr_sticker, dpi = 80)
 path_to_tidydata_image <- file.path(
   here::here(
   "images",
-  "images",
   "tidy-1.png"))
 knitr::include_graphics(path_to_tidydata_image, dpi = 250)
 ```
@@ -148,7 +147,6 @@ table4a %>%
 knitr::include_graphics(file.path(
   here::here(
   "images", 
-  "images", 
   "tidy-9.png")
   ))
 ```
@@ -210,7 +208,6 @@ spread(table2, key = type, value = count)
 knitr::include_graphics(file.path(
   here::here(
   "images", 
-  "images", 
   "tidy-8.png")
   ))
 ```
@@ -240,7 +237,7 @@ table3 %>%
 ```{r tidy-separate, echo = FALSE, out.width = "75%", fig.cap = "Separating `table3` makes it tidy"}
 knitr::include_graphics(file.path(
   here::here(
-  "images", "images", "tidy-17.png")))
+   "images", "tidy-17.png")))
 ```
 
 ## Unite
