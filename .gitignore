@@ -2,3 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+panden-json.json
+unpublished_chapters
+_book
+_bookdown_files
+rsconnect
