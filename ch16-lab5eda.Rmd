@@ -105,10 +105,12 @@ We will address each of these questions with an example dataset in the demo that
 
 ## Demo from "R for Data Science" by Hadley Wickham & Garret Grolemund 
 
+This demo was partly reproduced from the R4DS book by Grolemund and Wickham and involves an example on how to answer questions using EDA on the `diamonds` dataset that is an example dataset and part of the R-package `{ggplot2}`
+
 ### General questions?
 
- 1. Which information do you need and can you come up with a plan to answer the question(s)
- 1. What kind of data do you have and how do you treat different types?
+ 1. Which information do you need and can you come up with a plan to answer the question(s) (PP)
+ 1. What kind of data do you have and how do you treat different types? (D)
 
 Here we already have the data: The infamous 'diamonds' dataset, build into the `{ggplot2}` package
 
@@ -118,7 +120,7 @@ The description of the data can be reviewed with
 ```
 
 From this description we could come up with a rather simple research question:
-"Is `carat`, the weight of a diamond, correlated with the `price` of a diamond. In the consecutive demo?" I will address this and other questions about this dataset.
+"Is `carat`, the weight of a diamond, correlated with the `price` of a diamond." Below we will address this question.
 
 ## Missingness & Outliers 
 
@@ -129,17 +131,22 @@ Are there any missing data in the diamonds dataset?
 ```{r}
 data("diamonds")
 naniar::vis_miss(diamonds)
+sum(is.na(diamonds))
 ```
 
 There seem to be no apparant missingness in any of the variables in the diamonds dataset. 
 
-### **EXERCISE 1: "Missingness"** 
+## EXERCISE 1: "Missingness" {-} 
 Checking for missingness is a crucial first step to avoid problems later in the analysis (for example when deriving summary statistics)
 
  A) List two potential problems that can occur if missingness is not properly inspected and subsequently dealt with
  B) Read this article: https://medium.com/coinmonks/dealing-with-missing-data-using-r-3ae428da2d17 Summarize the different types of missingness and how you could deal with them. Create a table in your Rmd file (see: https://rmarkdown.rstudio.com/lesson-7.html)
 
+## --- END OF EXERCISE --- {-}
+
+
 ### Distributions: The bar chart
+To get an idea on the binning of a categorical variable (how many observations belong to which category?)
 ```{r}
 ggplot(data = diamonds) +
   geom_bar(mapping = aes(x = cut))
@@ -148,7 +155,7 @@ ggplot(data = diamonds) +
 ### Count can also compute frequencies for categorical values 
 ```{r}
 diamonds %>% 
-  count(cut)
+  count(cut) ## the sort argument (set to TRUE will show the largest on top)
 ```
 
 ### Continuous variables
@@ -162,7 +169,7 @@ ggplot(data = diamonds) +
   geom_histogram(mapping = aes(x = carat), binwidth = 0.05)
 ```
 
-Wat do you notice from this plot?
+What do you notice from this plot?
 
 ### Frequency calculation by 'hand'
 You can compute this by hand by combining `dplyr::count()` and `ggplot2::cut_width()`:
@@ -179,14 +186,17 @@ diamonds %>%
 smaller <- diamonds %>% 
   dplyr::filter(carat < 3)
   
-ggplot(data = smaller, mapping = aes(x = carat)) +
-  geom_histogram(binwidth = 0.1)
+smaller %>%
+  ggplot(aes(x = carat)) +
+    geom_histogram(binwidth = 0.1)
 ```
 
 ### Multiple histograms in one plot: `geom_freqpoly()`
 ```{r}
-ggplot(data = smaller, mapping = aes(x = carat, colour = cut)) +
-  geom_freqpoly(binwidth = 0.1)
+smaller %>%
+  ggplot(aes(x = carat, colour = cut)) +
+    geom_freqpoly(binwidth = 0.1) +
+    theme_bw() ## set to bw for better contrast
 ```
 
 ### Subsequent questions
@@ -240,6 +250,7 @@ ggplot(data = faithful, mapping = aes(x = eruptions)) +
  * Outliers are sometimes difficult to see in a histogram.  
 
 ## Histogram to spot outliers
+When you see a histogram with an extraordinary large x-axis, you have to be vigilant about outliers 
 ```{r}
 ggplot(diamonds) + 
   geom_histogram(mapping = aes(x = y), binwidth = 0.5)
@@ -248,7 +259,7 @@ ggplot(diamonds) +
 ### Zooming in on your data
 
 To make it easy to see the unusual values, we need to zoom into to small values of the y-axis with `coord_cartesian()`:
-
+This truncates the y-axis
 ```{r}
 ggplot(diamonds) + 
   geom_histogram(mapping = aes(x = y), binwidth = 0.5) +
@@ -259,6 +270,7 @@ ggplot(diamonds) +
 This allows us to see that there are three unusual values: 0, ~30, and ~60. We pluck them out with dplyr: 
 
 ```{r, include = FALSE}
+## this chunk sets the print option for nice-tibble printing
 old <- options(tibble.print_max = 10, tibble.print_min = 10)
 ```
 
@@ -601,61 +613,11 @@ riskfactors %>%
 
 As you see, it might prove really difficult to tell anything about risk factors when we have so little data. Here we typically have a dataset that relative large P (predictors) and relatively small N (number of observations). In the next EXERCISE, we will use a different dataset that has a much larger N. This problem of large P, small N is common for Biology or Health Science related data.
 
-## EXERCISE 3 {-}
+## EXERCISE 3; Cocktails {-}
 
-This dataset is also on risk factors, but now for developing Breast cancer. It was doenloaded from here: https://www.bcsc-research.org/download_file/view/189/344
+A) Load the cocktails dataset from here https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-26/boston_cocktails.csv into R as `cocktails`
 
-“Data collection and sharing was supported by the National Cancer Institute (P01CA154292; U54CA163303), the Patient-Centered Outcomes Research Institute (PCS-1504-30370), and the Agency for Health Research and Quality (R01 HS018366-01A1). We thank the participating women, mammography facilities, and radiologists for the data they have provided for this study. You can learn more about the BCSC at: http://www.bcsc-research.org/."
-
-
-A) Unzip the data, load into R as a data frame (the data is available as "./data/bcsc_risk_factors_summarized1_corrected.zip")
-
-B) inspect the data, the variables, change the names of the variables to safe names if necessary.
-
-C) Check the variable types and change if necessary.
-
-D) Can you create a number of visualization from which you determine a strong riskfactor for the development of Breast cancer from this data?
-
-```{r}
-unzip(
-  here::here("data",
-       "bcsc_risk_factors_summarized1_corrected.zip"),
-  exdir = "data", "bcsc_risk_factors_summarized1.csv")
-
-data_bc_risk <- read_csv(
-  here::here(
-    "data",
-    "bcsc_risk_factors_summarized1.csv")
-)
-
-data_bc_risk %>%
-  is.na() %>%
-  sum()
-
-data_bc_risk %>% names
-
-map(
-  .x = data_bc_risk,
-  .f = typeof
-  )
-
-
-data_bc_risk %>%
-  sample_n(100) %>%
-  ggplot(aes(x = bmi_group, y = BIRADS_breast_density)) +
-  geom_point()
-  
-```
-
-
-
-EXERCISE 3; Cocktails: 
-
-https://www.youtube.com/redirect?redir_token=QUFFLUhqa2QtLU95MFE5d0JPUnozTl83SFhBaERPUG9YUXxBQ3Jtc0treEdWVmRrZmxFY0JPMlZtczI1TF85UjF5NWhzaG1Ua1BhSWpXb1pLYlJxQWxBZlV6eFRjZ1VKb0Z3c3hoVG1DRWRzQjVvSm5CMzRib3UyYUQ4Zng1aGlKWGdYZGNDd05Mc18yTlk2VUxJSWl6dkFIVQ%3D%3D&event=video_description&v=kHFmtKCI_F4&q=https%3A%2F%2Fgist.github.com%2Fhadley%2Fa892ff8f00973e3bc864851deae8315f
-
-
-
-```{r}
+```{r, answer_a, include=FALSE}
 # Code for quick exploration of
 # https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-05-26
 # Video at https://youtu.be/kHFmtKCI_F4
@@ -665,12 +627,39 @@ library(tidyverse)
 
 cocktails <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-26/boston_cocktails.csv")
 
-cocktails %>%
-  count(ingredient, sort = TRUE)
+```
+
+B) For this exercises we focus on the `ingredient` variable. How many unique ingredients are included in the `cocktails` dataset 
+
+```{r, answer_b}
+cocktails$ingredient %>%
+  unique() %>% 
+  length()
+```
 
 
-# Are name and row_id equivalent? -----------------------------------------
+C) Retrieve the top 30 most common ingredients
 
+```{r, include = FALSE}
+## this chunk sets the print option for nice-tibble printing
+options(tibble.print_max = 30, tibble.print_min = 10)
+```
+
+```{r}
+
+top_30 <- cocktails %>%
+  count(ingredient, sort = TRUE) %>%
+  head(30)
+top_30
+
+## restore setting for tibble printing
+options(tibble.print_max = 10, tibble.print_min = 10)
+
+```
+
+C) The data shows a `name` and a `row_id` variable. Are `name` and `row_id` equivalent? 
+
+```{r}
 cocktails %>% count(name)
 cocktails %>% count(row_id)
 
@@ -680,8 +669,11 @@ cocktails %>%
   filter(ids > 1)
 # Yes, they are
 
+```
 
-# How many ingredients are in each cocktail? ------------------------------
+
+D) How many ingredients are in each cocktail? ------------------------------
+```{r}
 cocktails %>%
   count(name) %>%
   count(n)
@@ -695,13 +687,18 @@ cocktails %>%
 cocktails %>%
   group_by(name) %>%
   filter(n() == 2)
+```
 
-# How big is each cocktail? -----------------------------------------------
+E) How big (`measure`) is each cocktail? 
 
+```{r}
 cocktails %>% count(measure, sort = TRUE)
 
 non_spirit <- c("Chilled Champagne", "Water", "Orange Juice", "Cranberry Juice", "Light Cream (if desired)", "Fresh orange juice", "Orange juice")
+```
 
+
+F) Correct the `measure` variable in an SI unit (milliliters) 
 # Have removed all cocktails with ounces of bitters - that is most
 # likely a data entry error (it certainly doesn't give me much confidence
 # in the quality of this data)
@@ -774,7 +771,9 @@ cocktails %>%
 
  
 
+ ## Case study
  
+ https://data-analist.info/cbs-open-data-downloaden-voor-data-analyse-in-r/
 
  
 
