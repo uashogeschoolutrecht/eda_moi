@@ -1,14 +1,4 @@
 .Rproj.user
 .Rhistory
 .RData
-_publish.R
-_book
-_bookdown_files
-rsconnect
-.nc
-data/household_powerconsumption.txt/household_power_consumption.txt
-panden-json.json
-unpublished_chapters
-json.zip
-ARCHIVE
-urls
+.Ruserdata
