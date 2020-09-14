@@ -21,13 +21,19 @@ Code can be recognized by a code chunck:
 _start code chunk_
 
 ` ```{r} `
+
 `library(tidyverse)`
+
 `average <- rnorm(1000) %>%` 
+
   `enframe()`
 
 `average %>%`
+
   `ggplot(aes(x = value)) +`
+
   `geom_histogram()`
+
 ` ``` `
 
 _end code chunk_
@@ -35,7 +41,8 @@ _end code chunk_
 To run the code chunks: set the cursor between the start ` ```{r} ` and the end 
 ` ``` ` of the chunk and press Ctrl, Shift, Enter, or choose "Run" in the top-right lint.
 
-## To start a new script you can look under File -> New File -> RMarkdown or R Script. You will see a lot of other options as well. In this course we will not address these.
+## To start a new script 
+you can look under File -> New File -> RMarkdown or R Script. You will see a lot of other options as well. In this course we will not address these.
 
 ## Getting started
 
@@ -76,7 +83,9 @@ The accompanying Bookdown Webpages to this course can be found at:
 `r urls[2,1]`
 
 ## Cloud server for RStudio
-During the course, we will be using a preinstalled version of the RStudio-IDE (integrated development environment). This IDE version runs on a remote UBUNTU 18.04 Linux server and has most of the packages that are needed to follow the course. You can login at the communicated server address and with the credentials supplied at the beginning of the course. The advantage of cloud servers is that you do not need to install anything on their own laptops. 
+During the course, we will be using a preinstalled version of the RStudio-IDE (integrated development environment). This IDE version runs on a remote UBUNTU 18.04 Linux server and has most of the packages that are needed to follow the course already installed. You can login at the communicated server address and with the credentials supplied at the beginning of the course. The advantage of cloud servers is that you do not need to install the software on their own laptops. 
+
+The address for the server is: `r urls[4,1]`
 
 To see what the current working directory (wd) is, you can execute the command
 
@@ -133,8 +142,8 @@ Lookup the documentation for the function sqrt(), what does it do?
 Run the examples for the function sqrt(). What does this do?
 
 ## A good resource to start
-Free material on learning R is very broadly available on the web. You can start yor adventuRe at:
+Free material on learning R is very broadly available on the web. You can start your adventuRe at:
 
 http://r4ds.had.co.nz/index.html
 
-the author Hadley Wickham is an excellent data scientist, speaker and developer at RStudio and the brain behind the "tidyverse" 
+the author Hadley Wickham is an excellent data scientist, speaker and developer at RStudio and the brain behind the "tidyverse". Garret Grolemund is an excellent speaker and the lead educator at RStudio. 

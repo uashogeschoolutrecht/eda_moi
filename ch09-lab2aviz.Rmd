@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE,
 ```
 
 ## Introduction
-Creating plots is essential for EDA and formal inference or any data-analysis activities. There are a number of arbitrary stages in plot-making, not neccessarily in any specific order or consecutiveness and also iterative in nature but these stages can help if you are just starting at it.
+Creating plots is essential for EDA and formal inference or any data-analysis activities. There are a number of arbitrary stages in plot-making, not necessarily in any specific order or consecutiveness and also iterative in nature but these stages can help if you are just starting at it.
 Here we talk about EDA and we discuss visualization as a means to generate hypotheses about the data. If information about the data (data-journal) is available, that will help! **So when you generate data: document!** In Chapter \@ref(lab7communicatereproduce) we will talk about this some more.
 
 **The EDA visualization stages:** 
@@ -1171,7 +1171,7 @@ To study the relationship between TB incidence and socio-economical and/or geogr
 14B) Load World data
 Load the World data from the `{tmap}` package (`data("World")`) and combine (left_join the world data to the TB_burden data (with selected variables)). Be sure to indicate the keys for the join (join by ISO3 which is present in both datasets)
 
-```{r, echo=TRUE}
+```{r, echo=TRUE, eval=FALSE}
 library(tmap)
 data("World") # from the tmap package
 names(World)
@@ -1190,7 +1190,7 @@ joined_data <- joined_data %>%
 14C) Facets for year
 Plot the relationship between the median income per capita (gdp_cap_est) per WHO region and the median TB incidence per WHO region, use facets and `alpha` to handle the years and overplotting.
 
-```{r, 4b, options_exercises}
+```{r, 4b, options_exercises, eval=FALSE}
 names(joined_data) 
 joined_data %>%
   na.omit() %>%
@@ -1213,7 +1213,7 @@ Create histograms of the following variables of the joined data:
 
 Account for `g_whoregion` in your plot. Take all years together in the histograms.
 
-```{r, 5a, options_exercises}
+```{r, 5a, options_exercises, eval=FALSE}
 joined_data %>%
   ggplot(aes(x = incidence_1e3)) +
   geom_histogram(aes(fill = g_whoregion), bins = 50)
@@ -1231,7 +1231,7 @@ Maybe do a log transformation on the incidence and/or gdp? Use factes for the ye
  
  - Investigate the difference between `geom_density()` and `geom_freqpoly()`
 
-```{r, 5b, options_exercises}
+```{r, 5b, options_exercises, eval=FALSE}
 joined_data %>%
   ggplot(aes(x = log10(incidence_1e3))) +
   geom_freqpoly(aes(colour = g_whoregion), size = 1) +
@@ -1271,7 +1271,7 @@ chicks <- datasets::ChickWeight
  - Are all the variables of the right type?
  - Which variables are categorical?
  - Which are numeric?
- - Change grouping/categorical variables to facors if neccesary(`chicks$var <- as_factor(chicks$var)`)
+ - Change grouping/categorical variables to factors if necessary(`chicks$var <- as_factor(chicks$var)`)
  
 ```{r, 6a, options_exercises}
 head(chicks)

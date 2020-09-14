@@ -228,7 +228,7 @@ beaver_telemetry
 ## Workflow
 The RStudio --> Git --> Github workflow can be summarized in the following graph
 
-```{r}
+```{r, eval=FALSE}
 DiagrammeR::grViz("
 digraph rmarkdown {
   'RStudio Project' -> 'Commit' 
@@ -238,7 +238,7 @@ digraph rmarkdown {
 
 ## DiagrammaR
 The `{DiagrammaR}` package is a great tool for drawing any type of diagram from within R. Drawing a diagram with code is a good idea because you do not have to wory about formatting and alignment and it let's you recycle parts of your diagram. As always, it will require some upfront investment of time to figure things out, but it will pay back in the end and is more fun than fussing over details in a diagram in PowerPoint.
-```{r}
+```{r, eval=FALSE}
 ###
 # Perform traversals with conditions
 # based on node `label` regex matches
