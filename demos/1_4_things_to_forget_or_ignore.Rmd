@@ -1,7 +1,7 @@
 ---
 title: "Things to forget or ignore"
 author: "Marc A.T. Teunis"
-date: "`r Sys.Date()`"
+date: "`r Sys.time()`"
 output:
   ioslides_presentation: 
     highlight: pygments
@@ -81,37 +81,20 @@ To assign a variable in R you can use:
 
 `=` has a special meaning and is reserved for naming an argument in a function. Always use `<-` when you want to assign a value to a variable. 
 
-Remmber: `<-` always works for assignment, `=` does not always work for assignment.
-
-## `stringsAsFactors = FALSE`
-Let's read a dataset `csv` file:
-```{r}
-library(here)
-library(readr)
-example <- read.csv(here("data", "EE controls.csv"), sep = ";")
-str(example, 3)
-## all character strings are converted to factors
-example_no_fct <- read.csv(
-        here("data", "EE controls.csv"), 
-        sep = ";", 
-        stringsAsFactors = FALSE)
-## characters are still characters
-str(example_no_fct, 3)
-example_tibble <- read_csv2(here("data", "EE controls.csv"))
-```
+Remember: `<-` always works for assignment, `=` does not always work for assignment.
 
 ## `{readr}` functions
 readr functions never convert to factors, except if explicitly told:
 ```{r, eval=TRUE}
 
 example_tibble <- read_delim(
-        here::here("data", "EE controls.csv"), 
-        delim = ";",
+        here::here("data", "gender.txt"), 
+        delim = "/",
         col_types = cols(
-                Chemical = col_factor()
-                )
-        )
+          sex = col_factor()
+          )
+)
 
 example_tibble
-## only Chemical is converted to a factor
+## only `sex` is converted to a factor
 ```

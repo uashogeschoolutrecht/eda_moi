@@ -1,7 +1,7 @@
 ---
 title: "Course Activities"
 author: "Marc A.T. Teunis"
-date: "3/27/2019"
+date: "`r Sys.time()`"
 output:
   ioslides_presentation: 
     highlight: pygments
@@ -70,7 +70,7 @@ Chapter \@ref(lab1crecursivevectors)
  1. Lists
  1. Matrices
 
-### Lab 2: Visualize & Explore Data
+## Lab 2a: Visualize & Explore Data
 Chapter \@ref(lab2viz)
 
  1. Visualizations demo
@@ -83,6 +83,14 @@ Chapter \@ref(lab2viz)
  1. Plot annotation and labels
  1. Saving plots
  1. Examples of `{shiny}` apps
+
+## Lab 2b: RMarkdown
+
+ 1. Literate programming
+ 1. Markdown syntax
+ 1. Code chunks
+ 1. Chunk options
+ 1. Parameters
 
 ## Lab 3a: Data Wrangling  
 Chapter \@ref(lab3awrangling)
@@ -137,7 +145,6 @@ Chapter \@ref(lab5eda)
  1. Principal Components
  
 ## Lab 6a: Exploring Assumptions & Models  
-Chapter \@ref(lab6amodels)
 
  1. Why Assumptions?
  1. Distributions (Gaussian)
@@ -145,12 +152,6 @@ Chapter \@ref(lab6amodels)
  1. Model output ( `{broom}`)
  
 ## Lab 6b: Statistics with R (resampling & simple regression) 
-Chapter \@ref(lab6bmanymodels)
- 
-## Lab 7: Statistics with R (multiple regression and ANOVA) 
-Chapter \@ref(lab7atextmining)
 
-
-
-
+## Lab 6c: Statistics with R (multiple regression and ANOVA) 
 

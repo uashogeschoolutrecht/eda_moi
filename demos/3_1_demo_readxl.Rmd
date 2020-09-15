@@ -1,7 +1,7 @@
 ---
 title: "Data Import; {readxl}"
 author: "Marc A.T. Teunis"
-date: "`r Sys.Date()`"
+date: "`r Sys.time()`"
 output:
   ioslides_presentation: 
     highlight: pygments

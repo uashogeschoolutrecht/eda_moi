@@ -1,7 +1,7 @@
 ---
 title: "Conventions, Code and Data Management"
 author: "Marc A.T. Teunis"
-date: "`r Sys.Date()`"
+date: "`r Sys.time()`"
 output:
   ioslides_presentation: 
     highlight: pygments
@@ -153,52 +153,11 @@ _Mutate new variables on the basis of old one, do not replace the old variable_
 
 ```{r, r_packages_graph, echo=FALSE}
 source(here::here("/code/r_packages_graph.R"))
-```
- 
-## Building an R package
-During the course we will gradually build our own R package as a demonstration that it is actually not so difficult as it sounds.
-
-## Initiate a package
-Initiate a package skeleton with the following command:
-```{r, eval=FALSE}  
-library(usethis)
-usethis::create_package(path = file.path("../courser"))
-```
-A new RStudio Project Session will open and will provide you with a skeleton of a new package called "courser". 
-
-## Adding content to the package
-
-As the course continues we will start filling this package skeleton with functions and data.
-
-We will take three more steps to start with our package:
-
-## 1. Package description
-Look at the file named "DESCRIPTION". Provide some basic            information about yourself and what the package is intended for. Fill  in the fields:
-
-  - `Title`; Provide a short description
-  - `Authors@R`; provide your name and email-address (if you want)
-  Leave the rest unchanged
-
-## 2. Add a package dependency
-Let's add our first dependency. The first dependecy that we will add is a package that we will use for data manipulation. It is called `{dplyr}` and we will use it very often. It makes sense to add this package as a dependency to our own package. The following code does that
-```{r, eval=FALSE}
-usethis::use_package(package = "dplyr")
-```
- 
-## 3. Building a package
-To build the package
-run 
-```{r, eval=FALSE}
-devtools::document(pkg = file.path("../courser"))
-```
-Than run:
-```{r, eval=FALSE}
-system("R CMD INSTALL --preclean --no-multiarch --with-keep.source ../courser")
+pkgs_plot <- plot_packages()
+pkgs_plot
 ```
 
-## **CONGRATULATIONS!!** 
 
-You have juist build your own R package. We can now start adding functionality to it. We will do so as the course progresses.
 
  
 

@@ -9,7 +9,6 @@
 
 
 
-  <meta name="date" content="2019-04-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1353,6 +1352,11 @@ slides > slide {
 opacity: 0;
 }
 @media print {
+
+@page {
+size: landscape;
+margin: 0;
+}
 
 slides slide {
 display: block !important;
@@ -3114,9 +3118,9 @@ slide:not(.current) .plotly.html-widget{
         <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
     <hgroup class="auto-fadein">
       <h1 data-config-title><!-- populated from slide_config.json --></h1>
-      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      
       <p data-config-presenter><!-- populated from slide_config.json --></p>
-            <p style="margin-top: 6px; margin-left: -2px;">2019-04-09</p>
+            <p style="margin-top: 6px; margin-left: -2px;">2020-09-15 13:12:31</p>
           </hgroup>
   </slide>
 
@@ -3197,58 +3201,44 @@ getwd()</pre>
 
 <p><code>=</code> has a special meaning and is reserved for naming an argument in a function. Always use <code>&lt;-</code> when you want to assign a value to a variable.</p>
 
-<p>Remmber: <code>&lt;-</code> always works for assignment, <code>=</code> does not always work for assignment.</p>
-
-</article></slide><slide class=""><hgroup><h2><code>stringsAsFactors = FALSE</code></h2></hgroup><article  id="stringsasfactors-false">
-
-<p>Let’s read a dataset <code>csv</code> file:</p>
-
-<pre class = 'prettyprint lang-r'>library(here)
-library(readr)
-example &lt;- read.csv(here(&quot;data&quot;, &quot;EE controls.csv&quot;), sep = &quot;;&quot;)
-str(example, 3)
-## all character strings are converted to factors
-example_no_fct &lt;- read.csv(
-        here(&quot;data&quot;, &quot;EE controls.csv&quot;), 
-        sep = &quot;;&quot;, 
-        stringsAsFactors = FALSE)
-## characters are still characters
-str(example_no_fct, 3)
-example_tibble &lt;- read_csv2(here(&quot;data&quot;, &quot;EE controls.csv&quot;))</pre>
+<p>Remember: <code>&lt;-</code> always works for assignment, <code>=</code> does not always work for assignment.</p>
 
 </article></slide><slide class=""><hgroup><h2><code>{readr}</code> functions</h2></hgroup><article  id="readr-functions">
 
 <p>readr functions never convert to factors, except if explicitly told:</p>
 
 <pre class = 'prettyprint lang-r'>example_tibble &lt;- read_delim(
-        here::here(&quot;data&quot;, &quot;EE controls.csv&quot;), 
-        delim = &quot;;&quot;,
+        here::here(&quot;data&quot;, &quot;gender.txt&quot;), 
+        delim = &quot;/&quot;,
         col_types = cols(
-                Chemical = col_factor()
-                )
-        )
+          sex = col_factor()
+          )
+)
 
 example_tibble</pre>
 
-<pre >## # A tibble: 412 x 19
-##      Lab Chemical Class Vehicle Compound Exp     Rep Batch BatchNr
-##    &lt;dbl&gt; &lt;fct&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
-##  1     1 Citral   W     AOO            1 BD A      1 EST-~       1
-##  2     1 Citral   W     AOO            1 BD A      2 EST-~       1
-##  3     1 Citral   W     AOO            1 BD B      1 EST-~       4
-##  4     1 Citral   W     AOO            1 BD B      2 EST-~       4
-##  5     1 Citral   W     AOO            1 FD 1      1 EST-~       6
-##  6     1 Citral   W     AOO            1 FD 1      2 EST-~       6
-##  7     1 Citral   W     AOO            1 FD 2      1 EST-~       9
-##  8     1 Citral   W     AOO            1 FD 2      2 EST-~       9
-##  9     1 p-Pheny~ S     AOO            2 BD A      1 EST-~       1
-## 10     1 p-Pheny~ S     AOO            2 BD A      2 EST-~       1
-## # ... with 402 more rows, and 10 more variables: UnE_viability &lt;dbl&gt;,
-## #   UneIL1a &lt;dbl&gt;, UnEFoldI &lt;dbl&gt;, VC_viability &lt;dbl&gt;, VC_IL1a &lt;dbl&gt;,
-## #   VH_FoldI &lt;dbl&gt;, PC_viability &lt;dbl&gt;, PC_IL1a &lt;dbl&gt;, PC_FoldI &lt;dbl&gt;,
-## #   ReseanRep &lt;chr&gt;</pre>
+<pre >## # A tibble: 17 x 2
+##    sex     age
+##    &lt;fct&gt; &lt;dbl&gt;
+##  1 F        12
+##  2 F        23
+##  3 F        34
+##  4 M        12
+##  5 M        15
+##  6 M        17
+##  7 F        18
+##  8 F        14
+##  9 M        56
+## 10 F        67
+## 11 M        89
+## 12 M        34
+## 13 M        45
+## 14 F        12
+## 15 F         3
+## 16 F         5
+## 17 M         4</pre>
 
-<pre class = 'prettyprint lang-r'>## only Chemical is converted to a factor</pre></article></slide>
+<pre class = 'prettyprint lang-r'>## only `sex` is converted to a factor</pre></article></slide>
 
 
   <slide class="backdrop"></slide>

@@ -1,6 +1,6 @@
 ---
 title: "Workflow Basics"
-date: "`r Sys.Date()`"
+date: "`r Sys.time()`"
 output:
   ioslides_presentation: 
     highlight: pygments
