@@ -36,7 +36,7 @@ I will go over each item in more detail in Chapter \@ref(lab5eda). If you want t
 
 The `{tidyverse}` [@tidyverse] is a suite of packages that together form a nice collection of tools to perform different tasks and analyses in R. A complete documentation website to the `{tidyverse}` is maintained [here](https://www.tidyverse.org/)
 
-Many of these packages have multiple contributors but one name cannot be left unmentioned in a paragraph about the tidyverse and that is the name of Dr. Hadley Wickham, Chief Scientist at RStudio, and an Adjunct Professor of Statistics at the University of Auckland, Stanford University, and Rice University. Hadley is one of the dirving forces behind innovation in the R-community when in comes to writing more robust, more reproduciible and more `human-readable` computercode. 
+Many of these packages have multiple contributors but one name cannot be left unmentioned in a paragraph about the tidyverse and that is the name of Dr. Hadley Wickham, Chief Scientist at RStudio, and an Adjunct Professor of Statistics at the University of Auckland, Stanford University, and Rice University. Hadley is one of the driving forces behind innovation in the R-community when in comes to writing more robust, more reproducible and more `human-readable` computer code. 
 
 The `{tidyverse}` is meant as a collection of helpful tools for doing data science with R, but it is not meant as a stand-alone suite to be used in isolation. Connecting tidyverse to other packages is encouraged and also feasible and most of the times even necessary to get the job done.
 
@@ -68,15 +68,15 @@ Users of LaTeX can also use the BibTex entry to create a reference list.
 
 R is an implementation of the S programming language combined with lexical scoping semantics, inspired by Scheme. S was created by John Chambers in 1976, while at Bell Labs. There are some important differences, but much of the code written for S runs unaltered.
 
-R was created by Ross Ihaka and Robert Gentleman[17] at the University of    Auckland, New Zealand, and is currently developed by the R Development Core  Team (of which Chambers is a member).[18] R is named partly after the first  names of the first two R authors and partly as a play on the name of S.[19]  The project was conceived in 1992, with an initial version released in 1995  and a stable beta version in 2000.
+R was created by Ross Ihaka and Robert Gentleman[17] at the University of Auckland, New Zealand, and is currently developed by the R Development Core  Team (of which Chambers is a member).[18] R is named partly after the first names of the first two R authors and partly as a play on the name of S. The project was conceived in 1992, with an initial version released in 1995 and a stable beta version in 2000 [text from wiki](https://en.wikipedia.org/wiki/R_(programming_language).
 
 ### Statistical features
 
-R and its libraries implement a wide variety of statistical and graphical   techniques, including linear and nonlinear modelling, classical statistical  tests, time-series analysis, classification, clustering, and others. R is  easily extensible through functions and extensions, and the R community is  noted for its active contributions in terms of packages. Many of R's standard functions are written in R itself, which makes it easy for users to follow the algorithmic choices made. For computationally intensive tasks, C, C++, and Fortran code can be linked and called at run time. Advanced users can write C, C++,[23] Java,[24] .NET[25] or Python code to manipulate R objects directly.[26] R is highly extensible through the use of user-submitted packages for specific functions or specific areas of study. Due to its S heritage, R has stronger object-oriented programming facilities than most statistical computing languages. Extending R is also eased by its lexical scoping rules.[27]
+R and its libraries implement a wide variety of statistical and graphical   techniques, including linear and nonlinear modeling, classical statistical  tests, time-series analysis, classification, clustering, and others. R is  easily extensible through functions and extensions, and the R community is  noted for its active contributions in terms of packages. Many of R's standard functions are written in R itself, which makes it easy for users to follow the algorithmic choices made. For computationally intensive tasks, C, C++, and Fortran code can be linked and called at run time. Advanced users can write C, C++,[23] Java,[24] .NET[25] or Python code to manipulate R objects directly.[26] R is highly extensible through the use of user-submitted packages for specific functions or specific areas of study. Due to its S heritage, R has stronger object-oriented programming facilities than most statistical computing languages. Extending R is also eased by its lexical scoping rules.[27]
 
 Another strength of R is static graphics, which can produce publication-quality graphs, including mathematical symbols. Dynamic and interactive graphics are available through additional packages.[28]
 
-R has Rmd, its own LaTeX-like documentation format, which is used to supply  comprehensive documentation, both online in a number of formats and in hard copy.[29] 
+R has Rmd, its own LaTeX-like documentation format, which is used to supply comprehensive documentation, both online in a number of formats and in hard copy.[29] 
 
 For more details on R itself review the Wiki page or look at: https://cran.r-project.org/
 
@@ -98,7 +98,7 @@ There are many resources for learning R and doing Data Science with R. One was a
 
 A non-exhaustive list is provided in \@ref(resources) and is meant to head you in the right direction. Finding the proper learning reasource that will solve you specific 'Analytics' issue is up to you and part of the fun. Google is defenitively a good mentor to guide you through this process! 
 
-### **EXERCISE** {-}
+## **EXERCISE** {-}
 Using the function `installed.packages()` and running the code below. Try to figure out how many packages are installed on the RSudio server instance that you have logged onto.
 
 Copy-paste the code below into your R Console and run the code
@@ -110,4 +110,20 @@ pkgs <- installed.packages() %>%
 pkgs
 ```
 
+## --- END EXERCISE ---
+
+## A plot on the packages
+Each package has a so-called DESCRIPTION file that contains information on the title, the author(s), the aim of the package and which dependencies (other R-packages) it needs to function. The imports field is an important files that displays the essential dependencies without which the package is not able to function. Let's try to find the package that has the most dependencies listed in the imports field. 
+```{r}
+names(pkgs)
+
+pkgs[1:3, "Imports"]
+
+
+pkgs %>%
+  select(Package, Imports) %>%
+  mutate(Imports_chr = as.character(Imports))
+  mutate(deps = length(Imports)) -> data_imports
+
+```
 

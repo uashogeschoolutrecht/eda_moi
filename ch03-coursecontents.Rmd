@@ -129,31 +129,15 @@ Chapter \@ref(lab5eda)
 Chapter \@ref(lab6amodels)
 
  1. Why Assumptions?
- 1. Distributions (Gaussian, Poisson, Uniform, Binomial)
+ 1. Distributions (Gaussian)
  1. Regression
  1. Model output ( `{broom}`)
-1. A few machine learning examples in R (`{caret}`)
-
  
-### Lab 6b: Using many models in EDA 
+### Lab 6b: Statistics with R (resampling & simple regression) 
 Chapter \@ref(lab6bmanymodels)
-
- 1. Managing many models
- 1. Linear and Generalized Linear models
  
-### Lab 7a: Text mining and R-packages
+### Lab 7: Statistics with R (multiple regression and ANOVA) 
 Chapter \@ref(lab7atextmining)
-
- 1. Text mining
- 1. Building a corpus
- 1. Word cloud
- 1. Text classification and clustering
-
-### Lab 7b: Developing R packages
-
- 1. RMarkdown 
- 1. The 'RMarkdown First' Principle
- 1. `{usethis}` for creating R-packages
  
 ## Exercises
 Each masterclass/lab contains a number of exercises. Most lessons have exercises in between the demos and explanations. Usually at the end of each lessons, more exercises are included.

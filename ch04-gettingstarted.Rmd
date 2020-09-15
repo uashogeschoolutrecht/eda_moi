@@ -76,7 +76,7 @@ urls[3,1] %>% as.character()
  5. Paste the url in the `Repository URL` field
  6. click `Create Project` and let the clone finish
  
-**YOU NOW HAVE THE FILES TO START THE FIRST LESSON** 
+**YOU NOW HAVE THE FILES TO START THE FIRST LESSONS** 
 
 The accompanying Bookdown Webpages to this course can be found at:
 

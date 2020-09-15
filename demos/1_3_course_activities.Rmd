@@ -20,14 +20,6 @@ library(rprojroot)
 root <- find_root_file(criterion = is_rstudio_project)
 ```
 
-```{r, include=FALSE}
-exercise_files <- list.files(path = file.path(root, "exercises"), full.names = TRUE, recursive = TRUE)
-
-presentation_files <- list.files(path = file.path(root, "presentations"), full.names = TRUE, recursive = TRUE)
-
-##exercise_files
-```
-
 ## Course Overview (this document)
 
  - The course overview provides a summary of the course. It is a document that is fluid throughout the course. It is the current document before you. I will make changes to this as we go along to personalize the course to your needs as much as possible.
@@ -35,16 +27,11 @@ presentation_files <- list.files(path = file.path(root, "presentations"), full.n
   - If applicable the Course Exam will be addressed (Bachelor Course Only)
   - We will get to know some of the conventions used in the course materials to aid readibility and completion of the exercises
 
-## Menti.com
-
-<div style='position: relative; padding-bottom: 56.25%; padding-top: 35px; height: 0; overflow: hidden;'><iframe allowfullscreen='true' allowtransparency='true' frameborder='0' height='315' src='https://www.mentimeter.com/embed/45fa38401d60a4886d2e21c9f2ebc240/d2a9c72548cf' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' width='420'></iframe></div>
-
-
 ## Labs
 
- - Each day (lesson) consists of several labs
+ - Each day (lesson) consists of 1 or several labs
  - Is a combination of direct instruction and introduction to a new topic  
- - Each topic is accompanied by exercises. 
+ - Each topic (lab) is accompanied by exercises. 
  - Some of the exercise will be addressed during instruction. 
  - Some exercises will have to be prepared outside of class. 
  - Each consecutive lesson will follow up on the previous exercises. 
@@ -53,73 +40,115 @@ presentation_files <- list.files(path = file.path(root, "presentations"), full.n
 
 ## Cases
 
- - During each lesson I will ask for a case from the participants
+ - During each lesson (not lesson 1 ;-), I will ask for a case from the participants
  - Some problem you are working on that is relevant for the topics in that day's class
  - If possible I will prepare a short demo, workflow or provide some tips on how to tackle the case problem
  - I will ask for your input on the matter
  
-# Day 1
+## Lab 1a: Introduction to RStudio 
+Chapter \@ref(lab1aintrorstudio)
 
- 1. Course overview, Datamanagement 
- 2. Git, Github.com  
- 3. Visualization examples in R RStudio
- 4. RMarkdown
- 5. R basics and Getting Help
- 6. Intro to R 
+ 1. Getting the course materials from github.com
+ 1. Creating objects in R
+ 1. RStudio introduction
 
-## Lab 1 Course intro
-  
-  - We will discuss some of the conventions used in the slides and talk a little bit more about R and how to get additional resources for learning to use R
-  - You will intiate your first R-package
-  - To find some of the resources used in this course and for progessing you R learning: look at the "resources" file in the root. 
-  - In RStudio, important tools for reproducibility of (data)-research are build-in: `{rmarkdown}`, RStudio Projects, the `{here}` package 
- - Every data-project has files, and often many, many files
- - We will see a short list of rules to keep track of things and to aid reproducibility and tracebility
- - You will learn about the structure of an R package to aid reproducibility
+## Lab 1b: Introduction to R  
+Chapter \@ref(lab1bintror)
 
-## Lab 2 Git/github.com
+ 1. Functional and object oriented programming
+ 1. Functions
+ 1. Object Class; vectors, dataframes, lists
+ 1. Vector types
+ 1. Getting help
+ 1. Plots
+ 1. Data examples
 
- - Git is used to keep track of changes, collaborate and reproduce.
- - Github is used to share code (any code), data and other files and find additional great R resources and packages  
- - Git/Github are is a widely used platform for the development of software
+## Lab 1c: Dataframes, lists and matrices  
+Chapter \@ref(lab1crecursivevectors)
 
-## Lab 3 Visualizations (demo)
+ 1. Dataframes
+ 1. Lists
+ 1. Matrices
 
- - Are a great way to get inspired on the possibilities for using R
- - Are great for exploring new datasets
- - Are a great way to learn (new) ways of writing R code
+### Lab 2: Visualize & Explore Data
+Chapter \@ref(lab2viz)
 
-## Lab 4 RMarkdown
+ 1. Visualizations demo
+ 1. Build in datasets 
+ 1. Using the grammar of graphics with `{ggplot2}`
+ 1. Plot types
+ 1. `geom_...` and `aes()`
+ 1. Adding dimensions to a plot 
+ 1. Solving overplotting
+ 1. Plot annotation and labels
+ 1. Saving plots
+ 1. Examples of `{shiny}` apps
 
- - All Exercises and demos are RMarkdown files
- - We will study this format 
- - During this lab you will learn (some of) the possibilities of RMarkdown
- - You will create your own RMarkdown and push it to you Github repository
+## Lab 3a: Data Wrangling  
+Chapter \@ref(lab3awrangling)
 
-## Lab 5 RStudio
+ 1. Using `{dplyr}` for data wrangling
+ 1. The `{dplyr}` verbs
+ 1. Data wrangling in combination with `{ggplot2}`
 
- - We will use RStudio Server as an Integrated Development Environment (IDE) for developing in R
- - RStudio is one of most widely used IDEs
- - RStudio integrates with the `Tidyverse`
- - RStudio enables easy creation of your own R package
+## Lab 3b: Functional Programming 
+Chapter \@ref(lab3bfunctions)
+
+ 1. What is a function
+ 1. Writing function
+ 1. Function documentation
+ 1. Loops and `map` family of functions
+ 1. Scripts and the `source` function
+ 1. Why write function
+ 1. Function elements (name/arguments, body, return)
+ 1. Function documentation, Roxygen comments
+ 1. Writing error / warning /  messages
  
+## Lab 3c: Tidy data
+Chapter \@ref(lab3ctidydata)
  
-## Lab 6 Intro to R
+## Lab 4a: Importing data 
+Chapter \@ref(lab4aimportingdata)
 
- - You will learn the basics about R-commands (called `functions` in R)
- - We will see the most common objects (Vectors, Lists, Dataframe, Matrix)
- - You will learn how the help function for functions and packages works
+ 1. Paths
+ 1. Importing data functions
+ 1. Excel and other 'foreign' formats
+ 1. Reading from a zipfile/url
 
-# Day 2  
+## Lab 4b: Getting Open Data  
+Chapter \@ref(lab4bopendata)
 
-## Activities
+ 1. Open data sources
+ 1. Finding data
+ 1. Importing data into R (.csv, .tsv, .txt, .json, .xml, .xls(x)
+ 1. Using APIs (Twitter, Kaggle, Google, CBS)
+ 1. Accessing databases
 
- - Intro, file management, course conventions
- - Continue lab 6
- - Start with Data wrangling - lab 7
- - Start with Visualizations - lab 8
+## Lab 5: Exploratory Data Analysis _or_ The PPDAC Cycle
+Chapter \@ref(lab5eda)
+
+ 1. The process of EDA
+ 1. Problem-Plan-Data-Analysis-Conclusion (PPDAC) Cycle
+ 1. Missingness
+ 1. Distibutions
+ 1. Finding patterns 
+ 1. Graph types
+ 1. Multidimensional data
+ 1. Principal Components
  
+## Lab 6a: Exploring Assumptions & Models  
+Chapter \@ref(lab6amodels)
 
+ 1. Why Assumptions?
+ 1. Distributions (Gaussian)
+ 1. Regression
+ 1. Model output ( `{broom}`)
+ 
+## Lab 6b: Statistics with R (resampling & simple regression) 
+Chapter \@ref(lab6bmanymodels)
+ 
+## Lab 7: Statistics with R (multiple regression and ANOVA) 
+Chapter \@ref(lab7atextmining)
 
 
 
