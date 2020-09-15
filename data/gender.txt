@@ -1,4 +1,4 @@
-gender/age
+sex/age
 F/12
 F/23
 F/34
