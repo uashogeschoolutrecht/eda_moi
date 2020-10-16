@@ -137,7 +137,7 @@ args = with(females, c(mean = mean(height), sd = sd(height)))
     fill = "steelblue",
     alpha = .3,
   xlim  = c(140, 168)) +
-  ggtitle()
+  ggtitle("P = =< 168 cm")
 
 ```
 
@@ -145,17 +145,21 @@ args = with(females, c(mean = mean(height), sd = sd(height)))
 
 Based upon our intuition of randomness in the sampling process, we introduce the Sampling Distribution. The sampling distribution is a distribution of a sample statistic. Often the name of the computed statistic is added as part of the title. For example, if the computed statistic was the sample mean, the sampling distribution would be titled the `sampling distribution of the sample mean`.
 
-Let's assume we have a population that is represented by the first 100 integers {1,2,3,...,100}
+Let's assume we have a population that is represented by the integers {1,2,3,...,5961}.
 If we repeatedly sample from that population and compute each time the sample statistic (e.g. $\overline{x}$ or $s_x$, the resulting distribution of sample statistics is called the sampling distribution of that statistic.
 
 Let us take repeatedly random samples (x)
-without replacement of size n=30 from this population. The random sampling might generate sets that look like
+without replacement of sizes `r print(c(5, 10, 100, 500, 5961))` from this population.
 
 ```{r}
 set.seed(1234)
-population <- c(1L:5000L) %>%
+population <- rnorm(mean = 24, sd = 7.9, n = 5961) %>%
   enframe()
-no_samples <- c(5, 10, 100, 500, 1000)
+
+## what is the mean?
+mean(population$value)
+
+no_samples <- c(5, 10, 100, 500, length(population$value))
 
 samples <- map(
   .x = no_samples,
@@ -188,8 +192,45 @@ map(
 
 ```
 
+What we can conclude from the above graphs is that low sample numbers do not provide a good insight in the population mean, bigger samples approximate the population mean better and if we can study the complete population we get exactly the population mean. The method which analyzes the relation between the sample size and the precision of the test statistic is called `power analysis`.     
 
-For each sample we calculate a sample statistic. In this example we take the mean, $\overline{x}$, of each sample. However, please note that the sample statistic could be any descriptive statistic, such as the median, the standard deviation, a proportion, among others. Once we obtained the sample means for all samples, we list all their different values and number of their occurrences (frequencies) in order to obtain relative frequencies or empirical probabilities. We turn to R to visualize the relative frequency distribution of repeatedly sampling the given population for 5, 10, 100, 500, 1000, and 3000 times. The sample size is set to n=30. This procedure is also known in the statistics field as `bootsrapping`. Here we are bootstrapping the sampling from out population. We will also see that we can bootstrap the sample itself to get a more robust estimate for the sample mean and confidence intervals.
+## Bootstrap resampling
+
+For each set of samples we can calculate a sample statistic. In this example we take the mean, $\overline{x}$, of each collection of samples. However, please note that the sample statistic could be any descriptive statistic, such as the median, the standard deviation, a proportion, among others. 
+
+## Resampling a sample distribution (`bootstrapping`)
+from "The Art of Statistics", by David Spiegelhalter, 2019
+
+Now we want to know how precise we have been able to estimate the mean for the different sample-sets that we took from the population. In order to determine how accurate our statistic (in this case the mean) is we can image to take repeated samples (let's say 1000) from the population, we could determine how much the calculated mean would vary, each time we take a sample. If we know how much these estimates vary we would know how precise they are. But only if we know the details of the population (this we usually do not know in real data).
+
+One way to resolve this is assume that the sample looks like the population. Because in real live we usually cannot take many repeated new samples from the population, we take repeated new samples from our samples. 
+
+Suppose we draw a sample from our sample of 100 integers from that we drew from the integer population. We randomly pick samples of 1 record its value, put it back in the population and draw another sample. We repeat this procedure for 50 sample. This is called a `boot`. A bootstrapping experiments usually consists of 1000 boots. Meaning that we draw 1000 samples of 50, with replacement (meaning that we put the sample back, before drawing a new sample)
+
+Here we see the first 10 boots of this experiment
+```{r}
+source(
+  here::here("R", "these_boots_are_made_for.R"))
+
+bootstrap(x = population$value,
+          n = 50,
+          iter = 10,
+          as_tbl = TRUE,
+          mode = "raw") %>%
+  tidyr::pivot_longer(
+    cols = c(V1:V10), names_to = "boot", values_to = "value" 
+  ) %>%
+  mutate(iter = rep(1:10, times = 50)) -> boots_50 
+
+boots_50 %>%
+  ggplot(aes(x = value)) +
+  geom_histogram() +
+  facet_wrap(~iter, ncol = 2) +
+  ggtitle("Sampled values (n=50) of the 10 boots")
+
+```
+
+We now run a full bootstrapping experiment, with a number of different sample sizes (no_samples) and 1000 iterations (boots). In this experiment we will calculate the sample mean ($\overline{x}$) for each bootstrapped sample. Below we run the experiment by using the function defined in "./R/these_boots_are_made_for.R"
 
 ```{r}
 source(
@@ -199,30 +240,23 @@ source(
   )
 )
 
-pop <- 1:100 # initialize population as all integers between 1 and 100
-n <- 30 # sample size
-mean(pop)
-
-# start experiment
-no_samples <- c(5, 10, 100, 500, 1000) # set number of samples to be drawn
-
 ## run my self-written bootstrap function, this function takes a number of arguments to tune your bootstraps, you can get mean, median sd or raw (the actual sampled values) for  bootstrap
 ## look at the source code here: ".R/these_boots_are_made_for.R"
 ## we use map to loop over the predifined list of bootstrap iterations (repeats of sampling 30 samples from our simulated population) 
 set.seed(1234)
 
-bootstraps <- map(
-  .x = no_samples,
+
+bootstraps <- map_df(
+  .x = no_samples, ## we use map to loop over the different sample sizes
   .f = bootstrap,
-  x = pop,
-  n = 30,
-  mode = "mean",
-  trim = 1,
-  as_tbl = TRUE,
-  seed = 1234
+  x = population$value,
+  iter = 1000, ## usually we run 1000 bootstraps 
+  mode = "mean", ## the resampling statistic to be calculated after the bootstrapping
+  as_tbl = TRUE
 )
 
-bootstraps
+bootstraps <- bootstraps %>%
+  mutate(sample_size = rep(no_samples, each = 1000))
 
 ```
 
@@ -230,8 +264,6 @@ Let's plot each bootstrap in a seperate graph.
 ```{r}
 ## create function to plot bootstrap
 #install.packages("ggbeeswarm")
-
-see: http://www.cbs.dtu.dk/~eklund/beeswarm/
 
 plot_bootstrap <- function(bootstrap_tbl, mu, size = 1){
 
@@ -246,9 +278,6 @@ plot_bootstrap <- function(bootstrap_tbl, mu, size = 1){
   
   }
 
-plot_bootstrap(bootstraps[[1]], mu = mean(population$value))
-
-
 
 map(
   .x = bootstraps,
@@ -256,9 +285,16 @@ map(
   mu = mean(population$value)
 )
 
+## in one plot
+bootstraps %>%
+  ggplot(aes(x = value)) +
+  geom_histogram(bins = 100) +
+  facet_wrap(~sample_size, ncol = 2) +
+  ggtitle("Sampled values bootstrapping experiment")
+
 ```
 
-We see that the estimate for the mean of the sample distribution becomes more centered around the population mean mu (here we know it because we assumed the population to be the integers 1:100). Usually the population mean is unknown and we use sampling to get an estimate for it. What we also can see from the graphs is that the variability in the original sample distribution is almost gone in the resampled bootstrap distribution of the means. It is most apparent if you compare the histograms to the earlier dot plots. Now we can estimate the precision of the estimated mean in the bootstrapped sample distribution, providing us with an idea on how precise a specific size of samples from a population represents the estimate for the mean. To provide a number to this precision we can calculate the 95% confidence interval of the bootstrapped estimation for the sample mean. We also call this the `estimation of the margin of error`
+We see that the estimate for the mean of the sample distribution becomes more centered around the population mean mu (here we know it because we assumed the population to be the integers 1:5961). Usually the population mean is unknown and we use sampling to get an estimate for it. What we also can see from the graphs is that the variability in the original sample distribution is almost gone in the resampled bootstrap distribution of the means. It is most apparent if you compare the histograms to the earlier dot plots. Now we can estimate the precision of the estimated mean in the bootstrapped sample distribution, providing us with an idea on how precise a specific size of samples from a population represents the estimate for the mean. To provide a number to this precision we can calculate the 95% confidence interval of the bootstrapped estimation for the sample mean. We also call this the `estimation of the margin of error`
 
 ```{r}
 # install.packages("Rmisc")
@@ -269,8 +305,11 @@ margins_of_error <- map_df(
   .f = CI
 )
 
-## Of course we can put them in a plot
+margins_of_error
 
+## Of course we can put them in a plot
+margins_of_error %>%
+  ggplot(aes(x = mean, ))
 
 
 ```

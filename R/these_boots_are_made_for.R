@@ -5,18 +5,16 @@
 #' @param mode Which statistic do you want to return - 
 #' currently implemented are "mean", "median" and "sd"
 
-bootstrap <- function(x, 
-                      n,
-                      iter, 
+bootstrap <- function(n = NULL,
+                      x = NULL, 
+                      iter = NULL, 
                       mode = "mean", 
-                      trim = 1,
-                      as_tbl = FALSE,
-                      seed){
+                      as_tbl = FALSE){
 
   boots <- function(x){
     
     s <- sample(x = x, 
-                size = (n*trim), 
+                size = n, 
                 replace = TRUE)
     
     if(mode == "mean"){
