@@ -50,9 +50,14 @@ knitr::include_graphics(path_to_messy_excel, dpi = 110)
 
 ## Let's read this messy Excel file into R
 ```{r}
-path_to_messy_excel_data <- file.path(root, "data", "messy_excel.xlsx")
-messy <- readxl::read_excel(path = path_to_messy_excel_data, sheet = 1 )
+path_to_messy_excel_data <- here::here("data", "messy_excel.xlsx")
+
+readxl::excel_sheets(path = path_to_messy_excel_data)
+
+messy <- readxl::read_excel(path = path_to_messy_excel_data, sheet = "Blad1")
 head(messy, 8)
+
+
 ```
 
 ## So that didn't work, now what
@@ -77,6 +82,7 @@ head(messy, 8)
 
 ```{r}
 ?read_excel
+
 
 library(readxl)
 EC50 <- readxl::read_excel(path = path_to_messy_excel_data, 
@@ -232,7 +238,7 @@ correlation <- only_hu %>%
 ggplot(aes(x = result, 
            y = ec3)) +
   geom_point() +
-  geom_smooth(method = "lm") +
+  geom_smooth(method = "lm", se = FALSE) +
   xlab("IL-1a") +
   ylab("EC3") +
   ggtitle("Relation between EC50 and EC3 for HU") +

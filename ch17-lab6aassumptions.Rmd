@@ -27,18 +27,12 @@ http://rstudio-pubs-static.s3.amazonaws.com/78857_86c2403ca9c146ba8fcdcda79c3f47
  - Lab 6a Exploring distributions
  - Lab 6a Testing Assumptions
  - Lab 6a Data transformations
- - Lab 6b Bootstrapping
-
-*TO BE REMOVED [Exploring clusters (Principal Component Analysis) ]* 
  
- - Lab 6b: Comparing two and more means
+ - Lab 6b: Bootstrapping
  - Lab 6b: Simple linear regression
- - Lab 6b: Log-logistic regression
- 
- - Lab 6c: Predicting offspring length from adults length
- - Lab 6c: Using regression to discover patterns (`gapminder data`)
- - Lab 6c: Random Forest (as an example of Tree-based regression) (titanic data)
- - Lab 6c: Prediction (Titanic)
+ - Lab 6b: multiple regression
+ - Lab 6b: Comparing two and more means
+ - Lab 6b: Model performance analysis
  
 ## Introduction
 With this chapter, I hope to inspire the reader to try and use models (statistical models if you will) to do Exploratory Data Analysis. Although EDA is often said not to depend on statistics, I do not agree. Statistical inference and predictive modeling can learn you a lot about your data and provide valuable inside on where to go next in you analysis. 
@@ -133,12 +127,27 @@ normals <- rnorm(n = 100, mean = 0, sd = 1) %>%
 mean(normals$value)
 sd(normals$value)
 
+## 
+hist(normals$value)
+
 ## plot
 normals %>%
 ggplot(aes(x=value)) + 
   stat_function(fun = dnorm, colour = "red", size = 1) +
   xlim(c(-4, 4)) 
-  
+
+## resampling
+
+sample_1 <- sample_n(normals, 100, replace = TRUE)
+mean(sample_1$value)
+sample_2 <- sample_n(normals, 100, replace = TRUE)
+mean(sample_2$value)  
+
+## homework:
+## create a function that generates 1000 boostrapped samples of the mean form the 'normal$value' sample
+## plot a histogram of the 1000 mean-estimates
+
+
 ```
 
 C) Add the `mean` and the `sd` as a vertical (dashed) line to the graph from B)
@@ -190,6 +199,11 @@ ggplot(mtcars, aes(x = mpg)) +
   geom_density(aes(y=..density..),      
                    binwidth = 1,
                    colour = "red")
+
+
+
+
+
 
 
 ```
@@ -330,11 +344,19 @@ data_students %>%
 ind <- map_lgl(data_nested_students$data[[1]], is.numeric) 
 
 ## Females  
-map(data_nested_students$data[[1]][, ind], shapiro.test) %>%
-  map(., broom::tidy) %>% dplyr::bind_rows() %>%
-    mutate(var = names(data_nested_students$data[[1]][ind]),
-           gender = data_nested_students$gender[1]) -> shapiros_female
+map(data_nested_students$data[[1]][, ind], shapiro.test) 
 
+vector <- c(1:10)
+
+shapiro.test(vector)
+
+# H0 = Shapiro = Distributie is normaal verdeeld
+
+# %>%
+#   map(., broom::tidy) %>% dplyr::bind_rows() %>%
+#     mutate(var = names(data_nested_students$data[[1]][ind]),
+#            gender = data_nested_students$gender[1]) -> shapiros_female
+# 
 ## Males
 map(data_nested_students$data[[2]][, ind], shapiro.test) %>%
   map(., broom::tidy) %>% dplyr::bind_rows() %>%
@@ -408,74 +430,29 @@ data_students %>%
 ```
 
 
-
 ```{r, solution, include=FALSE}
 library(nlme)
+
+## statistics for inference
+## statistics for prediction
 
 ## linear model, anova
 salary_model_1 <- lm(data = data_students, salary ~ gender * major) 
 aov(salary_model_1) %>% summary
 
+## equal variance for all groups
+
 ## model inspection
 plot(salary_model_1)
 
 ## mixed effects model
-salary_model_2 <- lme(data = data_students %>% na.omit(), salary ~ gender * major,
+salary_model_2 <- lme(data = data_students %>% na.omit(), 
+                      salary ~ gender * major,
                         random = ~1 | semester)
 
 anova(salary_model_2)
 plot(salary_model_2)
 ```
-
-
-## Using the Normal distribution to calculate probability of observing a specific value or value range
-
-Before we actually start with the calculating probabilities we first calculate the mean $\mu$, and the standard deviation, $\delta$, of the target variable. Hence, we standardize the variable to get a standard normal distribution with $\mu$ = 0 and $\delta$ = 1
-and assign it to an appropriate variable name.
-
-```{r}
-# Heights
-height_mean <- mean($height)
-height_mean
-```
-## [1] 163.6533
-
-height.sd <- sd(females$height)
-height.sd
-
-## [1] 7.919726
-
-# z-transformation
-height.z <- (females$height - height.mean)/height.sd
-
-The height variable has a mean of 163.7 cm of and a standard deviation of 7.9 cm.
-
-
-
-
-## EDA on the 'students' data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ```{r}
 set.seed(seed = 10)
@@ -496,13 +473,6 @@ plot <- g +
 # Overlay with transparent density plot 
 plot
 ```
-
-
-
-
-
-
-
 
 ### Testing for a normal distribution
 We can formally assess whether a distribution is normal.
@@ -844,7 +814,5 @@ The residuals vs fitted plot shows a even distribution above and below the red l
 Calling plot on a model object in R also shows a number of diagnostic plots to assess model fit. Here we see that the Q-Q plot of the residuals: the points should be on the line for the assumption of nromality to be met. 
 
 
-## PCA and clustering
-see also: https://dev.to/juliasilge/pca-and-umap-with-cocktail-recipes-4980
 
-Let's revisit 
+

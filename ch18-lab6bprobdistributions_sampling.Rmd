@@ -1,0 +1,278 @@
+#Sampling, Probability distributions and bootstrapping {#lab6bsampling_bootstrapping}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Packages
+```{r}
+library(tidyverse)
+```
+
+## Data 
+```{r}
+data_students <- read.csv("https://userpage.fu-berlin.de/soga/200/2010_data_sets/students.csv")
+```
+
+## Probability distributions and predictions
+
+We first calculate the sample mean ($\overline{x}$), and the standard deviation of the sample mean $S_x$, of the target variable (in this case the `height` variable in the `data_students` dataframe. Then, we standardize the `height` variable to get a standard normal distribution with =0 and =1 and assign it to an appropriate variable name.
+
+The formula for culculating the standard deviation of the sample mean is:
+
+$s_x = \sqrt{\frac{\sum_{i=1}^N (x_i - \overline{x})^2}{N-1}}$
+
+## EXERCISE 1. Calculating the stardard deviation
+
+ a) Calculate with R the standard deviation of the sample mean by writing an expression in R that implements the above formula.
+
+ b) Use the function `mean()` calculate the sample mean, store it in a variable in R
+ 
+ c) and the function `sd()` to confirm your 'manual' calculations
+
+```{r}
+## a)
+height_values <- data_students$height
+degrees_freedom <- length(height_values)-1
+sum_of_squares <- (height_values - mean(height_values))^2 %>% sum() 
+sd = sqrt(sum_of_squares / degrees_freedom) 
+sd
+
+## b
+mean_height <- mean(height_values)
+
+## c
+sd_height <- sd(height_values)
+
+```
+
+--- END OF EXERCISE ---
+
+## Z-transformation of the female observations
+Here we transform the female sample distribution to a standard normal distribution.
+```{r}
+females <- data_students %>%
+  dplyr::filter(gender == "Female") %>%
+  as_tibble()
+
+females
+
+mean_height_f <- mean(females$height)
+sd_height_f <- sd(females$height)
+
+height_z <- (females$height - mean_height_f)/sd_height_f
+
+height_z %>% hist(main = "Z-transformed, female height")
+
+```
+
+The female height variable has a mean of `r mean(females$height)` cm of and a standard deviation of `r sd(females$height)` cm.
+
+Finding the area to the left of a specified z
+-score or x
+-score
+
+Question 1
+What is the probability of a randomly picked female student from the student data set with a height less or equal to 168 cm. Thus, we are looking for P(x≤168)
+
+First, we calculate the probability for the standardized variable. Therefore, we have to transform our value of interest (168 cm) into a z-score.
+
+$z = \frac{x−μ}{σ} = \frac{168−163.7}{7.9} = 0.55$
+
+Then we have to calculate the area under the curve left to the obtained z
+
+the area under the curve of a normal distributed variable can be calculated by applying the pnorm function. The pnorm function is written as pnorm(q, mean = 0, sd = 1, lower.tail = TRUE, log.p = FALSE). For this particular example we can accept all default argument values.
+
+```{R}
+x <- 168 # height in cm 
+x_z <- (x - mean_height_f)/sd_height_f # z-transformation
+pnorm(x_z) %>% round(2)
+```
+
+## [1] 0.7084447
+
+Awesome, we have a result: P(z≤0.55)≈0.71
+
+Now, we do the same calculation, however this time we skip the step of standardization. Thanks to the power of R we do not need to rely on tables, but can we can easily put the sample mean, $\overline{x}$ and the sample standard deviation, $s_x$ into the pnorm function.
+
+```{r}
+x <- 168 # height in cm 
+pnorm(x, 
+      mean = mean_height_f, 
+      sd = sd_height_f, 
+      lower.tail = TRUE, log.p = FALSE
+      ) %>%
+  round(3)
+
+## [1] 0.7084447
+```
+
+Perfect! The numbers match: P(x≤168)≈0.71. To make sure we realize what is going on, both the area under the curve for the standardized variable in z-values (left panel) as well as the area for the non-standardized variable in cm (right panel) are visualized below.
+
+```{r}
+
+ggplot(females, aes(x = height_z)) +
+stat_function(
+fun = dnorm,
+args = with(females, c(mean = mean(height_z), sd = sd(height_z)))
+) + stat_function(
+  args = with(females, c(mean = mean(height_z), sd = sd(height_z))),
+    fun = dnorm,
+    geom = "area",
+    fill = "steelblue",
+    alpha = .3,
+  xlim = c(-4, 0.55)) +
+  ggtitle("P(z =< 0.55")
+
+
+
+ggplot(females, aes(x = height)) +
+stat_function(
+fun = dnorm,
+args = with(females, c(mean = mean(height), sd = sd(height)))
+) + stat_function(
+  args = with(females, c(mean = mean(height), sd = sd(height))),
+    fun = dnorm,
+    geom = "area",
+    fill = "steelblue",
+    alpha = .3,
+  xlim  = c(140, 168)) +
+  ggtitle()
+
+```
+
+## Sampling distributions
+
+Based upon our intuition of randomness in the sampling process, we introduce the Sampling Distribution. The sampling distribution is a distribution of a sample statistic. Often the name of the computed statistic is added as part of the title. For example, if the computed statistic was the sample mean, the sampling distribution would be titled the `sampling distribution of the sample mean`.
+
+Let's assume we have a population that is represented by the first 100 integers {1,2,3,...,100}
+If we repeatedly sample from that population and compute each time the sample statistic (e.g. $\overline{x}$ or $s_x$, the resulting distribution of sample statistics is called the sampling distribution of that statistic.
+
+Let us take repeatedly random samples (x)
+without replacement of size n=30 from this population. The random sampling might generate sets that look like
+
+```{r}
+set.seed(1234)
+population <- c(1L:5000L) %>%
+  enframe()
+no_samples <- c(5, 10, 100, 500, 1000)
+
+samples <- map(
+  .x = no_samples,
+  .f = sample_n,
+  tbl = population,
+  replace = FALSE
+)
+
+## function to plot the draws from the population
+plot_bootstrap <- function(bootstrap_tbl, mu, size = 1){
+
+  bootstrap_tbl %>%
+    ggplot(aes(x = value)) +
+    geom_histogram() +
+ #   xlim(c(1,100)) +
+    geom_vline(xintercept = mu, 
+               size = 1, 
+               colour = "red", 
+               linetype = "dashed")
+  
+  }
+
+
+map(
+  .x = samples,
+  .f = plot_bootstrap,
+  mu = mean(population$value)
+)
+
+
+```
+
+
+For each sample we calculate a sample statistic. In this example we take the mean, $\overline{x}$, of each sample. However, please note that the sample statistic could be any descriptive statistic, such as the median, the standard deviation, a proportion, among others. Once we obtained the sample means for all samples, we list all their different values and number of their occurrences (frequencies) in order to obtain relative frequencies or empirical probabilities. We turn to R to visualize the relative frequency distribution of repeatedly sampling the given population for 5, 10, 100, 500, 1000, and 3000 times. The sample size is set to n=30. This procedure is also known in the statistics field as `bootsrapping`. Here we are bootstrapping the sampling from out population. We will also see that we can bootstrap the sample itself to get a more robust estimate for the sample mean and confidence intervals.
+
+```{r}
+source(
+  here::here(
+    "R",
+    "these_boots_are_made_for.R"
+  )
+)
+
+pop <- 1:100 # initialize population as all integers between 1 and 100
+n <- 30 # sample size
+mean(pop)
+
+# start experiment
+no_samples <- c(5, 10, 100, 500, 1000) # set number of samples to be drawn
+
+## run my self-written bootstrap function, this function takes a number of arguments to tune your bootstraps, you can get mean, median sd or raw (the actual sampled values) for  bootstrap
+## look at the source code here: ".R/these_boots_are_made_for.R"
+## we use map to loop over the predifined list of bootstrap iterations (repeats of sampling 30 samples from our simulated population) 
+set.seed(1234)
+
+bootstraps <- map(
+  .x = no_samples,
+  .f = bootstrap,
+  x = pop,
+  n = 30,
+  mode = "mean",
+  trim = 1,
+  as_tbl = TRUE,
+  seed = 1234
+)
+
+bootstraps
+
+```
+
+Let's plot each bootstrap in a seperate graph.
+```{r}
+## create function to plot bootstrap
+#install.packages("ggbeeswarm")
+
+see: http://www.cbs.dtu.dk/~eklund/beeswarm/
+
+plot_bootstrap <- function(bootstrap_tbl, mu, size = 1){
+
+  bootstrap_tbl %>%
+    ggplot(aes(x = value)) +
+    geom_histogram() +
+    xlim(c(1,100)) +
+    geom_vline(xintercept = mu, 
+               size = 1, 
+               colour = "red", 
+               linetype = "dashed")
+  
+  }
+
+plot_bootstrap(bootstraps[[1]], mu = mean(population$value))
+
+
+
+map(
+  .x = bootstraps,
+  .f = plot_bootstrap,
+  mu = mean(population$value)
+)
+
+```
+
+We see that the estimate for the mean of the sample distribution becomes more centered around the population mean mu (here we know it because we assumed the population to be the integers 1:100). Usually the population mean is unknown and we use sampling to get an estimate for it. What we also can see from the graphs is that the variability in the original sample distribution is almost gone in the resampled bootstrap distribution of the means. It is most apparent if you compare the histograms to the earlier dot plots. Now we can estimate the precision of the estimated mean in the bootstrapped sample distribution, providing us with an idea on how precise a specific size of samples from a population represents the estimate for the mean. To provide a number to this precision we can calculate the 95% confidence interval of the bootstrapped estimation for the sample mean. We also call this the `estimation of the margin of error`
+
+```{r}
+# install.packages("Rmisc")
+library(Rmisc)
+
+margins_of_error <- map_df(
+  .x = bootstraps %>% flatten,
+  .f = CI
+)
+
+## Of course we can put them in a plot
+
+
+
+```
+
+

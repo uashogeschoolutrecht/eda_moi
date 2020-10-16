@@ -702,7 +702,7 @@ F) Correct the `measure` variable in an SI unit (milliliters)
 # Have removed all cocktails with ounces of bitters - that is most
 # likely a data entry error (it certainly doesn't give me much confidence
 # in the quality of this data)
-
+```{r}
 sizes <- cocktails %>%
   filter(str_detect(measure, "oz")) %>%
   filter(!str_detect(ingredient, fixed("bitters", ignore_case = TRUE))) %>%
@@ -769,11 +769,7 @@ cocktails %>%
   head(20)
 ```
 
- 
 
- ## Case study
- 
- https://data-analist.info/cbs-open-data-downloaden-voor-data-analyse-in-r/
 
  
 

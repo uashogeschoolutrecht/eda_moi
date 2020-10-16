@@ -122,8 +122,20 @@ pkgs[1:3, "Imports"]
 
 pkgs %>%
   select(Package, Imports) %>%
-  mutate(Imports_chr = as.character(Imports))
-  mutate(deps = length(Imports)) -> data_imports
+  mutate(Imports_chr = as.character(Imports)) %>%
+  mutate(
+    n_depends = 
+      str_split(Imports_chr, pattern = ",")) %>%
+ # mutate(
+#    n_depends = map(n_depends, flatten)) %>%
+  mutate(
+    n_depends = map_int(n_depends, length)) %>%
+  arrange(desc(n_depends)) %>%
+  dplyr::filter(n_depends >10) %>%
+  ggplot(aes(x = reorder(Package, n_depends), y = n_depends)) +
+  geom_point() +
+  coord_flip()
 
+  
 ```
 

@@ -520,7 +520,7 @@ Load the data with the following code
 library(tidyverse)
 
 heights_file <- here::here("data", "heights.RDS")
-heights <- read_rds(path = heights_file)
+heights <- read_rds(file = heights_file)
 head(heights)
 heights
 heights_tib <- as_tibble(heights)
