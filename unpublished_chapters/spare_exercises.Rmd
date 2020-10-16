@@ -1,0 +1,54 @@
+---
+title: "Spare exercises"
+author: "Marc Teunis"
+date: "12-9-2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This dataset is also on risk factors, but now for developing Breast cancer. It was doenloaded from here: https://www.bcsc-research.org/download_file/view/189/344
+
+“Data collection and sharing was supported by the National Cancer Institute (P01CA154292; U54CA163303), the Patient-Centered Outcomes Research Institute (PCS-1504-30370), and the Agency for Health Research and Quality (R01 HS018366-01A1). We thank the participating women, mammography facilities, and radiologists for the data they have provided for this study. You can learn more about the BCSC at: http://www.bcsc-research.org/."
+
+
+A) Unzip the data, load into R as a data frame (the data is available as "./data/bcsc_risk_factors_summarized1_corrected.zip")
+
+B) inspect the data, the variables, change the names of the variables to safe names if necessary.
+
+C) Check the variable types and change if necessary.
+
+D) Can you create a number of visualization from which you determine a strong riskfactor for the development of Breast cancer from this data?
+
+```{r}
+unzip(
+  here::here("data",
+       "bcsc_risk_factors_summarized1_corrected.zip"),
+  exdir = "data", "bcsc_risk_factors_summarized1.csv")
+
+data_bc_risk <- read_csv(
+  here::here(
+    "data",
+    "bcsc_risk_factors_summarized1.csv")
+)
+
+data_bc_risk %>%
+  is.na() %>%
+  sum()
+
+data_bc_risk %>% names
+
+map(
+  .x = data_bc_risk,
+  .f = typeof
+  )
+
+
+data_bc_risk %>%
+  sample_n(100) %>%
+  ggplot(aes(x = bmi_group, y = BIRADS_breast_density)) +
+  geom_point()
+  
+```
