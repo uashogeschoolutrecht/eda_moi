@@ -1,4 +1,4 @@
-#Sampling, Probability distributions and bootstrapping {#lab6bsampling_bootstrapping}
+# Lab 6b; Sampling, Probability distributions and bootstrapping {#lab6bsampling_bootstrapping}
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -265,7 +265,7 @@ Let's plot each bootstrap in a seperate graph.
 ## create function to plot bootstrap
 #install.packages("ggbeeswarm")
 
-plot_bootstrap <- function(bootstrap_tbl, mu, size = 1){
+plot_bootstrap <- function(bootstrap_tbl, mu, size = 1000){
 
   bootstrap_tbl %>%
     ggplot(aes(x = value)) +
@@ -279,11 +279,11 @@ plot_bootstrap <- function(bootstrap_tbl, mu, size = 1){
   }
 
 
-map(
-  .x = bootstraps,
-  .f = plot_bootstrap,
-  mu = mean(population$value)
-)
+#map(
+#  .x = bootstraps,
+#  .f = plot_bootstrap,
+#  mu = mean(population$value)
+#)
 
 ## in one plot
 bootstraps %>%
@@ -294,7 +294,7 @@ bootstraps %>%
 
 ```
 
-We see that the estimate for the mean of the sample distribution becomes more centered around the population mean mu (here we know it because we assumed the population to be the integers 1:5961). Usually the population mean is unknown and we use sampling to get an estimate for it. What we also can see from the graphs is that the variability in the original sample distribution is almost gone in the resampled bootstrap distribution of the means. It is most apparent if you compare the histograms to the earlier dot plots. Now we can estimate the precision of the estimated mean in the bootstrapped sample distribution, providing us with an idea on how precise a specific size of samples from a population represents the estimate for the mean. To provide a number to this precision we can calculate the 95% confidence interval of the bootstrapped estimation for the sample mean. We also call this the `estimation of the margin of error`
+We see that the estimate for the mean of the sample distribution becomes more centered around the population mean mu (here we know it because we assumed the population to be the normals 1:5961). Usually the population mean is unknown and we use sampling to get an estimate for it. What we also can see from the graphs is that the variability in the original sample distribution is almost gone in the resampled bootstrap distribution of the means. It is most apparent if you compare the histograms to the earlier dot plots. Now we can estimate the precision of the estimated mean in the bootstrapped sample distribution, providing us with an idea on how precise a specific size of samples from a population represents the estimate for the mean. To provide a number to this precision we can calculate the 95% confidence interval of the bootstrapped estimation for the sample mean. We also call this the `estimation of the margin of error`
 
 ```{r}
 # install.packages("Rmisc")

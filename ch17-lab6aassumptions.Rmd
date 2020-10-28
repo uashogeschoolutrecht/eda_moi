@@ -1,4 +1,4 @@
-# Lab 6A; Assumptions and statistical models {#lab6aassumptions}
+# Lab6a; Assumptions and statistical models {#lab6aassumptions}
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
@@ -358,6 +358,12 @@ shapiro.test(vector)
 #            gender = data_nested_students$gender[1]) -> shapiros_female
 # 
 ## Males
+
+map(data_nested_students$data[[1]][, ind], shapiro.test) %>%
+  map(., broom::tidy) %>% dplyr::bind_rows() %>%
+    mutate(var = names(data_nested_students$data[[1]][ind]),
+           gender = data_nested_students$gender[1]) -> shapiros_female
+
 map(data_nested_students$data[[2]][, ind], shapiro.test) %>%
   map(., broom::tidy) %>% dplyr::bind_rows() %>%
     mutate(var = names(data_nested_students$data[[2]][ind]),
