@@ -7,3 +7,7 @@ _book
 _bookdown_files
 rsconnect
 Dockerfile
+libs
+render16086f6e6d41.rds
+exploratory_data_analysis.rds
+json.zip
