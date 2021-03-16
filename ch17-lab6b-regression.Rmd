@@ -1,0 +1,1252 @@
+# Lab 6b - Basic regression
+
+```{r include = FALSE, eval = TRUE}
+# set CSS for objects on page as rendering whole site takes so long
+knitr::opts_chunk$set(class.source="Rchunk", class.output="Rout", echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, cache = TRUE)
+```
+
+```{r, echo=FALSE}
+knitr::include_graphics(
+  here::here(
+    "images",
+    "correlations.jpg"
+  )
+)
+```
+
+## Resources and justification 
+This chapter was adapted from chapter 5 and 6 of
+
+"ModerDive, Statistical Inference via Data Science, A ModernDive into R and the Tidyverse", by Chester Ismay and Albert Y. Kim
+Foreword by Kelly S. McConville
+Version: February 05, 2021
+
+The full book and source can be found 
+
+ - [bookdown project](https://moderndive.com/) and 
+ - [github repo](https://github.com/moderndive/ModernDive_book )
+ - [R package](https://github.com/moderndive/moderndive)
+ - [exercises](https://github.com/moderndive/moderndive_labs/tree/master/static)
+
+To install the `{moderndive}` R package we will install the latest development version, using `{remotes}`.
+
+```{r, eval=F}
+remotes::install_github("https://github.com/moderndive/moderndive")
+```
+
+In the Data Analysis Using R (DAUR-1) course you acquired the skills to import, wrangle and visualize data and you learned the concept of a "tidy" data format. In Lesson "Probability" you also learned the basic principles for using statistical models and how they work. It is now time to start to do the actual modeling of data. The fundamental premise of data modeling is to make explicit the relationship between:
+
+* an *outcome variable* $y$, also called a *dependent variable* or response variable, \index{variables!response / outcome / dependent} and
+* an *explanatory/predictor variable* $x$, also called an *independent variable* or \index{variables!explanatory / predictor / independent} covariate.
+
+Another way to state this is using mathematical terminology: we will model the outcome variable $y$ "as a function" of the explanatory/predictor variable $x$. When we say "function" here, we aren't referring to functions in R like the `ggplot()` function, but rather as a mathematical function. But, why are there two labels, explanatory and predictor, for the variable $x$? Because, even though the two terms are used interchangeably, data modeling mainly serves one of two purposes:
+
+ 1. **Modeling for explanation**: When you want to explicitly describe and quantify the relationship between the outcome variable $y$ and a set of explanatory variables $x$, determine the significance of any relationships, have measures summarizing these relationships, and possibly identify any *causal* relationships between the variables. 
+ 1. **Modeling for prediction**: When you want to predict an outcome variable $y$ based on the information contained in a set of predictor variables $x$. Unlike modeling for explanation, however, you don't care so much about understanding how all the variables relate and interact with one another, but rather only whether you can make good predictions about $y$ using the information in $x$.
+
+## Example from ModernDive
+For example, say you are interested in an outcome variable $y$ of whether patients develop lung cancer and information $x$ on their risk factors, such as smoking habits, age, and socioeconomic status. If we are modeling for explanation, we would be interested in both describing and quantifying the effects of the different risk factors. One reason could be that you want to design an intervention to reduce lung cancer incidence in a population, such as targeting smokers of a specific age group with advertising for smoking cessation programs. If we are modeling for prediction, however, we wouldn't care so much about understanding how all the individual risk factors contribute to lung cancer, but rather only whether we can make good predictions of which people will contract lung cancer.
+
+In this lesson, we'll focus on modeling for explanation and hence refer to $x$ as *explanatory variables*. Here we'll focus on one particular technique: *linear regression*. Linear regression is one of the most commonly-used approaches to modeling.
+
+Linear regression involves a *numerical* outcome variable $y$ and explanatory variables $x$ that are either *numerical* or *categorical*. Furthermore, the relationship between $y$ and $x$ is assumed to be linear, or in other words, a line. However, we'll see that how a "line" is defined, will vary depending on the nature of your explanatory variables $x$.
+
+During this lesson, we'll only consider models with a single explanatory variable $x$. In the first part, the explanatory variable will be numerical. This scenario is known as *simple linear regression*. In the second part of this lesson, the explanatory variable will be categorical.
+
+Let's now begin with basic regression, which refers to linear regression models with a single explanatory variable $x$. We'll also discuss important statistical concepts like the *correlation coefficient*, that "correlation isn't necessarily causation," and what it means for a line to be "best-fitting."
+
+### Needed packages 
+Let's load the necessary packages for this Lesson
+```{r, pkgs}
+library(dagitty)
+library(tidyverse)
+library(moderndive)
+library(skimr)
+library(gapminder)
+library(mvtnorm)
+library(broom)
+library(kableExtra)
+library(patchwork)
+library(RNHANES)
+library(HSAUR3)
+library(rethinking)
+```
+
+If you did not install "rethinking" before, see [here](https://www.rdocumentation.org/packages/rethinking/versions/1.59)
+
+## One numerical explanatory variable {#model1}
+
+[Why do some professors and instructors at universities and colleges receive high [teaching evaluations scores from students while others receive lower ones? Are there [differences in teaching evaluations between instructors of different demographic [groups? Could there be an impact due to student biases? These are all questions that [are of interest to university/college administrators, as teaching evaluations are [among the many criteria considered in determining which instructors and professors [get promoted.
+
+
+To start with simple regression, we will look at a dataset from the [`{HSAUR3}`](https://cran.r-project.org/package=HSAUR3) package, which is the accompanying R package to the book: "A Handbook of Statistical Analyses Using R", (3rd Edition), by Torsten Hothorn.
+
+The data was published in the paper: J. D. Robertson and P. Armitage (1959) Comparison of Two Hypotensive Agents, Anaesthesia, 14(1), 53–64. 
+```{r, blood_pressure_data}
+## data from HSAUR3
+data(package = "HSAUR3", dataset = "bp")
+
+bp <- bp %>% 
+  as_tibble()
+```
+
+In this section, we'll keep things simple for now and try to explain differences in drug dose as a function of one numerical variable: the average systolic blood pressure in mmHg (millimeters of mercury). The study intended to compare the effectiveness of two hypotensive (blood pressure lowering) drugs. 
+
+Let's look at the variables in the data that matter for this basic regression analysis. We need 
+
+1. A numerical outcome variable $y$ (blood pressure: `bloodp`) and
+1. A single numerical explanatory variable $x$ (the log10 of the drug dose: `logdose`).
+
+## Exploratory data analysis
+
+Let's `select()` only the subset of the variables we'll consider in this chapter, and save this data in a new data frame called `bp_simple`:
+
+```{r, select_bp}
+bp_simple <- bp %>%
+  dplyr::select(bloodp, logdose)
+bp_simple
+```
+
+A crucial step before doing any kind of analysis or modeling is performing an *exploratory data analysis*, or EDA for short. EDA gives you a sense of the distributions of the individual variables in your data, whether any potential relationships exist between variables, whether there are outliers and/or missing values, and (most importantly) how to build your model. Here are common steps in an EDA:
+
+1. Most crucially, looking at the raw data values.
+1. Creating an initial visualization, showing _all_ the data (sometimes you have so many data points that you are better off taking a random sample first).
+1. Computing summary statistics, such as means, medians, and interquartile ranges.
+1. More visualizations (e.g. to explore statistical model assumptions - which you saw in the DAUR1 course)
+
+**STEP1; Looking at your data**
+Let's perform the first common step in an exploratory data analysis: looking at the raw data values. Because this step seems so trivial, unfortunately many data analysts ignore it. However, getting an early sense of what your raw data looks like can often prevent many larger issues down the road. Grab a cup of coffee, or whather is your fancy and start looking at the data.
+
+You can do this by using RStudio's spreadsheet viewer or by using the `glimpse()` function.
+
+```{r, introducing_glimpse}
+glimpse(bp_simple)
+bp_simple
+```
+
+**STEP2 Visualize as fast as you can**
+Before doing anything else, I always like to have a first glimpse at the actual values in the data by means of a graph. With simple regression we have two numeric variables, so a scatterplot of these two variables where we plot the outcome (or dependent) variable `bloodp` on the $y$ axis and the single numeric explanatory variable (`logdose`) on the $x$ axis is a logical choice.
+
+```{r}
+bp_simple %>%
+  ggplot(aes(x = logdose, y = bloodp)) +
+  geom_point()
+
+```
+
+We can add the linear relationship that is implied from the scatterplot:
+```{r}
+bp_simple %>%
+  ggplot(aes(x = logdose, y = bloodp)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
+
+From this we can observe the relationship between the blood pressure variable `bloodp` and the dose of the hypotensive drug `logdose` appears to be positive in nature. Meaning that increasing the dose, is correlated with an increase in blood pressure. Mind that we can not claim any causal relationship from this relationship. At this point, we also have no clue how strong this relationship is (how good does the line fit (represents) the data points = *correlation coefficient*) and we also have no idea on how large the effect of increasing the dose is on increasing the blood pressure (slope). We do have a sense of what the  *direction* (or *sign*) of the `*correlation coefficient*) is going to be (probably positive).   
+
+```{r, bp_nrows, echo=FALSE, include=FALSE}
+# This code is used for dynamic non-static in-line text output purposes
+n_bp_simple <- bp_simple %>% nrow()
+```
+
+Observe that Observations: `r n_bp_simple` indicates that there are `r n_bp_simple` rows/observations in `bp_simple`, where each row corresponds to one observation made in one individual patient. It is important to note that the *observational unit* is an individual patient. The observational unit is the "type of thing" that is being measured by our variables.
+
+**STEP3 Summary statistics**
+Now that we've looked at the raw values in our `bp_simple` data frame and got a preliminary sense of the data, let's move on to last common step in an exploratory data analysis: computing summary statistics. Let's start by computing the mean and median of our numerical outcome variable `bloodp` and our numerical explanatory variable "beauty" score denoted as `logdose`. We'll do this by using the `summarize()` function from `{dplyr}` along with the `mean()` and `median()` functions.
+
+```{r, bp_summary}
+bp_simple %>%
+  summarize(
+    mean_bloop = mean(bloodp), 
+    mean_logdose = mean(logdose),
+    median_bloodp = median(bloodp), 
+    median_logdose = median(logdose))
+```
+
+However, what if we want other summary statistics as well, such as the standard deviation (a measure of spread), the minimum and maximum values, and various percentiles? 
+
+Typing out all these summary statistic functions in `summarize()` would be long and tedious. Instead, let's use the convenient `skim()` function from the `{skimr}` package. This function takes in a data frame, "skims" it, and returns commonly used summary statistics. Let's take our `bp_simple` data frame, and pipe it into the `skim()` function:
+
+```{r, bp_skim}
+bp_simple %>% 
+  skim()
+```
+
+For both `bloodp` and `logdose` it returns:
+
+- `n_missing`: the number of missing values
+- `complete_rate`: the ratio of non-missing or complete values, compared to all observations
+- `mean`: the average
+- `sd`: the standard deviation
+- `p0`: the 0th percentile: the value at which 0% of observations are smaller than it (the *minimum* value)
+- `p25`: the 25th percentile: the value at which 25% of observations are smaller than it (the *1st quartile*)
+- `p50`: the 50th percentile: the value at which 50% of observations are smaller than it (the *2nd* quartile and more commonly called the *median*)
+- `p75`: the 75th percentile: the value at which 75% of observations are smaller than it (the *3rd quartile*)
+- `p100`: the 100th percentile: the value at which 100% of observations are smaller than it (the *maximum* value)
+- `hist`: A pictogram-like display of the variable histogram 
+
+The `skim()` function only returns what are known as *univariate* summary statistics: functions that take a single variable and return some numerical summary of that variable. However, there also exist *bivariate* summary statistics: functions that take in two variables and return some summary of those two variables. In particular, when the two variables are numerical, we can compute the *correlation coefficient*. Generally speaking, *coefficients* are quantitative expressions of a specific phenomenon.  A *correlation coefficient* is a quantitative expression of the *strength of the linear relationship between two numerical variables*. Its value ranges between -1 and 1 where:
+
+* -1 indicates a perfect *negative relationship*: As one variable increases, the value of the other variable tends to go down, following a straight line.
+* 0 indicates no relationship: The values of both variables go up/down independently of each other.
+* +1 indicates a perfect *positive relationship*: As the value of one variable goes up, the value of the other variable tends to go up as well in a linear fashion.
+
+```{r correlation1, echo=FALSE, fig.cap="Nine different correlation coefficients.", fig.height=2.6}
+correlation <- c(-0.9999, -0.9, -0.75, -0.3, 0, 0.3, 0.75, 0.9, 0.9999)
+n_sim <- 100
+values <- NULL
+for (i in seq_along(correlation)) {
+  rho <- correlation[i]
+  sigma <- matrix(c(5, rho * sqrt(50), rho * sqrt(50), 10), 2, 2)
+  sim <- rmvnorm(
+    n = n_sim,
+    mean = c(20, 40),
+    sigma = sigma
+  ) %>%
+    as.data.frame() %>%
+    as_tibble() %>%
+    mutate(correlation = round(rho, 2))
+
+  values <- bind_rows(values, sim)
+}
+
+corr_plot <- ggplot(data = values, mapping = aes(V1, V2)) +
+  geom_point() +
+  facet_wrap(~correlation, ncol = 3) +
+  labs(x = "x", y = "y") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank()
+  )
+
+corr_plot
+```
+
+The figure above gives examples of 9 different correlation coefficient values for hypothetical numerical variables $x$ and $y$. For example, observe in the top right plot that for a correlation coefficient of -0.75 there is a negative linear relationship between $x$ and $y$, but it is not as strong as the negative linear relationship between $x$ and $y$ when the correlation coefficient is -0.9 or -1.
+
+<div class="question">
+##### Exercise 6
+Look carefully at the correlation figure above. What value do you expect the correlation coefficient of the blood pressure-drug relationship to be? Make an educated guess. If you cannot put a single number to it, at least provide an upper and a lower limit of your estimate (between what values do you think it lies?).   
+
+</div>
+
+<details><summary>Click for the answer</summary>
+Judging the correlation coefficient from the figure it might come out somewhere between 0.3 and 0.75.
+</details>
+
+The correlation coefficient can be computed using the `get_correlation()` function in the `moderndive` package. In this case, the inputs to the function are the two numerical variables for which we want to calculate the correlation coefficient. 
+
+We put the name of the outcome variable on the left-hand side of the `~` "tilde" sign, while putting the name of the explanatory variable on the right-hand side. This is known as R's *formula notation*. We will use this same "formula" syntax with regression later in this chapter.
+
+```{r, bp_corcoeff}
+bp_simple %>% 
+  get_correlation(formula = bloodp ~ logdose)
+```
+
+An alternative way to compute correlation is to use the `cor()` summary function within a `summarize()`:
+```{r, eval=FALSE}
+bp_simple %>% 
+  summarize(correlation = cor(bloodp, logdose))
+```
+
+getting and rounding the coefficient
+```{r,}
+bp_simple %>% 
+  get_correlation(formula = bloodp ~ logdose) %>%
+  round(3) %>%
+  pull() -> cor_bp
+```
+
+In our case, the correlation coefficient of `r cor_bp` indicates that the relationship between drug dose and blood pressure  "weakly positive." There is a certain amount of subjectivity in interpreting correlation coefficients, especially those that aren't close to the extreme values of -1, 0, and 1. 
+
+Let's now perform the last of the steps in an exploratory data analysis: creating data visualizations. Since both the `bloodp` and `logdose` variables are numerical, a scatterplot is an appropriate graph to visualize this data. We made a quick graph like that above. Here we zoom in on some of the points in the graph. Let's do this using `geom_point()` and display the result: 
+
+```{r, numxplot1}
+bp_simple %>%
+  ggplot(aes(x = logdose, y = bloodp)) +
+  geom_point() +
+  labs(x = "Dose(log10)", 
+       y = "Blood Pressure (mmHg)",
+       title = "Simple linear regression") 
+```
+
+
+Observe that most `Blood Pressure` vlaues lie between `65` and `75`, while most `Log 10(Dose)` values lie between `1.5` and `2.25`. Furthermore, the relationship between `Bloood Pressure` and `Log10(Dose)` is "weakly positive." This is consistent with our earlier computed correlation coefficient of `r cor_bp`.
+
+<div class="question">
+##### Exercise 6. 
+Add random noise to points to assess overplotting
+(a) We know that sometimes in scatterplots, point that exaclty overlap result in masking a pattern. Add some random noise to the graph above to see if there is indeed overplotting happening in this case
+(b) What is your conclusion?
+(c) Did you change the value of the points by adding 'jitter' to the graph?
+
+</div>
+
+<details><summary>Click for the answer</summary>
+```{r}
+#(a) 
+bp_simple %>%
+  ggplot(aes(x = logdose, y = bloodp)) +
+  geom_point(position = "jitter") +
+  geom_smooth(method = "lm") +
+  labs(x = "Dose(log10)", 
+       y = "Blood Pressure (mmHg)",
+       title = "Simple linear regression") 
+
+#(b)there is no overplotting
+
+#(c)no values are not changed, only the displayed position in the graph
+```
+</details>
+
+Let's build on the unjittered scatterplot in Figure \@ref(fig:numxplot1) by adding a "best-fitting" line: of all possible lines we can draw on this scatterplot, it is the line that "best" fits through the cloud of points. We do this by adding a new `geom_smooth(method = "lm", se = FALSE)` layer to the `ggplot()` code that created the scatterplot in Figure \@ref(fig:numxplot1). The `method = "lm"` argument sets the line to be a "`l`inear `m`odel." The `se = FALSE` argument suppresses _standard error_ uncertainty bars.
+
+```{r numxplot3, fig.cap="Regression line.", message=FALSE}
+bp_simple %>%
+  ggplot(aes(x = logdose, y = bloodp)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(x = "Dose(log10)", 
+       y = "Blood Pressure (mmHg)",
+       title = "Simple linear regression") 
+```
+
+The line in the resulting Figure is called a "regression line." The regression line is a visual summary of the relationship between two numerical variables, in our case the outcome variable `bloodp` and the explanatory variable `logdose`. The positive slope of the blue line is consistent with our earlier observed correlation coefficient of `r cor_bp` suggesting that there is a positive relationship between these two variables: as the log10 of the drug dose increases, so also does the blood pressure. We'll see later, however, that while the correlation coefficient and the slope of a regression line always have the same sign (positive or negative), they typically do not have the same value.
+
+Furthermore, a regression line is "best-fitting" in that it minimizes some mathematical criteria. We present these mathematical criteria in later in this lesson.
+
+<div class="question">
+##### Exercise 6
+Perform a simple regression analysis on your own
+
+For this exercise we move to a different dataset: `milk` from the rethinking package by Richard Mc Elreath. [see:](https://rdrr.io/github/rmcelreath/rethinking/man/milk.html) or 
+```
+?rethinking::milk
+```
+for more info
+
+An evolutionary hypothesis is that fat contents of mother's milk is related to the relative size of the so-called neocortex (or neuronal gray matter) in the brain of mammals. The formation of the complicated neocortex during post-natal development is an energy consuming process, so having higher energetic content in milk could have generated an evolutionary advantage and driven neocortical development. To gather insight into this relationship, we will run a simple regression.
+
+For this exercise you need to complete the following steps:
+
+ 1. Load the `{rethinking}` package
+ 1. Load the dataset `milk` as a tibble in your R-session
+ 1. Inspect the data and see what kind of variables you have
+ 1. Are there missing data? Create a visualization
+ 1. Which variables are numeric (write a short piece of code that uses a `map()` function and a conditional statement)
+ 1. Select (using `dplyr::select()`) those variables that are numeric
+ 1. Plot the relationship between the `neocortex.perc` variable and the `perc.fat`. In your analysis, regard `perc.fat` as the response ($y$) and `neocortex.perc` as the explanatory ($x$), variable
+ 1. Calculate relevant summary statistics
+ 1. Plot a regression line under linear (straight line: $y = ax + b$) assumption. 
+ 1. Describe the relationship in quantitative and qualitative terms
+ 1. Calculate the correlation coefficient
+ 1. Write your conclusion on the relationship between the percentage of fat in mother's milk (`perc.fat`) and the percentage of the brain that is composed of neuronal grey matter (neocortex -> `neocortex.perc`) 
+
+</div>
+
+<details><summary>Click for the answer</summary>
+```{r}
+# 1
+library(rethinking)
+# 2
+data("milk")
+# 3
+milk %>% as_tibble()
+names(milk)
+# 4/5/7
+ind <- purrr::map(milk, class) == "numeric"
+milk_num <- milk %>%
+  dplyr::select(names(milk)[ind])
+skimr::skim(milk)
+
+naniar::vis_miss(milk)
+naniar::gg_miss_fct(milk, clade)
+
+# 6/8
+milk %>%
+  ggplot(aes(x = perc.fat, y = neocortex.perc)) +
+#  geom_point(aes(colour = clade)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+# the relationship is weakly positive, there is not so much data ..., the deviation from linearity is high, so the correlation coefficient is expected to be quite low but with a positive sign.
+milk_num %>% 
+  na.omit %>%
+  get_correlation(formula = neocortex.perc ~ perc.fat)  
+```
+</details>
+
+## Simple linear regression
+
+You may recall from secondary/high school algebra that the equation of a line is $y = a\cdot x + b $. (Note that the $\cdot$ symbol is equivalent to the $\times$ "multiply by" mathematical symbol. We'll use the $\cdot$ symbol in this course. It is defined by two coefficients $a$ and $b$. The intercept coefficient $b$ is the value of $y$ when $x = 0$. The slope coefficient $a$ for $x$ is the increase in $y$ for every increase of one in $x$.
+
+However, when defining a regression line we use slightly different notation: the equation of the regression line is $\widehat{y} = b_0 + b_1 \cdot x$. The intercept coefficient is $b_0$, so $b_0$ is the value of $\widehat{y}$ when $x = 0$. The slope coefficient for $x$ is $b_1$, i.e., the increase in $\widehat{y}$ for every increase of one in $x$. Why do we put a "hat" on top of the $y$? It's a form of notation commonly used in regression to indicate that we have a \index{regression!fitted value} "fitted value," or the value of $y$ on the regression line for a given $x$ value.
+
+## Slope and intercept
+We know that the regression line in Figure \@ref(fig:numxplot3) has a positive slope $b_1$ corresponding to our explanatory $x$ variable `logdose`. Why? Because as drug dose increases, blood pressure tends to increase as well. However, what is the numerical value of the slope $b_1$? What about the intercept $b_0$?  Let's compute these two values.
+
+We can obtain the values of the intercept $b_0$ and the slope for `logdose` $b_1$ by outputting a *linear regression table*. This is done in two steps:
+
+1. We first "fit" the linear regression model using the `lm()` function and save it in `bloodp_model`.
+1. We get the regression table by applying the `get_regression_table()` function from the `moderndive` package to `score_model`.
+
+```{r}
+# Fit regression model:
+bloodp_model <- lm(bloodp ~ logdose, data = bp_simple)
+# Get regression table:
+get_regression_table(bloodp_model)
+```
+
+To isolate only the estimated values:
+```{r}
+evals_line <- bloodp_model %>%
+  get_regression_table() %>%
+  pull(estimate)
+
+evals_line %>% round(1)
+```
+
+Let's first focus on interpreting the regression table output above. In the `estimate` column, the intercept $b_0$ = `r evals_line[1]` and the slope $b_1$ = `r evals_line[2]` for `logdose`. Thus the equation of the regression line in Figure \@ref(fig:numxplot3) follows:
+
+The intercept $b_0$ = `r evals_line[1]` is the average blood pressure $\widehat{y} = \widehat{\text{BloodPressure}}$ for the log10(dose) `logdose` of 0. Or in graphical terms, it's where the line intersects the $y$ axis when $x$ = 0. Note, however, that while the intercept of the regression line has a mathematical interpretation. We need to be careful about the *practical* interpretation, because logdose = 0 was not actually observed in the data, so the intercept is *extrapolated* from the straight regression line, estimated from the actually observed data. You should always think about the meaning of parameters in your model. Most of the time they have statistical (or mathematical meaning), and not much real value for interpretation.
+
+Or as Richard MacElreath freely puts it: "They have meaning in the small statistical world, but probably have limited value in the Big Real world". 
+
+Of greater interest is the slope $b_1$ = $b_{\text{logdose}}$ for `logdose` of `r evals_line[2]`, as this summarizes the relationship between the blood pressure and logdose variables. Note that the sign is positive, suggesting a positive relationship between these two variables. Recall from earlier that the correlation coefficient is `r cor_bp`. They both have the same positive sign, but have a different value. Recall further that the correlation's interpretation is the "strength of linear association". The slope's interpretation is a little different:
+
+> For every increase of 1 unit in `logdose`, there is an *associated* increase of, *on average*, `r evals_line[2]` units of `bloodp`.
+
+We only state that there is an *associated* increase and not necessarily a *causal* increase. For example, perhaps it's not that higher dose directly cause higher blood pressure per se. Instead, the following could hold true: individuals of higher age tend to have more receptors for the drug administered here, so the relationship we are observing is casue by an age effect in stead of a drug effect perse. In other words, just because two variables are strongly associated, it doesn't necessarily mean that one causes the other. Age is the so-called 'unobserved' variable 
+
+This is summed up in the often quoted phrase, "correlation is not (necessarily) causation. 
+
+Furthermore, we say that this associated increase is *on average* `r evals_line[2]` units of `logdose`, because you might have two observations where `bloodp` values differ by 1 unit, but their difference in blood pressure won't necessarily be exactly `r evals_line[2]`. What the slope of `r evals_line[2]` is saying is that across all possible outcomes, the *average* difference in blood pressure between two tested individuals where the logdose differs by one is `r evals_line[2]`.
+
+Now that we've learned how to compute the equation for the regression line in Figure \@ref(fig:numxplot3) using the values in the `estimate` column, and how to interpret the resulting intercept and slope, let's revisit the code that generated this table:
+
+```{r, eval=FALSE}
+# Fit regression model:
+bloodp_model <- lm(bloodp ~ logdose, data = bp_simple)
+# Get regression table:
+get_regression_table(bloodp_model)
+```
+
+First, we "fit" the linear regression model to the `data` using the `lm()` function and save this as `bloodp_model`. With "fit" we mean "find the best fitting straight line to this data." `lm()` stands for "linear model" and is used as follows: `lm(y ~ x, data = data_frame_name)` where:
+
+* `y` is the outcome variable, followed by a tilde `~`. In our case, `y` is set to `bloodp`.
+* `x` is the explanatory variable. In our case, `x` is set to `logdose`.
+* The combination of `y ~ x` is called a *model formula*. (Note the order of `y` and `x`.) In our case, the model formula is `bloodp ~ logdose`. We saw such model formulas earlier when we computed the correlation coefficient using the `get_correlation()` function.
+* `data_frame_name` is the name of the data frame that contains the variables `y` and `x`. In our case, `data_frame_name` is the `bp_simple` data frame.
+
+Second, we take the saved model in `bloodp_model` and apply the `get_regression_table()` function from the `moderndive` package to it to obtain the regression table. This function is an example of what's known in computer programming as a *wrapper function*. They take other pre-existing functions and "wrap" them into a single function that hides its inner workings.
+
+So all you need to worry about is what the inputs look like and what the outputs look like. In our regression modeling example, the `get_regression_table()` function takes a saved `lm()` linear regression model as input and returns a 'tidy' data frame of the regression table as output. 
+
+Lastly, you might be wondering what the remaining five columns are: `std_error`, `statistic`, `p_value`, `lower_ci` and `upper_ci`. They are the _standard error_, _test statistic_, _p-value_, _lower 95% confidence interval bound_, and _upper 95% confidence interval bound_. They tell us about both the *statistical significance* and *practical significance* of our results. This is loosely the "meaningfulness" of our results from a statistical perspective. 
+
+<div class="question">
+##### Exercise 6
+Getting the regression table
+For this exercise we will look at a different dataset: `Howel1` from the `{rethinking}` package. See `help(data(package = "rethinking", "Howell1"))` for more info and origin of this dataset.
+
+**Complete the following steps to look at the relationship between `height` and `weight` in the `Howell1` data, where you assume weight to be an outcome (response) variable of explanatory variable `height`
+
+ 1. Investigate the data
+ 1. Investigate the missingness
+ 1. Compute summary statistics
+ 1. Create a visualization, showing the regression line
+ 1. Compute the intercept and the slop of the regression line
+ 1. Describe the relationship between `height` and `weight` based on the regression you just performed
+ 1. Can you think of **confounder** variable (present in the data), that could be responsible for the pattern you observe in the data? Create a plot to show this _third_ variable and it's influence on the relationship between
+ 1. Do you think a linear relationship is a good representation of the true pattern in the data?
+ 1. Perform a log transformation on the `weight` variable and perform the regression again, what do you think about the fitted model now?
+ 
+</div>
+
+<details><summary>Click for the answer</summary>
+```{r}
+data(package = "rethinking", data = "Howell1")
+naniar::vis_miss(Howell1)
+skimr::skim(Howell1)
+Howell1 %>%
+  ggplot(aes(x = height, y = weight)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+## confounder (sex?
+Howell1 %>%
+  mutate(sex = ifelse(male == 1, "male", "female")) %>% # using indicator variable is not good practice
+  ggplot(aes(x = height, y = weight)) +
+  geom_point(aes(colour = sex)) +
+  geom_smooth(method = "lm")
+
+
+Howell1 %>%
+  mutate(sex = ifelse(male == 1, "male", "female")) %>% # using indicator variable is not good practice
+  ggplot(aes(x = height, y = log(weight))) +
+  geom_point(aes(colour = sex)) +
+  geom_smooth(method = "lm")
+
+```
+</details>
+
+## Observed/fitted values and residuals
+
+We just saw how to get the value of the intercept and the slope of a regression line from the `estimate` column of a regression table generated by the `get_regression_table()` function. Now instead say we want information on individual observations. 
+
+We would like to get the values for all points related to the `clade` of the 'Apes'
+First, let's recreate the graph to show how the variable `clade` influences the regression. Otherwise zooming in on those points does not make sense. We will consider the data observed for 'Ape' by creating a filter for `clade` == "Ape" 
+
+```{r milk_apes, echo=FALSE, purl=FALSE}
+data(package = "rethinking", data = "milk")
+
+## remove na
+milk <- milk %>%
+  na.omit()
+
+filtered_points <- milk %>%
+  na.omit() %>%
+  dplyr::filter(clade == "Ape")
+
+
+milk %>%
+  ggplot(aes(x = perc.fat, y = neocortex.perc)) +
+  geom_point(aes(colour = clade)) +
+  geom_smooth(method = "lm") +
+  geom_point(data = filtered_points, shape  = 1, size = 4)
+
+
+milk_model <- lm(data = milk, neocortex.perc ~ perc.fat)
+
+index <- which(milk$clade == "Ape")
+
+target_point <- milk_model %>%
+  get_regression_points() 
+
+target_point <- target_point[index,]
+
+
+x <- target_point$perc.fat
+y <- target_point$neocortex.perc
+y_hat <-target_point$neocortex.perc_hat
+resid <- target_point$residual
+
+```
+
+<div class="question">
+##### Exercise 6
+What is striking from the picture above if you consider the position of the actual Ape values, in relation to the position of the fitted values (the line)?
+</div>
+
+<details><summary>Click for the answer</summary>
+All Ape values lie (1 lies almost on top of the line) above the regression line, meaning the actual Neocortex value is larger than can be expected on the basis of the fitted line through the data. </details>
+
+```{r numxplot4, echo=FALSE, fig.cap="Example of observed value, fitted value, and residual.", fig.height=2.8, message=FALSE, purl=FALSE}
+
+milk %>%
+ggplot(aes(x = perc.fat, y = neocortex.perc)) +
+  geom_point(color = "grey") +
+  labs(
+    x = "Fat in milk (% w/v)", y = "Neocortex (% of b.w.)",
+    title = "Relationship between relative neocortex \nsize and fat percentage in milk"
+  ) +
+  geom_smooth(method = "lm", se = FALSE) +
+  annotate("point", x = x, y = y_hat, col = "orange", shape = 15, size = 4) +
+  annotate("segment",
+    x = x, xend = x, y = y, yend = y_hat, color = "blue",
+    arrow = arrow(type = "closed", length = unit(0.04, "npc"))
+  ) +
+  annotate("point", x = x, y = y, col = "darkgreen", size = 4)
+
+```
+
+What is the value $\widehat{y}$ on the regression line corresponding to the Ape `neocortex.perc` `r x`? 
+
+* Circle: The *observed values* $y$ = `r y` are the Apes actual `neocortex.perc` values.
+* Square: The *fitted values* $\widehat{y}$ are the values on the regression line for $x$ = `perc.fat` = `r x`. This value is computed using the intercept and slope in the previous regression table: 
+
+* Arrow: The length of this arrow is the *residual* and is computed by subtracting the fitted value $\widehat{y}$ from the observed value $y$. The residual can be thought of as a model's error or "lack of fit" for a particular observation.  In the case of all Apes that we have data for, it is $yi - \widehat{y}i$ = `r y` - `r y_hat` = `r resid`.
+
+Now say we want to compute both the fitted value $\widehat{y} = b_0 + b_1 \cdot x$ and the residual $y - \widehat{y}$ for *all* animals in the study. 
+
+We could repeat the previous calculations we performed by hand `r nrow(milk)` times, but that would be tedious and time consuming. Instead, let's do this using a computer with the `get_regression_points()` function. Just like the `get_regression_table()` function, the `get_regression_points()` function is a "wrapper" function. However, this function returns a different output. Let's apply the `get_regression_points()` function to `milk_model`, which is where we saved our `lm()` model in the previous section. 
+
+```{r}
+regression_points <- get_regression_points(milk_model)
+regression_points
+```
+
+
+ - The `ID` column is the row id for the observation in the original dataframe.
+ - The `neocortex.perc` column represents the observed outcome variable $yi$
+ - The `perc.fat` column represents the values of the explanatory variable $xi$
+ - The `neocortex.perc.hat` column represents the fitted values $\widehat{y}$. This is the corresponding ith $\widehat{y}i$ value on the regression line for each $yi$ and $xi$ combination.
+ - The `residual` column represents the residuals $yi - \widehat{y}i$. 
+
+**Note that the index $i$ can be read as the row number of the regression points table. So i can take any value between 1 and 17 in this case.
+
+A "best-fitting" line refers to the line that minimizes the *sum of squared residuals* out of all possible lines we can draw through the points. 
+
+<div class="question">
+##### Exercise 6
+**Using residuals**
+
+(a) Generate a data frame of the residuals of the model where you use `mass` as the explanatory $x$ variable. Also include the `clade` variable 
+(b) Plot the relation
+(c) What `clade` do the high mass points belong to?
+(d) In light of this result and the regression above, how would you interpret this result?
+
+</div>
+
+```{r}
+
+exercise_df <- tibble(
+  residuals = regression_points$residual,
+  mass = milk$mass,
+  clade = milk$clade
+
+)
+
+exercise_df %>%
+  ggplot(aes(x = mass, y = residuals)) +
+  geom_point(aes(colour = clade))
+
+
+```
+
+## One categorical explanatory variable
+
+Life expectancy is not the same across all countries in the world. International development agencies are interested in studying these differences in life expectancy in the hopes of identifying where governments should allocate resources to address this problem. In this section, we'll explore differences in life expectancy in two ways, using the dataset from the `{gapminder}` package:
+
+1. Differences between continents: Are there significant differences in average life expectancy between the five populated continents of the world: Africa, the Americas, Asia, Europe, and Oceania?
+1. Differences within continents: How does life expectancy vary within the world's five continents? For example, is the spread of life expectancy among the countries of Africa larger than the spread of life expectancy among the countries of Asia?
+
+```{r echo=FALSE, purl=FALSE}
+# This code is used for dynamic non-static in-line text output purposes
+n_countries <- gapminder %>%
+  dplyr::select(country) %>%
+  n_distinct()
+year_start <- gapminder %>%
+  dplyr::select(year) %>%
+  min()
+year_end <- gapminder %>%
+  dplyr::select(year) %>%
+  max()
+```
+
+The `gapminder` dataset (from the `{gapminder}` package) has international development statistics such as life expectancy, GDP per capita, and population for `r n_countries` countries for 5-year intervals between `r year_start` and `r year_end`.
+
+We'll use this data for basic regression again, but now using an explanatory variable $x$ that is categorical, as opposed to the numerical explanatory variable model we used in the previous Section.
+
+1. A numerical outcome variable $y$ (a country's life expectancy) and
+1. A single categorical explanatory variable $x$ (the continent that the country is a part of).
+
+When the explanatory variable $x$ is categorical, the concept of a "best-fitting" regression line is a little different than the one we saw previously where the explanatory variable $x$ was numerical. 
+
+## Exploratory data analysis
+
+The data on the `r n_countries` countries can be found in the `gapminder` data frame included in the `gapminder` package. However, to keep things simple, let's `filter()` for only those observations/rows corresponding to the year 2007. Additionally, let's `select()` only the subset of the variables we'll consider in this chapter. We'll save this data in a new data frame called `gapminder2007`:
+
+```{r, message=FALSE}
+library(gapminder)
+gapminder2007 <- gapminder %>%
+  dplyr::filter(year == 2007) %>%
+  dplyr::select(country, lifeExp, continent, gdpPercap)
+```
+
+```{r, echo=FALSE, include=FALSE}
+# Hidden: internally compute mean and median life expectancy
+lifeExp_worldwide <- gapminder2007 %>%
+  summarize(median = median(lifeExp), mean = mean(lifeExp))
+mean_africa <- gapminder2007 %>%
+  dplyr::filter(continent == "Africa") %>%
+  summarize(mean_africa = mean(lifeExp)) %>%
+  pull(mean_africa)
+
+# This code is used for dynamic non-static in-line text output purposes
+gapminder2007_rows <- gapminder2007 %>% nrow()
+```
+
+Let's perform the first common step in an exploratory data analysis: looking at the raw data values. You can do this by using RStudio's spreadsheet viewer or by using the `glimpse()` command.
+
+```{r}
+glimpse(gapminder2007)
+```
+
+Observe that ``Observations: `r gapminder2007_rows` `` indicates that there are `r gapminder2007_rows` rows/observations in `gapminder2007`, where each row corresponds to one country. In other words, the *observational unit* is an individual country. Furthermore, observe that the variable `continent` is of type `<fct>`, which stands for _factor_, which is R's way of encoding categorical variables.
+
+A full description of all the variables included in `gapminder` can be found by reading the associated help file (run `?gapminder` in the console). However, let's fully describe only the `r ncol(gapminder2007)` variables we selected in `gapminder2007`:
+
+1. `country`: An identification variable of type character/text used to distinguish the 142 countries in the dataset.
+1. `lifeExp`: A numerical variable of that country's life expectancy at birth. This is the outcome variable $y$ of interest.
+1. `continent`: A categorical variable with five levels. Here "levels" correspond to the possible categories: Africa, Asia, Americas, Europe, and Oceania. This is the explanatory variable $x$ of interest.
+1. `gdpPercap`: A numerical variable of that country's GDP per capita in US inflation-adjusted dollars that we'll use as another outcome variable $y$ in the *Learning check* at the end of this subsection.
+
+Let's look at a random sample of five out of the `r gapminder2007_rows` countries in. 
+
+```{r}
+set.seed(123)
+gapminder2007 %>% sample_n(size = 5)
+```
+
+Note that random sampling will likely produce a different subset of 5 rows for you than what's shown (for reproducibility reasons it is therefore a good idea to include a seed). Now that we've looked at the raw values in our `gapminder2007` data frame and got a sense of the data, let's move on to computing summary statistics. Let's once again apply the `skim()` function from the `skimr` package. Recall from our previous EDA that this function takes in a data frame, "skims" it, and returns commonly used summary statistics. Let's take our `gapminder2007` data frame, `select()` only the outcome and explanatory variables `lifeExp` and `continent`, and pipe them into the `skim()` function:
+
+```{r}
+gapminder2007 %>%
+  dplyr::select(lifeExp, continent) %>%
+  skim()
+```
+
+
+The `skim()` output now reports summaries for categorical variables (`Variable type:factor`) separately from the numerical variables (`Variable type:numeric`). For the categorical variable `continent`, it reports:
+
+- `missing`, `complete`, and `n`,  which are the number of missing, complete, and total number of values as before, respectively.
+- `n_unique`: The number of unique levels to this variable, corresponding to Africa, Asia, Americas, Europe, and Oceania. This refers to how many countries are in the data for each continent.
+- `top_counts`: In this case, the top four counts: `Africa` has 52 countries, `Asia` has 33, `Europe` has 30, and `Americas` has 25. Not displayed is `Oceania` with 2 countries.
+- `ordered`: This tells us whether the categorical variable is "ordinal": whether there is an encoded hierarchy (like low, medium, high). In this case, `continent` is not ordered.
+
+```{r, echo=FALSE, purl=FALSE}
+# This code is used for dynamic non-static in-line text output purposes
+median_life_exp <- lifeExp_worldwide$median %>% round(2)
+mean_life_exp <- lifeExp_worldwide$mean %>% round(2)
+```
+
+Turning our attention to the summary statistics of the numerical variable `lifeExp`, we observe that the global median life expectancy in 2007 was `r median_life_exp`. Thus, half of the world's countries (`r n_countries/2` countries) had a life expectancy less than `r median_life_exp`. The mean life expectancy of `r mean_life_exp` is lower, however. Why is the mean life expectancy lower than the median?
+
+We can answer this question by performing the last of the three common steps in an exploratory data analysis: creating data visualizations. Let's visualize the distribution of our outcome variable $y$ = `lifeExp`. The dotted red line indicates the median life expectancy for all countries.
+
+```{r lifeExp2007hist, echo=TRUE, fig.cap="Histogram of life expectancy in 2007.", fig.height=5.2}
+gapminder2007 %>%
+ggplot(aes(x = lifeExp)) +
+  geom_histogram(
+    binwidth = 5, 
+    color = "white", 
+    alpha = 0.7) +
+  labs(
+    x = "Life expectancy", 
+    y = "Number of countries",
+    title = "Histogram of distribution of worldwide life expectancies") +
+  geom_vline(
+    xintercept = median_life_exp, 
+    colour = "darkred", 
+    linetype = "dashed", 
+    size = 1.5)
+  
+```
+
+We see that this data is *left-skewed*, also known as *negatively* skewed: there are a few countries with low life expectancy that are bringing down the mean life expectancy. However, the median is less sensitive to the effects of such outliers; hence, the median is greater than the mean in this case.
+
+Remember, however, that we want to compare life expectancies both between continents and within continents. In other words, our visualizations need to incorporate some notion of the variable `continent`. We can do this easily with a faceted histogram. Facets allow us to split a visualization by the different values of another variable. We display the resulting visualization in Figure \@ref(fig:catxplot0b) by adding a `facet_wrap(~ continent, nrow = 2)` layer.
+
+```{r catxplot0b, fig.cap="Life expectancy in 2007.", fig.height=4.3}
+gapminder2007 %>%
+ggplot(aes(x = lifeExp)) +
+  geom_histogram(binwidth = 5, color = "white") +
+  labs(
+    x = "Life expectancy", y = "Number of countries",
+    title = "Histogram of distribution of worldwide life expectancies"
+  ) +
+  facet_wrap(~continent, nrow = 2)
+
+```
+
+Observe an unfortunate distribution of African life expectancies that are much lower than the other continents, while in Europe life expectancies tend to be higher and furthermore do not vary as much. On the other hand, both Asia and Africa have the most variation in life expectancies. There is the least variation in Oceania, but keep in mind that there are only two countries in Oceania: Australia and New Zealand.
+
+Recall that an alternative method to visualize the distribution of a numerical variable split by a categorical variable is by using a side-by-side boxplot. We map the categorical variable `continent` to the $x$-axis and the different life expectancies within each continent on the $y$-axis in Figure \@ref(fig:catxplot1).
+
+```{r catxplot1, fig.cap="Life expectancy in 2007.", fig.height=3.4}
+gapminder2007 %>%
+  ggplot(aes(
+    x = continent, 
+    y = lifeExp)) +
+  geom_boxplot() +
+  labs(
+    x = "Continent", 
+    y = "Life expectancy",
+    title = "Life expectancy by continent")
+```
+
+Some people prefer comparing the distributions of a numerical variable between different levels of a categorical variable using a boxplot instead of a faceted histogram. This is because we can make quick comparisons between the categorical variable's levels with imaginary horizontal lines. For example, observe in Figure \@ref(fig:catxplot1) that we can quickly convince ourselves that Oceania has the highest median life expectancies by drawing an imaginary horizontal line at $y$ = 80. Furthermore, as we observed in the faceted histogram in Figure \@ref(fig:catxplot0b), Africa and Asia have the largest variation in life expectancy as evidenced by their large interquartile ranges (the heights of the boxes).
+
+The differences between the continets become ven more apparant if we also plot a reference (dotted dark red line) in the boxplot graph. Basically all continents have an equal or larger-than-overall-median median life expactancy, except for Africa.
+```{r}
+gapminder2007 %>%
+  ggplot(aes(
+    x = continent, 
+    y = lifeExp)) +
+  geom_boxplot() +
+  geom_hline(
+    yintercept = median_life_exp,
+    colour = "darkred", 
+    linetype = "dotted",
+    size = 2) +
+  labs(
+    x = "Continent", 
+    y = "Life expectancy",
+    title = "Life expectancy by continent")
+```
+
+It’s important to remember, however, that the solid lines in the middle of the boxes correspond to the continent's medians (the middle value) rather than the mean (the average). So, for example, if you look at Asia, the solid line denotes the median life expectancy of around 72 years. This tells us that half of all countries in Asia have a life expectancy below 72 years, whereas half have a life expectancy above 72 years.
+
+Let's compute the median and mean life expectancy for each continent with a little more data wrangling and display the results.
+
+```{r}
+lifeExp_by_continent <- gapminder2007 %>%
+  group_by(continent) %>%
+  summarize(
+    median = median(lifeExp),
+    mean = mean(lifeExp))
+
+lifeExp_by_continent
+
+lifeExp_by_continent %>%
+  pivot_longer(
+    median:mean,
+    names_to = "parameter",
+    values_to = "estimate") %>%
+  ggplot(aes(x = continent, y = estimate)) +
+  geom_col(aes(fill = parameter), position = "dodge") +
+  geom_hline(
+    yintercept = median_life_exp,
+    colour = "darkred", 
+    linetype = "dotted",
+    size = 2)
+
+```
+
+Observe the order of the second column `median` life expectancy in the table: Africa is lowest, the Americas and Asia are next with similar medians, then Europe, then Oceania. This ordering corresponds to the ordering of the solid black lines inside the boxes in our side-by-side boxplot in Figure \@ref(fig:catxplot1). 
+
+```{r, include=FALSE, echo=FALSE}
+# This code is used for dynamic non-static in-line text output purposes
+# Coding model earlier to calculate the intercepts etc below
+lifeExp_model <- lm(lifeExp ~ continent, data = gapminder2007)
+
+# Africa / Intercept
+intercept <- get_regression_table(lifeExp_model) %>%
+  dplyr::filter(term == "intercept") %>%
+  pull(estimate) %>%
+  round(1)
+
+# Americas
+offset_americas <- get_regression_table(lifeExp_model) %>%
+  dplyr::filter(term == "continentAmericas") %>%
+  pull(estimate) %>%
+  round(1)
+mean_americas <- intercept + offset_americas
+
+# Asia
+offset_asia <- get_regression_table(lifeExp_model) %>%
+  dplyr::filter(term == "continentAsia") %>%
+  pull(estimate) %>%
+  round(1)
+mean_asia <- intercept + offset_asia
+
+# Europe
+offset_europe <- get_regression_table(lifeExp_model) %>%
+  dplyr::filter(term == "continentEurope") %>%
+  pull(estimate) %>%
+  round(1)
+mean_europe <- intercept + offset_europe
+
+# Oceania
+offset_oceania <- get_regression_table(lifeExp_model) %>%
+  dplyr::filter(term == "continentOceania") %>%
+  pull(estimate) %>%
+  round(1)
+mean_oceania <- intercept + offset_oceania
+```
+
+Let's now turn our attention to the values in the third column `mean`. Using Africa's mean life expectancy of `r intercept` as a *baseline for comparison*, let's start making comparisons to the mean life expectancies of the other four continents and put these values in a table.
+
+1. For the Americas, it is `r mean_americas` - `r intercept` = `r offset_americas` years higher.
+1. For Asia, it is `r mean_asia` - `r intercept` = `r offset_asia` years higher.
+1. For Europe, it is `r mean_europe` - `r intercept` = `r offset_europe` years higher.
+1. For Oceania, it is `r mean_oceania` - `r intercept` = `r offset_oceania` years higher.
+
+```{r continent-mean-life-expectancies}
+gapminder2007 %>%
+  group_by(continent) %>%
+  summarize(mean = mean(lifeExp)) %>%
+  mutate(`Difference versus Africa` = mean - mean_africa) 
+```
+
+<div class="question">
+#####Exercise 6
+**Using a different outcome variable**
+Conduct a new exploratory data analysis with the same explanatory variable $x$ being `continent` but with `gdpPercap` as the new outcome variable $y$. What can you say about the differences in GDP per capita between continents based on this exploration?
+
+**This exercise has no answer available, so will you need to figure things out yourself**
+
+</div>
+
+
+### Linear regression using a categorical explanatory variable 
+
+Previously, we introduced simple linear regression, which involves modeling the relationship between a numerical outcome variable $y$ and a numerical explanatory variable $x$. In our life expectancy example, we now instead have a categorical explanatory variable `continent`. Our model will not yield a "best-fitting" regression line like in Figure \@ref(fig:numxplot3), but rather *offsets* relative to a baseline for comparison.
+
+As we did when studying the relationship between log10(drug dose) and blood pressure, let's output the regression table for this model. Recall that this is done in two steps:
+
+1. We first "fit" the linear regression model using the `lm(y ~ x, data)` function and save it in `lifeExp_model`.
+1. We get the regression table by applying the `get_regression_table()` function from the `moderndive` package to `lifeExp_model`.
+
+```{r, eval=FALSE}
+lifeExp_model <- lm(lifeExp ~ continent, data = gapminder2007)
+get_regression_table(lifeExp_model)
+```
+
+Let's once again focus on the values in the `term` and `estimate` columns of Table. Why are there now 5 rows? Let's break them down one-by-one:
+
+1. `intercept` corresponds to the mean life expectancy of countries in Africa of `r intercept` years.
+1. `continentAmericas` corresponds to countries in the Americas and the value `r offset_americas` is the difference in mean life expectancy relative to Africa: $`r intercept` + `r offset_americas` = `r mean_americas`$.
+1. `continentAsia` corresponds to countries in Asia and the value `r offset_asia` is the  difference in mean life expectancy relative to Africa $`r intercept` + `r offset_asia` = `r mean_asia`$.
+1. `continentEurope` corresponds to countries in Europe and the value `r offset_europe` is the difference in mean life expectancy relative to Africa $`r intercept` + `r offset_europe` = `r mean_europe`$.
+1. `continentOceania` corresponds to countries in Oceania and the value `r offset_oceania` is the difference in mean life expectancy relative to Africa  $`r intercept` + `r offset_oceania` = `r mean_oceania`$.
+
+To summarize, the 5 values in the `estimate` column correspond to the "baseline for comparison" continent Africa (the intercept) as well as four "offsets" from this baseline for the remaining 4 continents: the Americas, Asia, Europe, and Oceania.
+
+You might be asking at this point why was Africa chosen as the "baseline for comparison" group. This is the case for no other reason than it comes first alphabetically of the five continents; by default R arranges factors/categorical variables in alphanumeric order. You can change this baseline group to be another continent if you manipulate the variable `continent`'s factor "levels" using the `forcats` package. See [Chapter 15](https://r4ds.had.co.nz/factors.html) of *R for Data Science* [@rds2016] for examples. 
+
+Let's now write the equation for our fitted values 
+
+$\widehat{y} = \widehat{\text{life exp}}$.
+
+<!--
+Note: Even though markdown preview of the following LaTeX looks garbled, it
+comes out correct in the HTML output.
+-->
+$$
+\begin{aligned}
+\widehat{y} = \widehat{\text{life exp}} &= b_0 + b_{\text{Amer}}\cdot\mathbb{1}_{\text{Amer}}(x) + b_{\text{Asia}}\cdot\mathbb{1}_{\text{Asia}}(x) + \\
+& \qquad b_{\text{Euro}}\cdot\mathbb{1}_{\text{Euro}}(x) + b_{\text{Ocean}}\cdot\mathbb{1}_{\text{Ocean}}(x)\\
+&= `r intercept` + `r offset_americas`\cdot\mathbb{1}_{\text{Amer}}(x) + `r offset_asia`\cdot\mathbb{1}_{\text{Asia}}(x) + \\
+& \qquad `r offset_europe`\cdot\mathbb{1}_{\text{Euro}}(x) + `r offset_oceania`\cdot\mathbb{1}_{\text{Ocean}}(x)
+\end{aligned}
+$$
+
+Whoa! That looks daunting! Don't fret, however, as once you understand what all the elements mean, things simplify greatly. First, $\mathbb{1}_{A}(x)$ is what's known in mathematics as an "indicator function." It returns only one of two possible values, 0 and 1, where
+
+$$
+\mathbb{1}_{A}(x) = \left\{
+\begin{array}{ll}
+1 & \text{if } x \text{ is in } A \\
+0 & \text{if } \text{otherwise} \end{array}
+\right.
+$$
+
+In a statistical modeling context, this is also known as a *dummy variable*. In our case, let's consider the first such indicator variable $\mathbb{1}_{\text{Amer}}(x)$. This indicator function returns 1 if a country is in the Americas, 0 otherwise:
+
+$$
+\mathbb{1}_{\text{Amer}}(x) = \left\{
+\begin{array}{ll}
+1 & \text{if } \text{country } x \text{ is in the Americas} \\
+0 & \text{otherwise}\end{array}
+\right.
+$$
+
+Second, $b_0$ corresponds to the intercept as before; in this case, it's the mean life expectancy of all countries in Africa. Third, the $b_{\text{Amer}}$, $b_{\text{Asia}}$, $b_{\text{Euro}}$, and $b_{\text{Ocean}}$ represent the 4 "offsets relative to the baseline for comparison" in the regression table output in Table \@ref(tab:catxplot4b): `continentAmericas`, `continentAsia`, `continentEurope`, and `continentOceania`.
+
+Let's put this all together and compute the fitted value $\widehat{y} = \widehat{\text{life exp}}$ for a country in Africa. Since the country is in Africa, all four indicator functions $\mathbb{1}_{\text{Amer}}(x)$, $\mathbb{1}_{\text{Asia}}(x)$, $\mathbb{1}_{\text{Euro}}(x)$, and $\mathbb{1}_{\text{Ocean}}(x)$ will equal 0, and thus:
+
+$$
+\begin{aligned}
+\widehat{\text{life exp}} &= b_0 + b_{\text{Amer}}\cdot\mathbb{1}_{\text{Amer}}(x) + b_{\text{Asia}}\cdot\mathbb{1}_{\text{Asia}}(x)
++ \\
+& \qquad b_{\text{Euro}}\cdot\mathbb{1}_{\text{Euro}}(x) + b_{\text{Ocean}}\cdot\mathbb{1}_{\text{Ocean}}(x)\\
+&= `r intercept` + `r offset_americas`\cdot\mathbb{1}_{\text{Amer}}(x) + `r offset_asia`\cdot\mathbb{1}_{\text{Asia}}(x)
++ \\
+& \qquad `r offset_europe`\cdot\mathbb{1}_{\text{Euro}}(x) + `r offset_oceania`\cdot\mathbb{1}_{\text{Ocean}}(x)\\
+&= `r intercept` + `r offset_americas`\cdot 0 + `r offset_asia`\cdot 0 + `r offset_europe`\cdot 0 + `r offset_oceania`\cdot 0\\
+&= `r intercept`
+\end{aligned}
+$$
+
+In other words, all that's left is the intercept $b_0$, corresponding to the average life expectancy of African countries of `r intercept` years. Next, say we are considering a country in the Americas. In this case, only the indicator function $\mathbb{1}_{\text{Amer}}(x)$ for the Americas will equal 1, while all the others will equal 0, and thus:
+
+$$
+\begin{aligned}
+\widehat{\text{life exp}} &= `r intercept` + `r offset_americas`\cdot\mathbb{1}_{\text{Amer}}(x) + `r offset_asia`\cdot\mathbb{1}_{\text{Asia}}(x)
++ `r offset_europe`\cdot\mathbb{1}_{\text{Euro}}(x) + \\
+& \qquad `r offset_oceania`\cdot\mathbb{1}_{\text{Ocean}}(x)\\
+&= `r intercept` + `r offset_americas`\cdot 1 + `r offset_asia`\cdot 0 + `r offset_europe`\cdot 0 + `r offset_oceania`\cdot 0\\
+&= `r intercept` + `r offset_americas` \\
+& = `r mean_americas`
+\end{aligned}
+$$
+
+which is the mean life expectancy for countries in the Americas of `r mean_americas` years. Note the "offset from the baseline for comparison" is +`r offset_americas` years. 
+
+Let's do one more. Say we are considering a country in Asia. In this case, only the indicator function $\mathbb{1}_{\text{Asia}}(x)$ for Asia will equal 1, while all the others will equal 0, and thus:
+
+$$
+\begin{aligned}
+\widehat{\text{life exp}} &= `r intercept` + `r offset_americas`\cdot\mathbb{1}_{\text{Amer}}(x) + `r offset_asia`\cdot\mathbb{1}_{\text{Asia}}(x)
++ `r offset_europe`\cdot\mathbb{1}_{\text{Euro}}(x) + \\
+& \qquad `r offset_oceania`\cdot\mathbb{1}_{\text{Ocean}}(x)\\
+&= `r intercept` + `r offset_americas`\cdot 0 + `r offset_asia`\cdot 1 + `r offset_europe`\cdot 0 + `r offset_oceania`\cdot 0\\
+&= `r intercept` + `r offset_asia` \\
+& = `r mean_asia`
+\end{aligned}
+$$
+
+which is the mean life expectancy for Asian countries of `r mean_asia` years. The "offset from the baseline for comparison" here is `r offset_asia` years.
+
+Let's generalize this idea a bit. If we fit a linear regression model using a categorical explanatory variable $x$ that has $k$ possible categories, the regression table will return an intercept and $k - 1$ "offsets." In our case, since there are $k = 5$ continents, the regression model returns an intercept corresponding to the baseline for comparison group of Africa and $k - 1 = 4$ offsets corresponding to the Americas, Asia, Europe, and Oceania.
+
+Understanding a regression table output when you're using a categorical explanatory variable is a topic those new to regression often struggle with. The only real remedy for these struggles is practice, practice, practice. However, once you equip yourselves with an understanding of how to create regression models using categorical explanatory variables, you'll be able to incorporate many new variables into your models, given the large amount of the world's data that is categorical.
+
+<div class="question">
+##### Exercise 6
+**Fitting a new model** 
+Fit a new linear regression using `lm(gdpPercap ~ continent, data = gapminder2007)` where `gdpPercap` is the new outcome variable $y$. Get information about the "best-fitting" line from the regression table by applying the `get_regression_table()` function. How do the regression results match up with the results from your previous exploratory data analysis?
+
+</div>
+
+<details><summary>Click for the answer</summary>
+```{r}
+model_gdp_per_cap <- lm(gdpPercap ~ continent, data = gapminder2007)
+get_regression_table(model_gdp_per_cap)
+
+```
+</details>
+
+### Observed/fitted values and residuals
+
+So far, we defined the following three concepts:
+
+1. Observed values $y$, or the observed value of the outcome variable \index{regression!observed values}
+1. Fitted values $\widehat{y}$, or the value on the regression line for a given $x$ value
+1. Residuals $y - \widehat{y}$, or the error between the observed value and the fitted value
+
+We obtained these values and other values using the `get_regression_points()` function from the `moderndive` package. This time, however, let's add an argument setting `ID = "country"`: this is telling the function to use the variable `country` in `gapminder2007` as an *identification variable* in the output. This will help contextualize our analysis by matching values to countries.
+
+```{r}
+regression_points <- get_regression_points(lifeExp_model, ID = "country")
+regression_points
+
+unique(regression_points$lifeExp_hat)
+
+```
+
+```{r, echo=FALSE, include=FALSE}
+# This code is for inline dynamic coding
+afghanistan_life_exp <- regression_points %>%
+  dplyr::filter(country == "Afghanistan") %>%
+  pull(lifeExp) %>%
+  round(1)
+afghanistan_offset <- (afghanistan_life_exp - mean_asia) %>% round(1)
+```
+
+Observe that `lifeExp_hat` contains the fitted values $\widehat{y}$ = $\widehat{\text{lifeExp}}$. If you look closely, there are only 5 possible values for `lifeExp_hat`. These correspond to the five mean life expectancies for the 5 continents that we displayed and computed using the values in the `estimate` column of the regression table.
+
+The `residual` column is simply $y - \widehat{y}$ = `lifeExp - lifeExp_hat`. These values can be interpreted as the deviation of a country's life expectancy from its continent's average life expectancy. For example, look at the first row corresponding to Afghanistan. The residual of $y - \widehat{y} = `r afghanistan_life_exp` - `r mean_asia` = `r afghanistan_offset`$ is telling us that Afghanistan's life expectancy is `r -1 * afghanistan_offset` years lower than the mean life expectancy of all Asian countries. This can in part be explained by the many years of war that country has suffered.
+
+<div class="question">
+##### Exercise 6
+**Ranking based on regression model**
+
+(a) Using either the sorting functionality of RStudio's spreadsheet viewer or using the data wrangling tools you learned in Chapter \@ref(wrangling), identify the five countries with the five smallest (most negative) residuals? What do these negative residuals say about their life expectancy relative to their continents' life expectancy?
+
+(b) Repeat this process, but identify the five countries with the five largest (most positive) residuals. What do these positive residuals say about their life expectancy relative to their continents' life expectancy?
+
+</div>
+```{r, eval=FALSE, include=FALSE}
+## ad A)
+get_regression_points(lifeExp_model, ID = "country") %>%
+  arrange(residual) %>%
+  slice(1:5)
+
+# The residuals show the deviation from the continents mean
+# These values can be interpreted as the deviation of a country's life expectancy from its continent's average life expectancy.
+
+## ad B)
+get_regression_points(lifeExp_model, ID = "country") %>%
+  arrange(desc(residual)) %>%
+  slice(1:5)
+
+#These values can be interpreted as the deviation of a country's life expectancy from its continent's average life expectancy.
+```
+
+## Correlation is not necessarily causation
+
+Throughout this chapter we've been cautious when interpreting regression slope coefficients. We always discussed the "associated" effect of an explanatory variable $x$ on an outcome variable $y$. For example, our statement from Subsection that "for every increase of 1 unit in `logdose`, there is an *associated* increase of on average `r evals_line[2]` units of `bloodp`." We include the term "associated" to be extra careful not to suggest we are making a *causal* statement. So while "blood pressure" score of `bloodp` is positively correlated with the log10 of the drug dose `logdose`, we can't necessarily make any statements about "the drug dosage" direct causal effect on blood pressure without more information on how this study was conducted. Here is another example: a not-so-great medical doctor goes through medical records and finds that patients who slept with their shoes on tended to wake up more with headaches. So this doctor declares, "Sleeping with shoes on causes headaches!"
+
+```{r moderndive-figure-causal-graph-2, echo=FALSE, fig.cap="Does sleeping with shoes on cause headaches?", out.width="60%", out.height="60%", purl=FALSE}
+knitr::include_graphics(
+  here::here(
+  "images",
+  "shoes_on_in_bed.jpg"
+  )
+)
+```
+
+However, there is a good chance that if someone is sleeping with their shoes on, it's potentially because they are intoxicated from alcohol. Furthermore, higher levels of drinking leads to more hangovers, and hence more headaches. The amount of alcohol consumption here is what's known as a *confounding/lurking* variable. It "lurks" behind the scenes, confounding the causal relationship (if any) of "sleeping with shoes on" with "waking up with a headache." We can summarize this in with a *causal graph* where:
+
+* Y is a *response* variable; here it is "waking up with a headache." \index{variables!response / outcome / dependent}
+* X is a *treatment* variable whose causal effect we are interested in; here it is "sleeping with shoes on.
+
+These graphs are also called Directed Acyclic Graphs or shorly: `DAG`
+
+Here is one for the "Shoes in bed cause headache" example. We assume that headache is the dependent variable $y$, 'shoes on in bed' is the predictor $x$ and alcohol is our confounding - not observed - $z$ variable.   
+
+```{r, fig.width=6}
+library(dagitty)
+dag_shoes <- dagitty(
+  "dag{ shoeson_x -> headache_y; 
+  alcohol_z -> headache_y; 
+  alcohol_z -> shoeson_x }"
+)
+dag_shoes %>% drawdag()
+```
+
+To study the relationship between Y and X, we could use a regression model where the outcome variable is set to Y and the explanatory variable is set to be X, as you've been doing throughout this chapter. However in the graph we also includes a third variable with arrows pointing at both X and Y:
+
+* Z is a *confounding* variable \index{variables!confounding} that affects both X and Y, thereby "confounding" their relationship. Here the confounding variable is alcohol.
+
+Alcohol will cause people to be both more likely to sleep with their shoes on as well as be more likely to wake up with a headache. Thus any regression model of the relationship between X and Y should also use Z as an explanatory variable. In other words, our doctor needs to take into account who had been drinking the night before. In the next lesson, we'll start covering multiple regression models that allow us to incorporate more than one variable in our regression models.
+
+Establishing causation is a tricky problem and frequently takes either carefully designed experiments or methods to control for the effects of confounding variables. Both these approaches attempt, as best they can, either to take all possible confounding variables into account or negate their impact. This allows researchers to focus only on the relationship of interest: the relationship between the outcome variable Y and the treatment variable X.
+
+As you read news stories, be careful not to fall into the trap of thinking that correlation necessarily implies causation.  Check out the [Spurious Correlations](http://www.tylervigen.com/spurious-correlations) website for some rather comical examples of variables that are correlated, but are definitely not causally related.
+
+## Best-fitting line
+
+Regression lines are also known as "best-fitting" lines. But what do we mean by "best"? Let's unpack the criteria that is used in regression to determine "best." Recall Figure \@ref(fig:numxplot4), where for Apes we marked the *observed value* $y$ with a circle, the *fitted value* $\widehat{y}$ with a square, and the *residual* $y - \widehat{y}$ with an arrow. Below we show you four different residuals.
+
+```{r best-fitting-line, fig.height=5.5, echo=FALSE, fig.cap="Example of observed value, fitted value, and residual.", purl=FALSE, message=FALSE}
+set.seed(1)
+target1 <- milk_model %>%
+  get_regression_points() %>%
+  sample_n(1)
+set.seed(22)
+target2 <- milk_model %>%
+  get_regression_points() %>%
+  sample_n(1)
+set.seed(333)
+target3 <- milk_model %>%
+  get_regression_points() %>%
+  sample_n(1)
+set.seed(4444)
+target4 <- milk_model %>%
+  get_regression_points() %>%
+  sample_n(1)
+
+## Let's pick some random other observations
+# First residual
+best_fit_plot1 <- ggplot(milk, aes(x = perc.fat, y = neocortex.perc)) +
+  geom_point(size = 1.5, color = "darkgrey") +
+  labs(x = "Fat in milk (% w/v)", y = "Neocortex (% of b.w.)") +
+  geom_smooth(method = "lm", se = FALSE) +
+  annotate("point", x = target1$perc.fat, y = target1$neocortex.perc, col = "red", size = 2) +
+  annotate("point", x = target1$perc.fat, y = target1$neocortex.perc_hat, col = "red", shape = 15, size = 2) +
+  annotate("segment",
+    x = target1$perc.fat, xend = target1$perc.fat, y = target1$neocortex.perc, yend = target1$neocortex.perc_hat, color = "blue",
+    arrow = arrow(type = "closed", length = unit(0.02, "npc"))
+  )
+
+p1 <- best_fit_plot1 + labs(title = "First residual")
+
+# Second residual
+best_fit_plot2 <- ggplot(milk, aes(x = perc.fat, y = neocortex.perc)) +
+  geom_point(size = 1.5, color = "darkgrey") +
+  labs(x = "Fat in milk (% w/v)", y = "Neocortex (% of b.w.)") +
+  geom_smooth(method = "lm", se = FALSE) +
+  annotate("point", x = target2$perc.fat, y = target2$neocortex.perc, col = "red", size = 2) +
+  annotate("point", x = target2$perc.fat, y = target2$neocortex.perc_hat, col = "red", shape = 15, size = 2) +
+  annotate("segment",
+    x = target2$perc.fat, xend = target2$perc.fat, y = target2$neocortex.perc, yend = target2$neocortex.perc_hat, color = "blue",
+    arrow = arrow(type = "closed", length = unit(0.02, "npc"))
+  )
+
+p2 <- best_fit_plot2 + labs(title = "Second residual")
+
+# Third residual
+best_fit_plot3 <- ggplot(milk, aes(x = perc.fat, y = neocortex.perc)) +
+  geom_point(size = 1.5, color = "darkgrey") +
+  labs(x = "Fat in milk (% w/v)", y = "Neocortex (% of b.w.)") +
+  geom_smooth(method = "lm", se = FALSE) +
+  annotate("point", x = target3$perc.fat, y = target3$neocortex.perc, col = "red", size = 2) +
+  annotate("point", x = target3$perc.fat, y = target3$neocortex.perc_hat, col = "red", shape = 15, size = 2) +
+  annotate("segment",
+    x = target3$perc.fat, xend = target3$perc.fat, y = target3$neocortex.perc, yend = target3$neocortex.perc_hat, color = "blue",
+    arrow = arrow(type = "closed", length = unit(0.02, "npc"))
+  )
+
+p3 <- best_fit_plot3 + labs(title = "Third residual")
+
+
+# Fourth residual
+best_fit_plot4 <- ggplot(milk, aes(x = perc.fat, y = neocortex.perc)) +
+  geom_point(size = 1.5, color = "darkgrey") +
+  labs(x = "Fat in milk (% w/v)", y = "Neocortex (% of b.w.)") +
+  geom_smooth(method = "lm", se = FALSE) +
+  annotate("point", x = target4$perc.fat, y = target4$neocortex.perc, col = "red", size = 2) +
+  annotate("point", x = target4$perc.fat, y = target4$neocortex.perc_hat, col = "red", shape = 15, size = 2) +
+  annotate("segment",
+    x = target4$perc.fat, xend = target4$perc.fat, y = target4$neocortex.perc, yend = target4$neocortex.perc_hat, color = "blue",
+    arrow = arrow(type = "closed", length = unit(0.02, "npc"))
+  )
+
+p4 <- best_fit_plot4 + labs(title = "Fourth residual")
+
+
+
+
+p1 + p2 + p3 + p4 + plot_layout(nrow = 2)
+```
+
+The plots above show four randomly selected residuals. What you see from the plot is that the size of each residual is determined by the distance between the regression line (the fitted value $\widehat{y}_i$) and it's corresponding value ($y_i$) in the data. Where $_i$ is each of the four randomly selected points
+
+Now say we repeated this process of computing residuals for all observations in `milk`, then we squared all the residuals, and then we summed them. We call this quantity the *sum of squared residuals*\index{sum of squared residuals}; it is a measure of the _lack of fit_ of a model. Larger values of the sum of squared residuals indicate a bigger lack of fit. This corresponds to a worse fitting model.
+
+If the regression line fits all the points perfectly, then the sum of squared residuals is 0. This is because if the regression line fits all the points perfectly, then the fitted value $\widehat{y}$ equals the observed value $y$ in all cases, and hence the residual $y-\widehat{y}$ = 0 in all cases, and the sum of even a large number of 0's is still 0. 
+
+Furthermore, of all possible lines we can draw through the cloud of points, the regression line minimizes this value. In other words, the regression and its corresponding fitted values $\widehat{y}$ minimizes the sum of the squared residuals:
+
+$$
+\sum_{i=1}^{n}(y_i - \widehat{y}_i)^2
+$$
+
+Let's use our data wrangling tools to compute the sum of squared residuals exactly:
+```{r}
+# Fit regression model:
+milk_model <- lm(neocortex.perc ~ perc.fat, 
+                  data = milk)
+
+# Get regression points:
+regression_points <- get_regression_points(milk_model)
+regression_points
+# Compute sum of squared residuals
+regression_points %>%
+  mutate(squared_residuals = residual^2) %>%
+  summarize(sum_of_squared_residuals = sum(squared_residuals)) -> sumsqrs
+sumsqrs
+```
+
+Any other straight line drawn in the figure would yield a sum of squared residuals greater than `r sumsqrs$sum_of_squared_residuals`. This is a mathematically guaranteed fact that you can prove using calculus and linear algebra. That's why alternative names for the linear regression line are the *best-fitting line* and the *least-squares line*. Why do we square the residuals (i.e., the arrow lengths)? So that both positive and negative deviations of the same amount are treated equally.
+
+<div class="question">
+##### Exercise 6 
+Study wrapper functions
+
+the 
+```{r, eval=FALSE}
+moderndive::get_regression_points()
+moderndive::get_regression_table()
+```
+
+are so-called _wrapper_ functions. To learn what goes on under the hood we need to take a closer look at the functions. Study the function definition of 
+```
+moderndive::get_regression_points() 
+moderndive::get_regression_table()`
+```
+by looking at the code in [github](https://github.com/moderndive/moderndive/blob/master/R/regression_functions.R)
+
+(a) Which important functions of which packages are used under the hood of these two functions?
+
+(b) Write a piece of R code that extracts the regression table from the `milk_model` above, without using the `get_regression_points()` function from the `{moderndive}` package.
+
+**Note that this exercise has no answer avaialble, so you will have to figure out things yourself**
+
+</div>

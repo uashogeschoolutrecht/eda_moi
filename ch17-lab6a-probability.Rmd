@@ -1,0 +1,1047 @@
+# Lab 6a - Probability 
+
+```{r include=FALSE}
+
+library(tidyverse)
+library(car)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here(
+    "images",
+    "cluedo.jpg"
+  )
+)
+```
+
+![](./images/cluedo.jpg)
+
+## Learning objectives
+
+After this lesson you can:
+
+- explain interpretations of probability
+- perform some basic probability calculations
+- evaluate what you need to pay attention to when using probability calculations in inductive statistics
+
+## Introduction
+
+In life sciences, things are more often than not uncertain. We can be pretty sure that 2x2 equals 4, but how certain are we exactly of how our latest experiment reflects the real world? If the latest improvement of Parkinson treatments will improve the life of patients? If the acidity of the surface water we just measured at the Uithof differs from the average in the Netherlands? Will a stricter lockdown in case of a pandemic help or crash our society? The world is a lot messier than 2x2.
+
+As most things in life (sciences) are uncertain, we have to do a lot of decisions on incomplete information. We are actually quite used to this, on a daily basis we roughly estimate stuff like the probability of catching the train if we stay for a few more minutes, or passing the exam with the current amount of effort.
+
+
+<div id="tip">
+We are discussing a few related but distinct terms here:
+
+- Uncertainty: situations involving imperfect or unknown information (for instance, when taking a sample (steekproef), you do not have information on the complete population.)
+- probability: how likely it is that something will happen
+- probability theory: as you may have guessed, you can get into quite a discussion on what "likely" means in this context. Depending on how you define probability, you get a different set of rules on calculating probability mathematically: probability theory.
+
+</div>
+
+<div class="question">
+##### Exercise 5 {#labelvraagbay}
+What would you say "probable" means?
+</div>
+
+<details><summary>Click for the answer</summary>
+
+Well, it's up to you really, people (including statisticians) disagree. However, defining "probability" is actually rather important if you are working with experimental designs.
+
+Roughly, there are two main ways researchers think about probability:
+Frequentists argue that something is more probable if it happens more often in a framework of repeatable experiments.
+Bayesians argue that probability is how likely I think it is something will happen, which may depend on other factors than purely the frequency of the event. For example, it allows for information from previous experiments to influence the current probability of an outcome.
+
+At the moment, as the frequentist is the dominant view, and you have learned several statistical methods that are based upon this (calculating p-values for example).
+
+</details>
+
+However, when analysing data on an important research question, you don't want to "roughly estimate", you will want to use a reliable, principled manner to quantify the uncertainty of events and make your decisions. You have been trained in using one such a method when doing hypothesis testing:
+
+1. pinpoint a specific research question
+1. set up a null hypothesis and alternative hypothesis
+1. with your data, calculate a test statistic (e.g. a t-value)
+1. calculate a p-value
+1. make a decision based on the p-value
+
+in R: you can do such a *hypothesis test* quite easily, as you have seen in DAUR1.
+Suppose you think you take more than 15 minutes to get to the Uithof by bike. 
+You measured this for 20 days:
+
+```{r}
+# one sample t-test, one-sided
+bike_duration <-  c(15.0, 15.3, 15.3, 14.2, 15.0, 14.4, 14.8, 14.9, 15.9, 15.5, 
+                    15.2, 14.9, 15.5, 15.3, 15.1, 15.1, 16.2, 15.8, 15.0, 15.7)
+testbike <- t.test(bike_duration, mu=15, alternative = "greater")
+
+#install.packages("schoRsch")
+library(schoRsch) #install first as needed: 
+
+# use this function from the schoRsch package to have R format the output:
+t_out(testbike, n.equal = TRUE,
+	welch.df.exact = TRUE, d.corr = FALSE, print = TRUE)
+```
+
+Pretty nice, the t-test tells us that the p-value is `r round(testbike$p.value,3)`, which is rather low, so we may conclude that it is **likely** we indeed take longer than 15 minutes to reach the uithof. Note that this test takes the mean duration as a model for duration. You will learn more about this in the next lesson, but generally, this is based on the idea that all your measurements will depend on the mean duration reflecting the "true" duration of getting to the Uithof by bike + some noise due to everything else (weather, traffic lights, differences in you pressing the stopwatch, etc). In general terms:
+
+$$ \text{ observation} =  model + residual$$
+
+So, the average duration is the model. Sometimes your bike duration will be a bit shorter than average ( residual = negative), sometimes it will be a bit longer (residual = positive). More on this in the next lesson.
+
+## Probability
+The p in p-value stands for probability. In this case, the probability of finding the observed or even more extreme results, when the null hypothesis would be true. Make note of the words signalling uncertainty in the interpretation above:  it was **likely**. We are not absolutely certain, but we have a strong indication: we calculated a probability of finding these measurements when in reality we take no more than 15 minutes to reach the Uithof, and this probability is lower than a certain cut-off that is generally agreed upon (0.05). The fact that we did all this probability calculations is reflected in how we correctly write a conclusion based on the test above:
+
+" we found that the average travel duration to the Uithof by bike was **significantly** higher than 15 minutes (one sample t-test, one-sided,  *p*=`r round(testbike$p.value,3)`) with a mean duration of `r round(mean(bike_duration),1) ` minutes."
+
+(compare this to the situation in which there is no uncertainty: you have measured every single time in your life you drove your bike to the Uithof. In other words: you measured the whole population. You will know exactly whether the average duration up until now (!) is longer than 15 minutes or not, there is no need to calculate any probabilities. You can't be certain about the future though..)
+
+## Calculating probability
+This probability calculation is a bit easier to understand in a binomial situation ( binomial = there are 2 possible outcomes): 
+
+Consider you want to investigate if a monkey can see the difference between a bunch of 3 bananas or 5 bananas. You let her choose between the two options, and the monkey chooses the bunch of 5 bananas. Now what is the probability that the monkey can differentiate between 3 and 5? 
+
+Well, that is kind of hard to answer. First of all, we are now asking for the probability of a hypothesis being true, considering the current data. While this makes perfect sense, it is not how the most used school of statistics, frequentist statistics, works. With frequentist statistics, we can however do the opposite: calculate the probability of the monkey choosing 5 bananas, *if the monkey had no clue whatsoever about the difference between the two bunches *(H0). You will intuitively know that this probability (p-value) would be 0.5, or 50%. 
+
+This generalises to:
+
+
+$$ \text{ probability of an event} =   \frac{\text{number of ways it can happen}}{\text{total number of possible outcomes}}$$
+In case of our monkey, she had 1 possible way of choosing the 5 bananas, out of 2 possible choices: 1 / 2 = 0.5. 
+
+Do we think this is a **low enough probability** to consider the alternative hypothesis: that the monkey **did** in fact see the difference between 3 and 5? Probably not. The example does clearly show however why frequentist statistics is called frequentist: it is based on counting frequencies of events in the data. The idea is that if something happened more often, it is more likely. 
+
+
+Let's try this with dice, which offer a bit more possible outcomes.
+
+<div class="question">
+##### Exercise 5
+
+You throw 2 six-sided dice. What is the probability of the sum of the dice being 3?
+</div>
+
+<details><summary>Click for the answer</summary>
+
+number of ways it can happen: 2 (1+2 and 2+1)
+
+number of possible outcomes: 36 (both dice are six-sided, so we have combinations: 1+1, 1+2, 1+3, 1+4, 1+5, 1+6, 2+1, 2+2, etc all the way up to 6+6)
+
+probability = 2/36 = $$ \frac{1}{18}$$
+
+</details>
+
+
+<div class="question">
+##### Exercise 5
+
+Suppose you flip a fair coin 3 times. 
+What is the probability of the middle throw having a different result than the first and last? 
+
+</div>
+
+<details><summary>Click for the answer</summary>
+
+The possible outcomes are:
+
+HHH, HHT, **HTH**, HTT, 
+TTT, TTH, **THT**, THH
+
+2 of which meet the requirements. So the probability is 2/8
+
+</details>
+
+<div class="question">
+##### Exercise 5
+
+What does a probability of 1 mean? And a probability of 0?
+</div>
+
+<details><summary>Click for the answer</summary>
+
+probability = 1 --> it is certain the event will happen
+
+probability = 0 --> it is certain the event will **not** happen
+
+</details>
+
+
+## Results vs hypotheses
+
+Now, back to our monkey. We could easily calculate the probability of a certain result. Possible results here are mutually exclusive (if the monkey chooses the 5 bananas, she does not choose the 3 bananas) and all probabilities add up to 1 (in this case 0.5+0.5). This is why we can do the calculations above: dividing the number of results that are in line with a certain condition by the total possible number of results.
+
+Now, what can we say about our hypothesis that the monkey may be able to differentiate between 3 and 5? Unlike results, hypotheses are not mutually exclusive, or always add up to 1. Usually we set up our null hypothesis and alternative hypothesis so that they seem to add up to 1 (if one isn't true, the other must be true), but in fact there may be some factors in play that we have not considered. If a monkey repeatedly chooses 5 over 3 bananas, this is a result with a very low **probability** if it were to be completely due to chance. Does that mean she can differentiate between the numbers? Well, maybe. She might instead be differentiating on basis of overall size. Or any other alternative hypothesis you can come up with. It does however indicate that the **likelihood** of the monkey being able to see the difference between 3 and 5 is high.
+
+<div class="question">
+##### Exercise 5
+
+Suppose you flip a coin 100 times. It comes up head 77 times.
+Would you say the likelihood of the coin being fair is high or low (you don't need to compute it)?
+
+</div>
+
+<details><summary>Click for the answer</summary>
+
+Without any calculations, you can estimate that the likelihood is pretty low.
+
+You could of course use R to calculate a **probability** (not the likelihood) for this **result** if the coin was fair:
+
+```{r}
+probability <- .5
+successes <- 77
+totalFlips <- 100
+dbinom(successes, totalFlips, probability) 
+# a binomial distribution is the one used for situations in which you have two possible outcomes.
+```
+</details>
+
+## Probability distributions
+Let's use the example in the previous question to plot the probabilities of all different "total number of heads" - situations when flipping a coin 10 times (so the probability of 0 head and 10 tails, the probability of 1 head and 9 tails, the probability of 2 head and 8 tails, etc.)
+
+<div class="question">
+##### Exercise 5
+
+Before doing so however, what would be the sum of all these 10 probabilities?
+
+</div>
+
+<details><summary>Click for the answer</summary>
+
+1, the sum of the probabilities of all possible outcomes will always equal 1.
+
+If you don't understand this yet, think about the first few exercises in this lesson: you used this idea:
+$$ \text{ probability of an event} =   \frac{\text{number of ways it can happen}}{\text{total number of possible outcomes}}$$
+to calculate a few probabilities. I think you all agreed that this was intuitive, given the example with the monkey.
+
+Let's use it to answer the question what the sum of all probabilities will be in this exercise:
+
+$$ \frac{\text{# of ways to get 0 head, 10 tails}}{\text{total # possible outcomes}} +  
+   \frac{\text{# of ways to get 1 head, 9 tails}}{\text{total # possible outcomes}} + $$
+   
+$$..etc...+  
+   \frac{\text{# of ways to get 10 head, 0 tails}}{\text{total # possible outcomes}} = 
+   \frac{\text{all possible outcomes}}{\text{total # possible outcomes}} = 1$$
+
+</details>
+
+Now we will calculate the probabilities:
+
+```{r}
+probability <- .5
+timeshead <- c(0:10)
+totalFlips <- 10
+probabilities = tibble(heads = timeshead, 
+                       prob = dbinom(timeshead, totalFlips, prob = 0.5))
+probabilities
+```
+
+As expected, the chance of getting 5 heads and 5 tails is the highest, and the distribution of probabilities is symmetrical: the probability of getting 1 head and 9 tails, is the same as the probability of getting 1 tail and 9 heads. This makes perfect sense, as heads and tails are equally likely in a fair coin. A probability distribution here is basically just a list of possible outcomes and their probabilities.
+
+Let's plot the **probability distribution**:
+
+```{r}
+
+probabilities %>% ggplot(aes(x = factor(heads), y = prob, )) +
+  geom_col(fill="#00BFC4") +
+  labs(title = "Probability distribution",
+       subtitle = "for #heads in 10 fair coin flips",
+       x = "heads",y = "probability") + 
+  theme_classic()+
+  theme(text = element_text(size=20))
+
+```
+
+Now say we want to know the probability of getting at least 7 heads. This would just be the sum of the probabilities for 7, 8, 9 and 10 heads, which looks like the area under the right part of the graph (red):
+
+```{r}
+probabilities %>% mutate(colour = if_else(heads>6, ">6 heads", "=<6 heads")) %>% 
+  ggplot(aes(x = factor(heads), y = prob, )) +
+  geom_col(aes(fill=colour)) +
+  labs(title = "Probability distribution",
+       subtitle = "for #heads in 10 fair coin flips",
+       x = "heads",y = "probability") + 
+  theme_classic()+
+  theme(text = element_text(size=20))+
+  scale_fill_manual(values=c("#00BFC4", "#D55E00"))
+
+```
+
+
+In R, you can use different but related functions to do calculations involving common probability distributions.
+
+We used `rnorm()` before to generate a random sample from a normal distribution.
+
+```{r}
+rnorm(50, mean=600, sd=24)
+```
+
+We used `dnorm()` before to generate a normal probability distribution
+```{r eval=F}
+dnorm(c(500:700), mean=600, sd=24)
+```
+
+You can use `pnorm` to find area's under the curve for such a probability function : the cumulative density function
+
+More on this later
+
+And finally, `qnorm()` can give you quantiles (this is the reverse of the cumulative density function )
+```{r}
+# What is the Z-score of the 96th quantile of the normal distribution?
+qnorm(.96)
+
+# Suppose IQ scores are normally distributed with mean 100 and standard deviation 15. 
+# What is the 95th percentile of the distribution of IQ scores?
+# (95% of the distribution is below this score)
+qnorm(0.95, mean=100, sd=15)
+
+```
+
+You can use the same format for calculations involving other distributions, for example:
+
+`rbinom()` will give you random samples from a binomial distribution.
+
+`dpois()` will give you probabilities using a poisson distribution.
+
+| Prefix   	    | meaning Continuous 	| meaning Discrete  	|
+|-------------	|-------------------	|-------------------	|
+| **d**        	| density           	| probability (pmf) 	|
+| **p**        	| probability (cdf) 	| probability (cdf) 	|
+| **q**        	| quantile          	| quantile          	|
+| **r**        	| random            	| random            	|
+
+
+| Distribution 	| Root  	    |
+|--------------	|------------	|
+| Binomial     	| **binom** 	|
+| Poisson      	| **pois**  	|
+| Normal       	| **norm**  	|
+| t            	| **t**     	|
+| F            	| **F**     	|
+| uniform      	| **unif**    |
+
+
+You can combine these any way you like.
+So `runif()` will give you random samples from a uniform distribution:
+
+```{r}
+# 10 random numbers in the interval 1 to 10
+runif(10, 1, 10)
+
+# looks pretty uniform
+plot(1:1000, runif(1000, 0, 1))
+
+# indeed, pretty uniform
+hist(runif(1000, 0, 1))
+
+```
+
+
+<div class="question">
+##### Exercise 5
+
+In the example, you have seen that we can take samples from any hypothetical distribution.
+
+Take 1500 samples from a normal distribution with a mean of 5 and a sd of 1.
+
+check that the distribution looks normal by plotting a histogram of the numbers.
+</div>
+
+<details><summary>Click for the answer</summary>
+
+```{r}
+sample1 <- rnorm(1500, mean=5, sd=1)
+
+# plot
+df_sample1 <- tibble(nums=sample1)
+ggplot(df_sample1, aes(x=nums)) + geom_histogram()
+
+#alternative plot
+hist(sample1)
+
+```
+
+</details>
+
+
+<div class="question">
+##### Exercise 5
+
+You are the lottery fairy! Everyday, 10 out of 80 unique numbers are drawn. You have to draw today's numbers.
+
+`sample()` can be used to draw random numbers without replacement, see ?sample.
+
+Which probability distribution would this be?
+</div>
+
+<details><summary>Click for the answer</summary>
+Uniform distribution: each number between 1 and 80 is equally likely to be one of today's numbers.
+
+```{r}
+
+# without replacement (zonder terugleggen)
+sample(1:80, size = 10, replace=FALSE)
+
+# example if numbers were not necessarily unique (so with replacement, met terugleggen):
+sample(1:80, size = 10, replace=TRUE)
+
+# or use runif() for a uniform distribution
+# use floor() rather than round() because otherwise people with 
+# the number 1 on their lottery card have a slight disadvantage.
+# --> Use max=81 as floor() will round down and it will never actually exactly equal 81
+floor(runif(10, min=1, max=81))
+
+
+```
+
+</details>
+
+
+<div class="question">
+##### Exercise 5
+
+Simulate 50 flips with an unfair coin (probability heads = P(head) = 0.8).
+
+look at ?rbinom()
+
+size=1, so that the results will be either a 1 (heads) or a 0 (tails)
+
+</div>
+
+
+<details><summary>Click for the answer</summary>
+```{r}
+# let's say we call heads 1 and tails 0
+
+rbinom(n = 50,  size = 1, prob = 0.8)
+
+```
+
+</details>
+
+
+## Familiar distributions
+Hopefully, this is starting to look familiar. You have met probability distributions before in the normal distribution, the z-distribution and the t-distribution. They are a bit different, in that if we are for instance measuring ear length in rabbits, we cannot just come up with a list of say 10 possible outcomes, and calculate their probability. Instead, you can use a function to describe probabilities: a probability density function. 
+
+```{r}
+#generate 10^5 standard normal random numbers and plot a normal distribution
+set.seed(12345)
+somedata <- rnorm(1e5)
+
+hist(somedata, freq=FALSE, breaks=50)
+curve(dnorm(x),col="red", lwd = 2,add=TRUE)
+
+```
+
+You can use R to plot normal distributions based on the formula for a normal distribution:
+
+```{r}
+curve(dnorm(x), xlim=c(-3,3),lwd = 2)
+
+#or ggplot:
+
+ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1), size=2) + ylab("")+
+  theme_classic()+
+  ylab("dnorm(x)")
+```
+
+Now suppose we are back at situations such as our bike trips to the Uithof and are interested in the probability of getting a t-value at least as extreme as the one we found with our data, if the null hypothesis was correct. This is the p-value in a t-test, as you have learned in *statistiek&excel*. Compare the situation to the example above of getting at least 7 heads when flipping a fair coin. We again want to look at the area under the probability distribution that is further from the mean than our value of interest.
+
+We use the t-distribution for situation with few datapoints, which resembles a normal distribution, but has fatter tails with lower degrees of freedom (in this case sample size -1), as can be seen in this plot:
+
+```{r}
+# thanks to Yuk Tung Liu for the graph
+curve(dt(x,1),xlim=c(-5,5),ylim=c(0,0.4),ylab="Student's t Density")
+curve(dt(x,2),col="red",lty=2,add=TRUE)
+curve(dt(x,5),col="blue",lty=3,add=TRUE)
+curve(dt(x,20),col="dark green",lty=4,add=TRUE)
+curve(dnorm(x),col="brown",lty=5,add=TRUE)
+legend(2,0.38,c("df=1","df=2","df=5","df=20","normal curve"),
+       col=c("black","red","blue","dark green","brown"),lty=1:5)
+
+
+
+```
+
+
+
+```{r}
+# the bike trip data in case it is no longer available:
+bike_duration <-  c(15.0, 15.3, 15.3, 14.2, 15.0, 14.4, 14.8, 14.9, 15.9, 15.5, 
+                    15.2, 14.9, 15.5, 15.3, 15.1, 15.1, 16.2, 15.8, 15.0, 15.7)
+
+# plot t distribution with cut-off
+
+twaarde <- t.test(bike_duration, mu=15, alternative = "greater")$statistic
+critical_t <-qt(p=.05, df=19, lower.tail=FALSE)
+dfreedom <- length(bike_duration)-1
+
+ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
+  stat_function(fun = dt, args = list(df = dfreedom),size=1)+
+  stat_function(fun = dt, args = list(df = dfreedom),
+    geom = "area",fill = "grey", alpha = .8, xlim  = c(critical_t, 4))+
+  geom_vline(xintercept = twaarde, size=1)+
+  labs(title = "Student t distribution with test statistic",
+              subtitle = "Alternative hypothesis: greater",
+              caption = "alpha = 0.05")+
+  xlab("t-distribution with 19 degrees of freedom")+
+  theme_classic()+
+  theme(text = element_text(size=20))
+
+```
+
+If we plot the t-distribution and add a vertical line for the t-value we found, you can see that the t-value is further from the mean than the critical t-value (shaded area). The area under the curve to the right of the vertical line (not the complete shaded area) is the p-value for this test.
+
+> As we are often interested in area under this curve as you have learned in the first year course on statistiek & excel, some people prefer to just plot that area instead: the cumulative distribution function (CDF), There is no need to learn by heart how to generate these in R, but knowing why they exist can be very helpful when googling or figuring out data analysis stuff. 
+
+The exact form of a probability distribution depends on what you are measuring. There are a couple of probability distributions that are often used in life sciences, some of them being discrete, some continuous:
+
+discrete: probability distributions about a countable number of values, for example:
+
+- Poisson distribution: probability of a given number of events occurring in a fixed interval of time or space (example: counting cells on a plate)
+- binomial distribution (our coin tossing)
+
+continuous:probability distributions about non-countable data, for example:
+
+- the uniform distribution (in which all outcomes are equally likely)
+- the normal distribution (for mathematical reasons often used to represent variables whose distributions are not known)
+- Z-distribution (just a standard normal distribution with mean=0 and standard deviation=1)
+- Student's t-distribution (has a bit heavier tails than the normal distribution to account for smaller sample sizes)
+
+
+
+<div class="question">
+##### Exercise 5
+
+You have used a Z-table in the 1th year course on *statistiek & excel*, to calculate probabilities. You were presented with exercises such as the following:
+The length of the population of female ILC students follows a normal distribution, with a mean of 172 cm and a standard deviation of 6.70 cm. What percentage of female ILC students have a length of more than 180 cm?
+
+Use R to make a graph of this distribution. Make the area under the curve above 180 cm on the x-axis red.
+
+
+</div>
+
+<details><summary>Click for the answer</summary>
+
+(a)
+```{r}
+
+ggplot(data = data.frame(x = c(150, 200)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 172, sd = 6.70), size=1) + ylab("")+
+  theme_classic()+
+  ylab("dnorm(x)")+
+  stat_function(args = list(mean = 172, sd = 6.70),
+    fun = dnorm,geom = "area", fill = "red", alpha = 1,xlim  = c(180, 200)) +
+  labs(title = "Distribution of height of female ILC students")+
+  xlab("heigth (cm)")+
+  theme_classic()+
+  theme(text = element_text(size=14))
+
+```
+
+</details>
+
+
+<div class="question">
+##### Exercise 5
+
+You want to know what percentage of female ILC students have a length of more than 180 cm.
+Calculate the Z-score for 180 cm (if you forgot how to do this, Google is your friend.)
+
+</div>
+
+<details><summary>Click for the answer</summary>
+
+(a)
+```{r}
+x <- 180 # height in cm 
+x_z <- (x - 172)/6.70 # z-transformation
+```
+
+</details>
+
+
+R doesn't need to look up the area under the normal distribution in a table, it can just calculate it for you with the `pnorm()` function. 
+
+The pnorm() function is written as `pnorm(q, mean = 0, sd = 1, lower.tail = TRUE, log.p = FALSE)`. But you can also feed it z-scores: `pnorm(z-score)`.
+
+<div class="question">
+##### Exercise 5
+For this particular example you can accept all default argument values for the pnorm() function.
+
+(a)
+Use `pnorm()` to calculate the percentage of female ILC students have a length of more than 180 cm using the z-score you just calculated.
+
+(b) 
+Now do the same using the population mean and standard deviation you know.
+
+(c)
+are both probabilities the same? Should they be?
+
+</div>
+
+<details><summary>Click for the answer</summary>
+
+(a)
+```{r}
+# lower.tail=false, because we are trying to find the area to the right of 180
+# the lower tail is the one on the left (the lower one)
+pnorm(x_z,lower.tail = FALSE) %>% round(2)
+```
+
+(b)
+```{r}
+pnorm(180, mean = 172, sd = 6.70,lower.tail = FALSE) %>% round(2)
+```
+
+(c)
+hopefully you found the same probabilities.
+
+</details>
+
+
+<div class="question">
+##### Exercise 5
+
+Again consider the bike duration data. We previously calculated the t-value for finding a sample with a mean of `r mean(bike_duration)` minutes with the null hypothesis that the population mean would be 15 minutes by using:
+
+> twaarde <- t.test(bike_duration, mu=15, alternative = "greater")$statistic
+
+(a)
+calculate the t-statistic by hand using the formula you learned in *statistiek & excel*:
+
+```{r , echo=FALSE, message=FALSE, out.width = "40%"}
+knitr::include_graphics("images/tvalue.png")
+```
+
+(b)
+Use the qt() function to see how high the t-statistic would have to be to meet an alpha of 0.05 (critical t-value) and check whether our calculated t-statistic exceeds this.
+
+(c)
+Use the pt() function to calculate the probability for the t-statistic being this far from the expected value would the null hypothesis be true. What is this probability called? Check with the results from t.test() whether you calculated it correctly.
+
+</div>
+
+<details><summary>Click for the answer</summary>
+
+(a)
+```{r}
+
+twaarde <- t.test(bike_duration, mu=15, alternative = "greater")$statistic
+twaarde 
+twaarde_handmatig <- (mean(bike_duration)-15)/(sd(bike_duration)/sqrt(length(bike_duration)))
+twaarde_handmatig 
+
+```
+
+(b)
+```{r}
+qt(0.95,19)
+
+twaarde_handmatig > qt(0.95,19)
+
+```
+
+
+
+(c)
+```{r}
+# probability of t-statistic being this extreme:
+pt(twaarde_handmatig, df = 19, lower.tail=FALSE)
+
+# which is the same p-value as t.test() have you earlier:
+t.test(bike_duration, mu=15, alternative = "greater")$p.value
+
+
+# note: would you have had a two-sided t-test (H1=average bike duration is different from 15 minutes) 
+# you would need twice this number as you are looking for the probability of 
+# twaarde_handmatig being this far to the right OR -twaarde_handmatig being this far to the left:
+2 * pt(twaarde_handmatig, df = 19, lower.tail=FALSE)
+t.test(bike_duration, mu=15, alternative = "two.sided")$p.value
+
+```
+</details>
+
+
+
+
+
+## Rejecting the null hypothesis
+
+Now this seems to paint a rather clear picture for our common experimental situation. If :
+
+A) a p-value in a null hypothesis test gives you the probability of getting the current data or more extreme ( = more different from what we would expect if the null hypothesis was true) if the null hypothesis was true.
+
+B) we mostly agree on how small this probability needs to be before we consider the data so unlikely that we reject our null hypothesis.
+
+C) these probabilities can be calculated in R (or SPSS or by hand, etc)
+
+We have reached a clear method and can go about doing proper, objective science, right?
+
+Well, in fact, you may have noticed the situation is a bit weird to begin with:
+
+We have a certain hypothesis about the world (I take longer than 15 minutes to reach the Uithof). Next, we test a *different* hypothesis (the null hypothesis: I take no more than 15 minutes). If we find that the data we acquired has a very low probability if this nullhypothesis was true, we dump the null hypothesis and accept the alternative one (p<0.05, so I take significantly longer than 15 minutes). Without ever testing the actual hypothesis we are interested in against the data. So we calculated the probability of the data given a different hypothesis, rather than the probability of our hypothesis given the data.
+
+Here is where we meet the two schools of thought again, you met in question 5.1: some people say: "well, this is bullshit. Let's do it the other way around. I might need big computers though and I am going to need to make some assumptions" (Bayesians). Other people say: "Yes, this is counterintuitive, but it seems to be the most objective way of handling inductive statistics, so we just have to be careful" (frequentists).
+
+As the latter is still the most popular approach in experimental settings, we will follow this route.
+
+However, the "just have to be careful"-part is no joke. We will focus this lesson on how you can be careful, and what can go wrong if you don't.
+
+<div class="question">
+##### Exercise 5
+
+A p-value in a null hypothesis test gives you the probability of getting the current data or more extreme ( = more different from what we would expect if the null hypothesis was true) if the null hypothesis was true.
+Suppose we do such a hypothesis test because we wonder whether cadmium concentration in mg/kg of the soil at the Uithof differs from that in Utrecht city.
+
+We will simulate this experiment. Generate the data by using the following code:
+
+> cd_uithof <- rnorm(50,mean=0.52,sd=0.2)
+
+> cd_stad <- rnorm(50,mean=0.51,sd=0.2)
+
+(a)
+Calculate the p-value you are looking for (of course, first inspect the data and test the assumptions)
+
+(b)
+If we found a p-value > 0.05, can we say we **proved** there is **no difference** in cadmium concentration?
+
+</div>
+
+<details><summary>Click for the answer to (a) </summary>
+
+(a)
+
+```{r}
+cd_uithof <- rnorm(50,mean=0.52,sd=0.2)
+cd_stad <- rnorm(50,mean=0.51,sd=0.2)
+
+# inspect the data
+cd_data <- data.frame( location = rep(c("Uithof", "Stad"), each = 50),
+                        cadmium = c(cd_uithof,  cd_stad))
+
+cd_data %>% group_by(location) %>%
+  summarise(  count = n(),
+              mean = mean(cadmium, na.rm = TRUE),
+                sd = sd(cadmium, na.rm = TRUE)
+  )
+
+# visually inspect it as well:
+cd_data %>% ggplot(aes(x=as.factor(location), y=cadmium)) + 
+    geom_boxplot(fill="slateblue", alpha=0.2) + 
+    xlab("location") + ylab("[cadmium] in mg/kg")
+
+
+# we already know, as we generated the data ourselves.
+# but let's check for normality:
+cd_data %>%
+  group_by(location) %>%
+  summarise(statistic = shapiro.test(cadmium)$statistic,
+            p.value = shapiro.test(cadmium)$p.value)
+
+# and equal variance:
+#library(car)
+leveneTest(cadmium ~ as.factor(location), data = cd_data, center = mean)
+
+# and finally the p-value
+cd_ttest <- t.test(cd_uithof, cd_stad, alternative = "two.sided", var.equal = TRUE)
+cd_ttest
+
+```
+</details>
+
+<details><summary>Click for the answer to (b) </summary>
+
+(b)
+
+No. We can say we **found no significant difference** in cadmium concentration. However, we did not "prove" the alternative hypothesis. 
+There was not enough statistical evidence to reject the null hypothesis that there is no difference in cadmium concentration between the soil at the Uithof and Utrecht city. However, failing to reject it, is not the same as proving it is false.
+
+Suppose someone is charged with murder and has to stand trial in a court of law. They are considered innocent until reasonably proven otherwise. The court concludes that there is not enough evidence to convict the defendant as all the clues gathered by the police are reasonably compatible with the defendant being innocent. Does that prove the defendant is innocent? No.
+
+Now suppose the police found the defendants DNA all over the murder scene while the defendant argued he has never even been in the same city. This would be very unlikely if the defendant was innocent, and while it does again not prove they are guilty, at some point the court (or researcher) will argue that the defendant gets a guilty verdict.
+
+</details>
+
+<div class="question">
+
+
+
+##### Exercise 5
+
+Can a p-value be negative? why?
+
+</div>
+
+<details><summary>Click for the answer</summary>
+
+No, it cannot. Suppose you get a p-value of zero. This means that the gathered data is impossible if the null hypothesis was true. It can't get any more impossible than impossible.
+
+</details>
+
+
+
+## Statistics gone wrong 
+
+In 1998, Andrew Wakefield and co-authors published a study linking the *bof-mazelen-rode hond-vaccinatie* to autism.
+
+There were so many things wrong with the paper it is hard to sum it up. There was no control group, the data was not blinded, there was a really small sample size, and most of the subjects in his study did not in fact have an official autism diagnosis. Several children showed behavioural symptoms though, before even receiving the vaccination. Data was altered and a former graduate student even testified that Wakefield ignored any data that did not match his hypothesis. 
+Apart from that, Wakefield was by no means a neutral scientist in this story, as he had previously received £400,000 by a group that would benefit from such a paper. Participants were recruited through anti-vax campaigners. It is as if they were trying to build a textbook example of how not to do science.
+
+The paper was rapidly retracted, but a lot of damage had already been done. Now 20 years later, a significant percentage of people seriously consider not getting a vaccination for the new coronavirus variant that has caused a huge pandemic, and vaccination rates for previously almost wiped out (in the Netherlands) viruses such as polio, have decreased to dangerously low levels. Which may not be caused entirely by Wakefield, but it has had a huge influence.
+
+Most people have heard of a few of these famous scientific frauds. In life science, inadequacies can have serious consequences. But actually, most researchers are normal honest people and the thing to watch out for is not suddenly becoming am fraudulent and deceitful evil scientist. **Most errors in science are committed unintentionally.**
+
+### Sample size
+
+We have seen that it is quite easy to misinterpret a null result: if we fail to reject a null hypothesis, this does not automatically mean our alternative hypothesis is not true. We just did not find enough evidence to reject the H0.
+
+One directly problem with p-values, is that p-values depend on how much data you have gathered. Suppose you hypothesize that the average Dutch cat weights about 5 kilo's. Your null hypothesis would be that the population average μ ≠ 5 kg. You measure three cats: one of yours and two of a friendly neighbour. They are 3.8, 4.1 and 4.8 kg. Now, is this data unlikely if μ = 5? Well, not really, probably..
+
+You decide that 3 is a bit low for a sample size, and organise a village-wide cat measuring day. You gather 80 datapoints, all between 3.8 and 4.8 kilos. Now, would you say this data is unlikely if μ = 5? Definitely more unlikely that with 3 datapoints! Your p-value will be lower, even though you did a very similar experiment (weighing neighbourhood cats) within the same population, with the same null hypothesis. 
+
+This is why studies generally start with doing a power analysis: a calculated estimate of how many datapoints should be gathered. If you gather too little data, you may miss effects that are really there (e.g. 3 cats with a sample mean $\bar{x}$ of 4.2). If you gather really a lot of data, you may find that whatever little unimportant difference turns up significant in your null hypothesis tests (e.g. 300.000 cats with a  $\bar{x}$ of 4.95).
+
+However, you can only do power analyses if you already have some evidence on what the population looks like, so if there are previous studies on cat weight you can look at. This becomes really hard when you are the first person to investigate a certain phenomenon.
+
+<div class="question">
+##### Exercise 5
+
+You have used the PlantGrowth dataset in DAUR1. This dataset contains the results from an experiment to compare yields (as measured by dried weight of plants) obtained under a control and two different treatment conditions. In DAUR1 we found that the data in all 3 treatment groups were normally distributed. Also you can assume equal variance in the groups. 
+
+
+(a) 
+Take a random sample of 5 plants from each group in the **PlantGrowth** dataset, using the `sample_n()` function (google or look at the help for examples). On this subset, test whether there is a difference in weight  between the three conditions.
+
+(b)
+Now test again on the whole PlantGrowth dataset. Compare the p-values for (a) and (b), are they the same?
+
+
+</div>
+
+<details><summary>Click for the answer</summary>
+
+(a)
+
+```{r}
+# take sample
+plantgrowth_sample <- PlantGrowth %>% group_by(group) %>% sample_n(size = 5)
+
+# ANOVA on sample
+plant_weight_sample <- aov(weight ~ group, plantgrowth_sample)
+summary.aov(plant_weight_sample)
+```
+
+(b)
+```{r}
+#ANOVA on full dataset
+plant_weight <- aov(weight ~ group, PlantGrowth)
+summary.aov(plant_weight)
+
+```
+
+rerun the code for question (a) a few times. See what happens with the p-value. Taking a new sample also changes the calculated p-value.
+Note that the PlantGrowth dataset is also a sample. If you did the experiment again, using the exact same methods, with exactly as many plants, you will get a different p-value. 
+
+As you can see, it is totally possible to miss real effects because you did not collect enough data.
+
+
+<div class="question">
+##### Exercise 5
+
+Now let's do the opposite. You previously analysed generated data on cadmium concentration in the soil at the Uithof and Utrecht city. You found significant difference with a t-test on 50 datapoints per location.
+Suppose we go completely beserk and collect (generate) 50.000 datapoints per location. What happens to the p-value?
+
+</div>
+
+<details><summary>Click for the answer</summary>
+
+(a)
+```{r}
+
+# previous t-test on 50 datapoints/location:
+cd_ttest
+
+# beserk mode
+cd_uithof2 <- rnorm(50000,mean=0.52,sd=0.2)
+cd_stad2 <- rnorm(50000,mean=0.51,sd=0.2)
+
+ t.test(cd_uithof2, cd_stad2, alternative = "two.sided", var.equal = TRUE)
+```
+
+You can see that it is just as possible to have every tiny little difference between conditions show up significant because you gathered an exorbitant amount of data. Would you warn the local government or Rijkswaterstaat per priority e-mail that there is a significant difference in cadmium concentration (0.52 vs 0.51 mg/kg soil) going on? Probably not.
+
+</details>
+
+
+
+### just a little p hacking
+It can be quite tempting to alter your study design a bit after you get the results (maybe don't include this group after all...), stop collecting data once your p-value drops below 0.05 or maybe lower the threshold for something being an outlier, so that you can find a p-value below 0.05 and publish your result... The times are changing, but it used to be very, very common for journals to only accept studies rejecting the null hypothesis, because you cannot prove the null hypothesis being correct as we have seen previously. So if you fail to reject the null hypothesis, you have little to tell. As a result, p-values just under 0.05 are extremely over-represented in published studies...
+
+Some solutions are preregistration of studies (the journal will accept studies based on the credibility of the design, and will publish the results no matter what they will be), making your data publicly available along with the results, so that everyone can see for themselves what they think of it, and changing to different kinds of statistics that do not rely on p-values.
+
+
+Go to the following website by fivethirtyeight :[fivethirtyeight](https://projects.fivethirtyeight.com/p-hacking/) 
+
+And see how easily you can p-hack your way to significant results. Can you get republicans or democrats to show both a positive as a negative effect on the economy depending on which factors and which politicians you include? (hint: yes, you can)
+
+
+### misinterpreting p-values
+
+Now can we dismiss half of modern research (or perhaps 5%?), sit back and criticize every slightly overinterpreted correlation or p-value we can find? 
+
+```{r , echo=FALSE, message=FALSE, out.width = "40%"}
+knitr::include_graphics("images/winnie.jpg")
+```
+
+Well, you could. But it is not very constructive. These errors do not automatically make the research stupid and the conclusions wrong. Just less supported by the data. 
+
+You will hopefully have realised that analysing your data is a lot more than selecting "the right test" and checking a p-value. It also relies on choices for instance in data manipulation, experimental design, what you think about probability, presentation of your data...
+
+We have seen that p-values can get really low for differences between conditions that are not at all interesting (the Cadmium concentration in the soil example). This shows that p-values are a probability for finding the data, not an effect size. So if your p-value is very low, this does not mean there is a larger difference between groups. 
+
+## Do I have a 5% risk of being wrong?
+
+Also, one often heard misinterpretation is that there is a 5% chance that your conclusion is wrong because of the alpha=0.05 (the threshold for the p-value for rejecting the null hypothesis).
+
+This stems from mixing two ideas about p-values. a) That they can provide you with an indication of how surprising a dataset is and b) that they can be used to reject or accept hypotheses with a guaranteed long-run false positive rate. If your p-value in a null hypothesis test is 0.03, this does not mean that there is a 3% chance of wrongly rejecting the null hypothesis. It means that if your null hypothesis was true, there is only a 3% chance of finding your data, which you could consider low enough to say that you think the null hypothesis may be wrong.
+
+Is 5% of literature wrong then?
+
+In the long run, if every study in the world used frequentist statistics with null hypothesis testing (they don't) and everybody uses it correctly (they don't either), and studies with p-values above 0.05 are just as likely to be published as studies with p-values below 0.05, you would guarantee not wrongly rejecting null hypotheses more than 5% of the time, likely even a lot less. So also the idea that 5% of studies in the library is wrong, is untrue, we simply do not really know. Some particular overconfident but incompetent researchers may have a much higher false rejection rate. And by nature, studies that have trouble finding enough data will have the opposite and will often wrongly not reject the null hypothesis (remember the plantgrowth example). For instance, studies on rare cancer types in children, will have a higher than average probability of wrongly **not** rejecting the null hypothesis, because they don't have that much data (and to be honest, we wouldn't want them to be able to collect more data). 
+
+## multiple comparisons
+
+That said, suppose the following example:
+
+A friend and you flip a coin on who gets the last piece of chocolate. She wins, and you are so angry you accuse her of using an unfair coin. You take the coin home, and record yourself flipping the coin 5 times in a row. 
+
+The first time you record yourself, it ends up heads 3 times and tails 2 times. What would you say is the probability of getting this result if the coin was fair? Hmn, pretty good actually. But you are angry, so you try another time. And another. And another.
+After 40 tries, the coin lands heads up all 5 times. Ha! the probability is 1/32 (remember this?:) 
+$$ \text{ probability of an event} =   \frac{\text{number of ways it can happen}}{\text{total number of possible outcomes}}$$
+
+1/32 is below 0.05, so we can reject the null hypothesis that the coin is fair!
+
+Let's angrily call your friend that she cheated. You send her the last recording as proof: there is significant evidence of fraud at the 5% level!
+
+However, you would expect to sometimes land a coin on heads 5 times in a row, and you can expect, if you redo a particular experiment enough times that it may by coincidence give you a dataset that is rather unlikely under the null hypothesis, even if the null hypothesis is actually true. Similarly, if you do a whole bunch of related null hypothesis tests, you will by coincidence find somep-values below 0.05.
+
+XKCD, as usual explains very well how this may happen in real life: [click](https://xkcd.com/882/). It also nicely illustrates the publication bias: the large number of insignificant results will likely never get published, The one significant result will.
+
+There are several ways to prevent making the mistakes above, most famously is *correcting for multiple comparisons*. So, if you do multiple similar t-tests within an experiment, you will lower the threshold the p-value needs to drop below before you would reject the null hypothesis.
+
+You can lower it for instance from $\alpha $ = 0.05 to $\alpha $ = 0.05/number_of_tests, or, essentially the same, correct the p-value for multiple comparisons by multiplying it with the number of tests. This is called the Bonferroni correction. This correction does very well at decreasing the chance of a type 1 error (wrongly rejecting the H0), but at the cost of increasing the type 2 error rate (not rejecting the H0 when you should have). It may lead to a very high rate of false negatives.
+
+As a example, let's look at the left frontpaw length in cm of some hypothetical rats in 3 groups:
+
+```{r}
+
+set.seed(1235)
+frontpaws.df <- tibble(
+  group = as.factor(rep(c("A","B","C"),each=10)),
+  pawlength = c(rnorm(10,3.4,1),rnorm(10,5.5,1),rnorm(10,5,1))
+)
+
+# there are 3 levels in group:
+levels(frontpaws.df$group)
+
+# they seem to have different lengths:
+group_by(frontpaws.df, group) %>%
+  summarise(
+    count = n(),
+    mean = mean(pawlength, na.rm = TRUE),
+    sd = sd(pawlength, na.rm = TRUE)
+  )
+
+# let's check for normality:
+frontpaws.df %>%
+  group_by(group) %>%
+  summarise(statistic = shapiro.test(pawlength)$statistic,
+            p.value = shapiro.test(pawlength)$p.value)
+
+# and equality of variance:
+
+library(car) 
+lm.paw1<-lm(pawlength~group,data=frontpaws.df) 
+leveneTest(lm.paw1)
+
+
+# Plot weight by group and color by group
+ggplot(frontpaws.df, aes(x = group, y = pawlength)) + 
+        geom_boxplot(aes(fill = group)) + 
+        geom_jitter(position=position_jitter(0.2)) +
+        theme_bw(base_size = 14) +
+        xlab("group") +
+        ylab("left front paw length") +
+        scale_fill_discrete(guide = guide_legend(title = "group"))
+
+# so we want to do an ANOVA:
+
+pawlength_aov<- aov(pawlength ~ group, frontpaws.df)
+summary.aov(pawlength_aov)
+
+
+```
+
+there is a significant difference between the groups in paw length! But between which groups exactly?
+We can do some post-hoc t-tests, comparing A to B, A to C and B to C. But this is starting to look like the jelly beans situation in the XKCD comic. So we will correct for multiple comparisons:
+
+```{r}
+
+
+p.AB <- frontpaws.df %>% filter(group!="C") %>%
+ summarise(pval = t.test(pawlength ~ group, var.equal = TRUE)$p.value)
+p.AC <- frontpaws.df %>% filter(group!="B") %>%
+ summarise(pval = t.test(pawlength ~ group, var.equal = TRUE)$p.value)
+p.BC <- frontpaws.df %>% filter(group!="A") %>%
+ summarise(pval = t.test(pawlength ~ group, var.equal = TRUE)$p.value)
+
+p.ABC <- tibble(comparison =c("AB", "AC", "BC"), p.value=  c(p.AB$pval, p.AC$pval, p.BC$pval))
+p.ABC
+```
+
+
+Unadjusted, we see a significant difference in left frontpaw length between group A and B, and between group A and C.
+
+
+After correcting for multiple comparisons, we fail to reject the null hypothesis for the comparison between group A and C:
+```{r}
+p.adjust(p.ABC$p.value,method="bonferroni",n=length(p.ABC$p.value))
+
+# should be the same in this case as:
+p.ABC$p.value*3
+
+```
+
+This can be done easier:
+
+```{r}
+# compare unadjusted
+pairwise.t.test(frontpaws.df$pawlength, frontpaws.df$group,
+                p.adjust.method="none", 
+                paired=FALSE, pool.sd=F,var.eq=T) 
+
+# to adjusted:
+pairwise.t.test(frontpaws.df$pawlength, frontpaws.df$group,
+                p.adjust.method="bonferroni", 
+                paired=FALSE, pool.sd=F,var.eq=T) 
+
+```
+
+
+So we would have to conclude that there is a significant difference in paw length between group A and group B.
+
+Note that this example shows that failing to reject the null hypothesis is not the same as proving the null hypothesis is correct.
+
+1. We find a significant difference in paw length between group A and B (H0 is rejected)
+
+2. We find no significant difference in paw length between group B and C (H0 is not rejected)
+
+3. We find no significant difference in paw length between group A and C (H0 is not rejected)
+
+If statement 2. would mean that we **prove** there is no difference whatsoever in paw length between group B and C, they were sampled from one and the same population, we should have gotten a significant difference in paw length between group A and C, because we found a significant difference between group A and B. This is not the case. Perhaps there is a difference between gorup B and C that we just have not enough prove for. Perhaps there is no difference between group B and C, and the fact that we find no significant difference between A and C is a type 2 error. 
+
+
+
+
+

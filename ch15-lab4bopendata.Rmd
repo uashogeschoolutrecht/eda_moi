@@ -396,7 +396,7 @@ levels(tmp_df03_new$month)
 F) Where on the planet was this measured (tip: Google is you friend) - find the address. Remember, this is an annual average ...
 
 ## Opening a .json format
-```{r}
+```{r, eval = FALSE}
 ## http://www.programmingr.com/examples/reading-json-data/
 library(jsonlite)
 # r web / r json - get json data from url
