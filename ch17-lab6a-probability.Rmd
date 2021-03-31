@@ -1,5 +1,7 @@
 # Lab 6a - Probability 
 
+Alyanne De Haan, PhD
+
 ```{r include=FALSE}
 
 library(tidyverse)
@@ -74,6 +76,13 @@ You measured this for 20 days:
 # one sample t-test, one-sided
 bike_duration <-  c(15.0, 15.3, 15.3, 14.2, 15.0, 14.4, 14.8, 14.9, 15.9, 15.5, 
                     15.2, 14.9, 15.5, 15.3, 15.1, 15.1, 16.2, 15.8, 15.0, 15.7)
+
+bike_duration %>% enframe() %>%
+  ggplot(aes(x = name, y = value)) +
+  geom_point() +
+  geom_hline(yintercept = 15, linetype = "dashed", colour = "red")
+  
+  
 testbike <- t.test(bike_duration, mu=15, alternative = "greater")
 
 #install.packages("schoRsch")
@@ -187,10 +196,10 @@ Without any calculations, you can estimate that the likelihood is pretty low.
 You could of course use R to calculate a **probability** (not the likelihood) for this **result** if the coin was fair:
 
 ```{r}
-probability <- .5
+probability <- 0.5
 successes <- 77
 totalFlips <- 100
-dbinom(successes, totalFlips, probability) 
+pbinom(successes, totalFlips, probability) 
 # a binomial distribution is the one used for situations in which you have two possible outcomes.
 ```
 </details>
@@ -233,6 +242,9 @@ totalFlips <- 10
 probabilities = tibble(heads = timeshead, 
                        prob = dbinom(timeshead, totalFlips, prob = 0.5))
 probabilities
+
+probabilities$prob %>% hist()
+
 ```
 
 As expected, the chance of getting 5 heads and 5 tails is the highest, and the distribution of probabilities is symmetrical: the probability of getting 1 head and 9 tails, is the same as the probability of getting 1 tail and 9 heads. This makes perfect sense, as heads and tails are equally likely in a fair coin. A probability distribution here is basically just a list of possible outcomes and their probabilities.
@@ -266,18 +278,32 @@ probabilities %>% mutate(colour = if_else(heads>6, ">6 heads", "=<6 heads")) %>%
 
 ```
 
+We can calculate this chance manually
+```{r}
+sum(probabilities$prob)
+sum(probabilities$prob[7:10])
 
-In R, you can use different but related functions to do calculations involving common probability distributions.
+## chance to observe 6 heads or less
+1-sum(probabilities$prob[7:10])
+```
+
+It would be tedious to write out all these chances for every 'bin'in our distributions
+
+In R, you can use different but related functions to do calculations involving common probability distributions. See [also](https://www.stat.umn.edu/geyer/old/5101/rlook.html)
 
 We used `rnorm()` before to generate a random sample from a normal distribution.
 
 ```{r}
+set.seed(123)
 rnorm(50, mean=600, sd=24)
+rnorm(50, mean=600, sd=24) %>% hist()
 ```
 
 We used `dnorm()` before to generate a normal probability distribution
 ```{r eval=F}
 dnorm(c(500:700), mean=600, sd=24)
+dnorm(c(500:700), mean=600, sd=24) %>% hist()
+
 ```
 
 You can use `pnorm` to find area's under the curve for such a probability function : the cumulative density function
@@ -390,7 +416,6 @@ sample(1:80, size = 10, replace=TRUE)
 # --> Use max=81 as floor() will round down and it will never actually exactly equal 81
 floor(runif(10, min=1, max=81))
 
-
 ```
 
 </details>
@@ -411,7 +436,11 @@ size=1, so that the results will be either a 1 (heads) or a 0 (tails)
 <details><summary>Click for the answer</summary>
 ```{r}
 # let's say we call heads 1 and tails 0
+set.seed(123)
+rbinom(n = 50,  size = 1, prob = 0.8)
 
+## create a meaningful plot
+set.seed(123)
 rbinom(n = 50,  size = 1, prob = 0.8)
 
 ```
@@ -445,9 +474,9 @@ ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
   ylab("dnorm(x)")
 ```
 
-Now suppose we are back at situations such as our bike trips to the Uithof and are interested in the probability of getting a t-value at least as extreme as the one we found with our data, if the null hypothesis was correct. This is the p-value in a t-test, as you have learned in *statistiek&excel*. Compare the situation to the example above of getting at least 7 heads when flipping a fair coin. We again want to look at the area under the probability distribution that is further from the mean than our value of interest.
+Now suppose we are back at situations such as our bike trips to the Uithof and are interested in the probability of getting a t-value at least as extreme as the one we found with our data, if the null hypothesis was correct. This is the p-value in a t-test, [as you have learned in *statistiek&excel*]. Compare the situation to the example above of getting at least 7 heads when flipping a fair coin. We again want to look at the area under the probability distribution that is further from the mean than our value of interest.
 
-We use the t-distribution for situation with few datapoints, which resembles a normal distribution, but has fatter tails with lower degrees of freedom (in this case sample size -1), as can be seen in this plot:
+We use the t-distribution for situations with few datapoints, which resembles a normal distribution, but has fatter tails with lower degrees of freedom (in this case sample size -1), as can be seen in this plot:
 
 ```{r}
 # thanks to Yuk Tung Liu for the graph
@@ -470,8 +499,13 @@ legend(2,0.38,c("df=1","df=2","df=5","df=20","normal curve"),
 bike_duration <-  c(15.0, 15.3, 15.3, 14.2, 15.0, 14.4, 14.8, 14.9, 15.9, 15.5, 
                     15.2, 14.9, 15.5, 15.3, 15.1, 15.1, 16.2, 15.8, 15.0, 15.7)
 
-# plot t distribution with cut-off
+bike_mean <- mean(bike_duration)
+bike_sd <- sd(bike_duration) 
 
+# t-lookup: https://i.ytimg.com/vi/bt3YqSHNwg4/maxresdefault.jpg
+# -> 1.729133
+
+# plot t distribution with cut-off
 twaarde <- t.test(bike_duration, mu=15, alternative = "greater")$statistic
 critical_t <-qt(p=.05, df=19, lower.tail=FALSE)
 dfreedom <- length(bike_duration)-1
@@ -491,8 +525,6 @@ ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
 ```
 
 If we plot the t-distribution and add a vertical line for the t-value we found, you can see that the t-value is further from the mean than the critical t-value (shaded area). The area under the curve to the right of the vertical line (not the complete shaded area) is the p-value for this test.
-
-> As we are often interested in area under this curve as you have learned in the first year course on statistiek & excel, some people prefer to just plot that area instead: the cumulative distribution function (CDF), There is no need to learn by heart how to generate these in R, but knowing why they exist can be very helpful when googling or figuring out data analysis stuff. 
 
 The exact form of a probability distribution depends on what you are measuring. There are a couple of probability distributions that are often used in life sciences, some of them being discrete, some continuous:
 
@@ -663,6 +695,7 @@ t.test(bike_duration, mu=15, alternative = "two.sided")$p.value
 </details>
 
 
+***BREAK FOR NEXT WEEK***
 
 
 

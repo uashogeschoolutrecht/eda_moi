@@ -50,7 +50,9 @@ We already saw the 'non-formal' EDA steps (PPDAC cycle) in the EDA case example 
 
 ## EDA and R programming
 ```{r, echo=FALSE, fig.align='left'}
-path_to_image <- file.path(root, "images", "data-science.png")
+path_to_image <- here::here(
+  "images", 
+  "data-science.png")
 knitr::include_graphics(path_to_image, dpi = 60)
 ```
 
@@ -132,6 +134,10 @@ Are there any missing data in the diamonds dataset?
 data("diamonds")
 naniar::vis_miss(diamonds)
 sum(is.na(diamonds))
+
+diamonds$depth[1:10000] <- NA 
+
+
 ```
 
 There seem to be no apparant missingness in any of the variables in the diamonds dataset. 
@@ -166,7 +172,7 @@ diamonds %>%
 ### The histogram
 ```{r}
 ggplot(data = diamonds) +
-  geom_histogram(mapping = aes(x = carat), binwidth = 0.05)
+  geom_histogram(mapping = aes(x = carat), binwidth = 0.01)
 ```
 
 What do you notice from this plot?
@@ -238,7 +244,20 @@ This is the famous data from the 'faithful' dataset, showing timings of eruption
 ggplot(data = faithful, mapping = aes(x = eruptions)) + 
   geom_histogram(binwidth = 0.25)
 
+ggplot(data = faithful, mapping = aes(y = eruptions)) + 
+  geom_boxplot()
+
+
+faithful %>% as_tibble()
 ## ?faithful for more details on the data
+
+
+faithful %>%
+  ggplot(aes(x = eruptions, y = waiting)) +
+  geom_point(position = "jitter", shape = 1)
+
+
+
 ```  
 
 ### Unusual values or outliers
@@ -254,6 +273,14 @@ When you see a histogram with an extraordinary large x-axis, you have to be vigi
 ```{r}
 ggplot(diamonds) + 
   geom_histogram(mapping = aes(x = y), binwidth = 0.5)
+
+ggplot(diamonds, aes(y = y)) + 
+  geom_boxplot()
+
+ggplot(diamonds, aes(y = log(y))) + 
+  geom_boxplot()
+
+
 ```   
 
 ### Zooming in on your data
@@ -514,6 +541,7 @@ ggplot(data = smaller, mapping = aes(x = carat, y = price)) +
   geom_boxplot(mapping = aes(group = cut_number(carat, 20)))
 ```
 
+https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip
 
 ## EXERCISES
 
@@ -544,6 +572,7 @@ download.file("https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_p
     "data",
     "household_power_consumption.zip"
 ))
+
 unzip(
   here::here(
     "data",

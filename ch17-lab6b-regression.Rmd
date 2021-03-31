@@ -115,7 +115,7 @@ A crucial step before doing any kind of analysis or modeling is performing an *e
 1. More visualizations (e.g. to explore statistical model assumptions - which you saw in the DAUR1 course)
 
 **STEP1; Looking at your data**
-Let's perform the first common step in an exploratory data analysis: looking at the raw data values. Because this step seems so trivial, unfortunately many data analysts ignore it. However, getting an early sense of what your raw data looks like can often prevent many larger issues down the road. Grab a cup of coffee, or whather is your fancy and start looking at the data.
+Let's perform the first common step in an exploratory data analysis: looking at the raw data values. Because this step seems so trivial, unfortunately many data analysts ignore it. However, getting an early sense of what your raw data looks like can often prevent many larger issues down the road. Grab a cup of coffee, or whther is your fancy and start looking at the data.
 
 You can do this by using RStudio's spreadsheet viewer or by using the `glimpse()` function.
 
@@ -575,8 +575,9 @@ We could repeat the previous calculations we performed by hand `r nrow(milk)` ti
 
 ```{r}
 regression_points <- get_regression_points(milk_model)
-regression_points
-```
+regression_points %>%
+  arrange(residual)
+``` 
 
 
  - The `ID` column is the row id for the observation in the original dataframe.
@@ -823,6 +824,8 @@ Observe the order of the second column `median` life expectancy in the table: Af
 # Coding model earlier to calculate the intercepts etc below
 lifeExp_model <- lm(lifeExp ~ continent, data = gapminder2007)
 
+lifeExp_model
+
 # Africa / Intercept
 intercept <- get_regression_table(lifeExp_model) %>%
   dplyr::filter(term == "intercept") %>%
@@ -831,28 +834,32 @@ intercept <- get_regression_table(lifeExp_model) %>%
 
 # Americas
 offset_americas <- get_regression_table(lifeExp_model) %>%
-  dplyr::filter(term == "continentAmericas") %>%
+  dplyr::filter(term == "continent: Americas") %>%
   pull(estimate) %>%
   round(1)
+
 mean_americas <- intercept + offset_americas
 
 # Asia
 offset_asia <- get_regression_table(lifeExp_model) %>%
-  dplyr::filter(term == "continentAsia") %>%
+  dplyr::filter(term == "continent: Asia") %>%
   pull(estimate) %>%
   round(1)
 mean_asia <- intercept + offset_asia
 
+## 1. contrast handmatig te definieren dmv matrix
+## 2. handmatig de volgorde van de levels in de factor
+
 # Europe
 offset_europe <- get_regression_table(lifeExp_model) %>%
-  dplyr::filter(term == "continentEurope") %>%
+  dplyr::filter(term == "continent: Europe") %>%
   pull(estimate) %>%
   round(1)
 mean_europe <- intercept + offset_europe
 
 # Oceania
 offset_oceania <- get_regression_table(lifeExp_model) %>%
-  dplyr::filter(term == "continentOceania") %>%
+  dplyr::filter(term == "continent: Oceania") %>%
   pull(estimate) %>%
   round(1)
 mean_oceania <- intercept + offset_oceania
@@ -1247,6 +1254,6 @@ by looking at the code in [github](https://github.com/moderndive/moderndive/blob
 
 (b) Write a piece of R code that extracts the regression table from the `milk_model` above, without using the `get_regression_points()` function from the `{moderndive}` package.
 
-**Note that this exercise has no answer avaialble, so you will have to figure out things yourself**
+**Note that this exercise has no answer available, so you will have to figure out things yourself**
 
 </div>

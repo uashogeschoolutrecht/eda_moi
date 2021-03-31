@@ -1,3 +1,7 @@
+---
+always_allow_html: true
+---
+
 # Lab 1B; Introduction to R {#lab1bintror}
 
 ```{r setup, include=FALSE}

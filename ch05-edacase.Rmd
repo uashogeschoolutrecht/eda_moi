@@ -1,3 +1,7 @@
+---
+always_allow_html: true
+---
+
 # Case Example {#edacase}
 
 This Chapter illustrates a case example for EDA with real-life data. It takes you through some of the steps of the EDA checklist and illustrates the Problem-Plan-Data-Analysis-Conclusion, shortly 'PPDAC' cycle of EDA. More details on EDA will be discussed in Chapter \@ref(lab5eda)

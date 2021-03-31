@@ -97,7 +97,7 @@ A) Download the Titanic data and load it into R:
  1. Download the zip archive from KAGGLE
  1. unzip the file in the "./data" folder
  1. Load the 'test.csv' and the 'train.csv' into R. Call the datasets `test` and `train`, respectively. 
- 1. Change the `Survived` variable in the `train` dataframe to a factor
+ 1. Change the `Survived` variable in the `train` data frame to a factor
 
 ```{r, include=FALSE}
 ## unzip zipfile with 'unzip()'
@@ -225,6 +225,7 @@ descriptives_train <- train %>%
 B) Using the `dlookr::plot_correlate()` function, create a correlation matrix.
 ```{r, include=FALSE}
 plot_correlate(train)
+
 ```
 
 C) Expand on the correlation matrix including the `Survided` variable
@@ -249,6 +250,8 @@ Below we 'feature engineer' the `Name` variable to extract valuable information 
 
 ### Engeneering the `Name` {-}
 ```{r}
+
+train$Name[1:20] 
 ## clean up the Name variable
 train %>%
   rowwise %>%
@@ -521,6 +524,7 @@ train %>%
     mutate(surname = gsub('( .*)|(*,*)', '', Name)) -> train
 
 train$surname[1:5]
+
 
 library(wru)
 wru::predict_race(train, surname.only = TRUE) -> train
@@ -890,7 +894,6 @@ regression_tree = rpart(
   Survived~. , 
   data = train_val, method="class"
   )
-
 
 rpart.plot(
   regression_tree,
