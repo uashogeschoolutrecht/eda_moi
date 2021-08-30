@@ -1,7 +1,7 @@
 This repo is the basis for the bookdown reader of the "Exploratory Data Analysis & Data Mining" Course of the Master of Informatics at HU University of Applied Sciences, Utrecht, The Netherlands.
 
 ## Licence
-The materials in this repo are under CC BY-NC 4.0 licence. Meaning you can use and adapt these materials for non-commercials ends as long as you provide proper credits and attribution to the copyright holder and the refereced sources (Marc A.T. Teunis, HU - 2021).
+The materials in this repo are under CC BY-NC 4.0 licence. Meaning you can use and adapt these materials for non-commercial ends as long as you provide proper credits and attribution to the copyright holder and the referenced sources (Marc A.T. Teunis, HU - 2021).
 
 ## Perequisites
 
@@ -11,6 +11,9 @@ We advise developing and working with R in RStudio. You can download R and RStud
 
  - [R](https://cran.r-project.org/)
  - [RStudio](https://cran.r-project.org/)
+
+### Memory and System specifications
+To run the code in this repository we recommend a system with at least 8 cores and 16 Gb of RAM. Building of the reader could consume even more resources and was preformed on a UBUNTU Virtual Machine running R Version: `4.1.1 (2021-08-10) -- "Kick Things"` and RStudio Version: `Version 1.4.1717` . This machine had 
 
 ### Docker
 To work with Docker you need to have a Docker Deamon installed. See the [Docker](https://www.docker.com/) homepage for more details
