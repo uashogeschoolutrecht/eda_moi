@@ -10,3 +10,4 @@ bookdown::gitbook:
         <li><a href="https://github.com/uashogeschoolutrecht/edamoi_site" target="blank">Published with bookdown</a></li>
     edit: https://github.com/uashogeschoolutrecht/edamoi_site/edit/master/%s
     download: ["pdf", "epub"]
+    

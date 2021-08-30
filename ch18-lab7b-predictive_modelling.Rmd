@@ -56,8 +56,8 @@ library(wru) # Bayesian prediction of ethnicity
 # Setup parallel processing
 suppressWarnings(suppressMessages(library(parallel)))
 suppressWarnings(suppressMessages(library(doParallel)))
-cluster <- makeCluster(detectCores() - 1) # convention to leave 1 core for OS
-registerDoParallel(cluster)
+#cluster <- makeCluster(detectCores() - 1) # convention to leave 1 core for OS
+#registerDoParallel(cluster)
 
 # Custom function
 `%not in%` <- function (x, table) is.na(match(x, table, nomatch=NA_integer_))
@@ -1420,7 +1420,7 @@ library(tidymodels)
 
 set.seed(4595)
 ## use stratification
-data_split <- initial_split(ames, strata = "Sale_Price", p = 0.75)
+data_split <- initial_split(ames, strata = "Sale_Price")
 
 ames_train <- training(data_split)
 ames_test  <- testing(data_split)

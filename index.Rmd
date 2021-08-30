@@ -61,6 +61,7 @@ How many R-packages are available from CRAN on the date that this website was la
 
 ```{r, fig.width=10, fig.height=10}
 library(rvest)
+library(xml2)
 
 pkgs <- read_html("https://cran.r-project.org/web/packages/available_packages_by_name.html")
 mylines <- pkgs %>% 

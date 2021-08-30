@@ -1,11 +1,11 @@
-Package: redamoi
-Title: redamoi is not really an R package, but this is here to list the 
-  dependencies for building the Exploratory Data Analysis "EDA-MOI" book.
+Package: edamoi
+Title: edamoi is not really an R package, but this is here to list the dependencies 
+  for building the Exploratory Data Analysis "EDA-MOI" book.
 Version: 0.2
 Authors@R: person("Marc", "Teunis", email = "marc.teunis@hu.nl",
                   role = c("aut", "cre"))
 Depends: R (>= 4.0)
-URL: https://datascience.hu.nl/rsconnect/redamoi/
+URL: https://datascience.hu.nl/rsconnect/eda-moi/
 biocViews:
 Imports:
   schoRsch,
@@ -67,34 +67,8 @@ Imports:
   ggiraph,
   pander,
   gapminder,
-  nycflights13,
-  RNHANES,
-  here,
-  dslabs,
-  naniar,
-  svglite,
-  R.utils,
-  skimr,
-  mvtnorm,
-  kableExtra,
-  HSAUR3,
-  rstan,
-  rethinking,
-  AppliedPredictiveModeling,
-  caret,
-  parsnip,
-  tidymodels,
-  dlookr,
-  agricolae,
-  emmeans,
-  ranger,
-  wru,
-  doParallel,
-  AmesHousing,
-  randomForest,
-  glmnet
+  nycflights13
 Remotes:
-  rmcelreath/rethinking,
   ropensci/USAboundariesData,
   rich-iannone/DiagrammeR,
   uashogeschoolutrecht/citrulliner,

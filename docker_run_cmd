@@ -1,0 +1,5 @@
+docker run --rm \
+  --platform linux/amd64 \
+  -p 127.0.0.1:8787:8787 \
+  -e DISABLE_AUTH=true \
+  rocker/rstudio

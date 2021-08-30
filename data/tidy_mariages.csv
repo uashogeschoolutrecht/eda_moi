@@ -15,7 +15,7 @@ Sachsen,1,spring,8654,1990
 Sachsen-Anhalt,1,spring,5795,1990
 Schleswig-Holstein,1,spring,5184,1990
 Thüringen,1,spring,4757,1990
-Baden-Württemberg,2,spring,12234,2003
+BaWü,2,spring,12234,2003
 Bayern,2,spring,14667,2003
 Berlin,2,spring,2986,2003
 Brandenburg,2,spring,2514,2003
@@ -127,7 +127,7 @@ Sachsen,1,summer,12169,1990
 Sachsen-Anhalt,1,summer,7238,1990
 Schleswig-Holstein,1,summer,6565,1990
 Thüringen,1,summer,5910,1990
-Baden-Württemberg,2,summer,16608,2003
+BaWü,2,summer,16608,2003
 Bayern,2,summer,19219,2003
 Berlin,2,summer,4147,2003
 Brandenburg,2,summer,4187,2003
@@ -239,7 +239,7 @@ Sachsen,1,fall,5633,1990
 Sachsen-Anhalt,1,fall,3330,1990
 Schleswig-Holstein,1,fall,4235,1990
 Thüringen,1,fall,3046,1990
-Baden-Württemberg,2,fall,12474,2003
+BaWü,2,fall,12474,2003
 Bayern,2,fall,14287,2003
 Berlin,2,fall,2992,2003
 Brandenburg,2,fall,2070,2003
@@ -351,7 +351,7 @@ Sachsen,1,winter,3147,1990
 Sachsen-Anhalt,1,winter,2030,1990
 Schleswig-Holstein,1,winter,2546,1990
 Thüringen,1,winter,2016,1990
-Baden-Württemberg,2,winter,9377,2003
+BaWü,2,winter,9377,2003
 Bayern,2,winter,10836,2003
 Berlin,2,winter,2265,2003
 Brandenburg,2,winter,1203,2003

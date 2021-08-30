@@ -17,8 +17,6 @@ knitr::include_graphics(
 )
 ```
 
-![](./images/cluedo.jpg)
-
 ## Learning objectives
 
 After this lesson you can:

@@ -1,0 +1,267 @@
+0:installed.packages("bookdown")
+0:install.packages("bookdown")
+0:update.packages(ask = FALSE)
+0:devtools::install(".")
+0:devtools::install(".")
+0:devtools::install(".")
+0:pertussis_data <- readr::read_csv(
+0:here::here(
+0:"data",
+0:"CISID_pertussis_10082018.csv"
+0:), comment = "#")
+0:pertussis_data <- readr::read_csv(
+0:here::here(
+0:"data",
+0:"CISID_pertussis_10082018.csv"
+0:), comment = "#")
+0:pertussis_data_tidy <- pertussis_data %>%
+0:tidyr::gather(`1980`:`2018`,
+0:key = "year",
+0:value = "annual_pertussis_cases") %>%
+0:## rename X1 / x2 columns
+0:dplyr::rename(key = X1,
+0:country = X2) %>%
+0:dplyr::mutate(annual_pertussis_cases = as.integer(annual_pertussis_cases)) %>%
+0:# we pretend that the measurement for the year was reported on January 1st the next  year.
+0:dplyr::mutate(year = lubridate::ymd(year, truncated = 2L)) %>%
+0:dplyr::mutate(year = lubridate::floor_date(year, unit = "year"))
+0:usethis::use_pipe()
+0:devtools::document()
+0:devtools::document()
+0:devtools::install(".")
+0:library(rvest)
+0:pkgs <- read_html("https://cran.r-project.org/web/packages/available_packages_by_name.html")
+0:mylines <- pkgs %>%
+0:html_nodes("tr") %>%
+0:xml_text()
+0:library(rvest)
+0:library(xml2)
+0:pkgs <- read_html("https://cran.r-project.org/web/packages/available_packages_by_name.html")
+0:mylines <- pkgs %>%
+0:html_nodes("tr") %>%
+0:xml_text()
+0:nb_pkgs <- length(which(sapply(mylines, nchar)>5))
+0:print(paste("There are", nb_pkgs, "packages available in CRAN as of", Sys.Date()))
+0:devtools::install(".")
+0:devtools::install(".")
+0:devtools::install(".")
+0:devtools::install(".")
+0:devtools::install(".")
+0:devtools::install(".")
+0:devtools::install(".")
+0:devtools::install(".")
+0:devtools::install(".")
+0:devtools::install(".")
+0:library(rvest)
+0:library(xml2)
+0:pkgs <- read_html("https://cran.r-project.org/web/packages/available_packages_by_name.html")
+0:mylines <- pkgs %>%
+0:html_nodes("tr") %>%
+0:xml_text()
+0:nb_pkgs <- length(which(sapply(mylines, nchar)>5))
+0:print(paste("There are", nb_pkgs, "packages available in CRAN as of", Sys.Date()))
+0:devtools::install(".")
+0:devtools::install(".")
+0:usethis::browse_github_pat()
+0:install.packages("captioner")
+0:install.packages("DT")
+0:install.packages("dslabs")
+0:install.packages("reshape")
+0:install.packages("pastecs")
+0:install.packages("GGally")
+0:install.packages("ggiraph")
+0:install.packages("pander")
+0:names(pertussis_data_tidy)
+0:# Chunk 1: setup
+0:knitr::opts_chunk$set(echo = TRUE,
+0:warning = FALSE,
+0:error = FALSE,
+0:message = FALSE,
+0:fig.width = 5, fig.height = 3)
+0:# Chunk 2
+0:library(tidyverse)
+0:library(dslabs)
+0:# Chunk 5
+0:pertussis_data <- read_csv(
+0:file = here::here(
+0:"data",
+0:"CISID_pertussis_10082018.csv"),
+0:comment = "#",
+0:na = c("", " ")
+0:)
+0:# Chunk 6
+0:pertussis_data
+0:names(pertussis_data)
+0:# Chunk 7
+0:pertussis_data
+0:# Chunk 9
+0:pertussis_data_tidy <- pertussis_data %>%
+0:gather(`1980`:`2018`, key = "year",
+0:value = "annual_pertussis_cases") %>%
+0:mutate(annual_pertussis_cases = as.numeric(annual_pertussis_cases
+0:))
+0:pertussis_data_tidy
+0:# Chunk 10
+0:knitr::include_graphics(path = here::here("images", "pipe.png"), dpi = 50)
+0:# Chunk 11: magrittr
+0:library(magrittr)
+0:names(pertussis_data_tidy)
+0:names(pertussis_data_tidy)
+0:## we can `rename()` a variable and `select()` variables
+0:pertussis_data_tidy <- pertussis_data_tidy %>%
+0:dplyr::rename(some_strange_index = `...1`,
+0:country = `...1`)
+0:pertussis_data_tidy %>% head(2)
+0:# Chunk 1: setup
+0:knitr::opts_chunk$set(echo = TRUE,
+0:warning = FALSE,
+0:error = FALSE,
+0:message = FALSE,
+0:fig.width = 5, fig.height = 3)
+0:# Chunk 2
+0:library(tidyverse)
+0:library(dslabs)
+0:# Chunk 5
+0:pertussis_data <- read_csv(
+0:file = here::here(
+0:"data",
+0:"CISID_pertussis_10082018.csv"),
+0:comment = "#",
+0:na = c("", " ")
+0:)
+0:# Chunk 6
+0:pertussis_data
+0:names(pertussis_data)
+0:# Chunk 7
+0:pertussis_data
+0:# Chunk 9
+0:pertussis_data_tidy <- pertussis_data %>%
+0:gather(`1980`:`2018`, key = "year",
+0:value = "annual_pertussis_cases") %>%
+0:mutate(annual_pertussis_cases = as.numeric(annual_pertussis_cases
+0:))
+0:pertussis_data_tidy
+0:# Chunk 10
+0:knitr::include_graphics(path = here::here("images", "pipe.png"), dpi = 50)
+0:# Chunk 11: magrittr
+0:library(magrittr)
+0:# Chunk 12
+0:names(pertussis_data_tidy)
+0:## we can `rename()` a variable and `select()` variables
+0:pertussis_data_tidy <- pertussis_data_tidy %>%
+0:dplyr::rename(some_strange_index = `...1`,
+0:country = `...1`)
+0:pertussis_data_tidy %>% head(2)
+0:# Chunk 13
+0:pertussis_data_tidy <- pertussis_data_tidy %>%
+0:dplyr::select(country,
+0:year,
+0:annual_pertussis_cases)
+0:pertussis_data_tidy %>% head(2)
+0:# Chunk 15
+0:data("gapminder", package = "dslabs")
+0:gapminder <- gapminder %>% as_tibble()
+0:View(gapminder)
+0:# pertussis_data_tidy
+0:# gapminder
+0:gapminder$year <- as.character(gapminder$year)
+0:gapminder$country <- as.character(gapminder$country)
+0:pertussis_data_tidy$country <- as.character(pertussis_data_tidy$country)
+0:join <-   dplyr::inner_join (gapminder, pertussis_data_tidy, by = c("country", "year")) %>%
+0:na.omit()
+0:join
+0:View(gapminder)
+0:View(pertussis_data)
+0:View(pertussis_data)
+0:# Chunk 1: setup
+0:knitr::opts_chunk$set(echo = TRUE,
+0:warning = FALSE,
+0:error = FALSE,
+0:message = FALSE,
+0:fig.width = 5, fig.height = 3)
+0:# Chunk 2
+0:library(tidyverse)
+0:library(dslabs)
+0:# Chunk 5
+0:pertussis_data <- read_csv(
+0:file = here::here(
+0:"data",
+0:"CISID_pertussis_10082018.csv"),
+0:comment = "#",
+0:na = c("", " ")
+0:)
+0:# Chunk 6
+0:pertussis_data
+0:names(pertussis_data)
+0:# Chunk 7
+0:pertussis_data
+0:# Chunk 9
+0:pertussis_data_tidy <- pertussis_data %>%
+0:gather(`1980`:`2018`, key = "year",
+0:value = "annual_pertussis_cases") %>%
+0:mutate(annual_pertussis_cases = as.numeric(annual_pertussis_cases
+0:))
+0:pertussis_data_tidy
+0:# Chunk 10
+0:knitr::include_graphics(path = here::here("images", "pipe.png"), dpi = 50)
+0:# Chunk 11: magrittr
+0:library(magrittr)
+0:# Chunk 12
+0:names(pertussis_data_tidy)
+0:## we can `rename()` a variable and `select()` variables
+0:pertussis_data_tidy <- pertussis_data_tidy %>%
+0:dplyr::rename(some_strange_index = `...1`,
+0:country = `...2`)
+0:pertussis_data_tidy %>% head(2)
+0:# Chunk 13
+0:pertussis_data_tidy <- pertussis_data_tidy %>%
+0:dplyr::select(country,
+0:year,
+0:annual_pertussis_cases)
+0:pertussis_data_tidy %>% head(2)
+0:# Chunk 15
+0:data("gapminder", package = "dslabs")
+0:gapminder <- gapminder %>% as_tibble()
+0:View(pertussis_data_tidy)
+0:# pertussis_data_tidy
+0:# gapminder
+0:gapminder$year <- as.character(gapminder$year)
+0:gapminder$country <- as.character(gapminder$country)
+0:pertussis_data_tidy$country <- as.character(pertussis_data_tidy$country)
+0:join <-   dplyr::inner_join (gapminder, pertussis_data_tidy, by = c("country", "year")) %>%
+0:na.omit()
+0:join
+0:devtools::install(".")
+0:install.packages("gapminder")
+0:BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+0:BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+0:BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+0:BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+0:BiocManager::install("rtracklayer")
+0:BiocManager::install("rtracklayer")
+0:BiocManager::install("Rhtslib")
+0:BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+0:BiocManager::install("Rhtslib")
+0:BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+0:setRepositories()
+0:BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+0:BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+0:devtools::install(".")
+0:install.packages("cbsodataR")
+0:install.packages(c("rattle.data", "mlbench"))
+0:devtools::install(".")
+0:devtools::install(".")
+0:install.packages("choRsch")
+0:install.packages("schoRsch")
+0:install.packages("dagitty")
+0:install.packages("moderndive")
+1630079913661:install.packages("here")
+1630079980033:install.packages("dslabs")
+1630080025691:install.packages("naniar")
+1630080120148:install.packages("svglite")
+1630080220220:install.packages("R.utils")
+1630080928781:install.packages("skimr")
+1630081475398:install.packages("mvtnorm")
+1630081794894:install.packages("kableExtra")
+1630082489990:install.packages("HSAUR3")
+1630082988302:devtools::install(".")

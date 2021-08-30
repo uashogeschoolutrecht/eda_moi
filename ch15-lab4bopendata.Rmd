@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE,
 ## Packages
 ```{r}
 library(tidyverse)
+library(rattle.data)
+library(mlbench)
 ```
 
 
@@ -88,7 +90,7 @@ help(wine, package = "rattle.data")
 
 Or the full standardized human genome with: 
 We show 101 nucleotides from chromosome 1, location 30,000 - 30,100
-```{r}
+```{r, eval=FALSE}
 # BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
 library(BSgenome.Hsapiens.UCSC.hg38)
 BSgenome.Hsapiens.UCSC.hg38$chr1[30000:30100]

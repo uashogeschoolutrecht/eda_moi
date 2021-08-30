@@ -180,8 +180,8 @@ For Renaming variables (`rename()`)
 names(pertussis_data_tidy)
 ## we can `rename()` a variable and `select()` variables
 pertussis_data_tidy <- pertussis_data_tidy %>%
-  dplyr::rename(some_strange_index = X1,
-       country = X2)
+  dplyr::rename(some_strange_index = `...1`,
+       country = `...2`)
 
 pertussis_data_tidy %>% head(2)
 ```
@@ -227,6 +227,8 @@ When joining tables you need at least one shared variable, that has the same nam
 # pertussis_data_tidy
 # gapminder
 gapminder$year <- as.character(gapminder$year)
+gapminder$country <- as.character(gapminder$country)
+pertussis_data_tidy$country <- as.character(pertussis_data_tidy$country)
 
 join <-   dplyr::inner_join (gapminder, pertussis_data_tidy, by = c("country", "year")) %>%
   na.omit()
