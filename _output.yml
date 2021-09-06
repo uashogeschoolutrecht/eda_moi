@@ -2,6 +2,7 @@ bookdown::gitbook:
   toc_depth: 1
   always_allow_html: true
   css: style.css
+  output_dir: "_html_book"
   config:
     toc:
       before: |
@@ -10,4 +11,5 @@ bookdown::gitbook:
         <li><a href="https://github.com/uashogeschoolutrecht/edamoi_site" target="blank">Published with bookdown</a></li>
     edit: https://github.com/uashogeschoolutrecht/edamoi_site/edit/master/%s
     download: ["pdf", "epub"]
-    
+bookdown::pdf_book:
+  output_dir: "_pdf_book"

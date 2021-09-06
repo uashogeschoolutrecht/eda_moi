@@ -139,3 +139,681 @@ pkgs %>%
   
 ```
 
+## Course Contents {#coursecontents}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data Mining Course
+This course is about "Exploratory Data Analysis and Initial Data Analysis"
+
+[Wikipedia definition](https://en.wikipedia.org/wiki/Exploratory_data_analysis)
+
+"In statistics, exploratory data analysis (EDA) is an approach to analyzing data sets to summarize their main characteristics, often with visual methods. A statistical model can be used or not, but primarily EDA is for seeing what the data can tell us beyond the formal modeling or hypothesis testing task. Exploratory data analysis was promoted by John Tukey to encourage statisticians to explore the data, and possibly formulate hypotheses that could lead to new data collection and experiments. EDA is different from initial data analysis (IDA),[1] which focuses more narrowly on checking assumptions required for model fitting and hypothesis testing, and handling missing values and making transformations of variables as needed. EDA encompasses IDA"
+
+## Course aims
+ 
+  - EDA is not a formal procedure, getting the right mind set
+  - Learn tools in R to GET, CLEAN, EXPLORE and MODEL data
+  - Acquire R skills for the complete EDA cycle; object oriented and functional programming  
+  - Visualize data
+  - Explore assumptions (IDA)
+  - Using R for Reproducible Research 
+  
+## Course contents
+Each course masterclass or so-called 'lab' will carry forward a specific theme related to Exploratory Data Analysis. In this course you will exclusively work with the Programming Environment `R` [@R-base] in the Integrated Development Environment `RStudio` [@R-rstudio]. There will be no need to install any software on your laptop, because we will be using a cloud computing solution. This offers flexibility and speed. I will show you where to get the required software. In case that you would be wanting to install your own environment locally.   
+  
+In this course you will get in-depth knowledge on how to use R in conjunction with RStudio to `IMPORT`, `INVESTIGATE`, `CLEAN`, `VISUALIZE`, `EXPLORE`, `MODEL` and `COMMUNICATE` data and conclusions about data. 
+  
+To this end, I divided an number of logically connected topics together in seven `labs`. Each lab has several interactive cycles of theory and exercises. During each lab, I will explain a small amount of topics after which the course participants will have the opportunity to practice with exercises.   
+  
+## BYOD; Bring Your Own Data  
+  
+During this course you will have the opportunity to bring your own data as case example. Please think about which data you will be able to (freely) share with me and your fellow paticipants. 
+
+## Lab Contents
+Below, I will shortly summarize what we will be covering in each lab (seven in total for the complete course).
+
+### Lab 1a: Introduction to RStudio 
+Chapter \@ref(lab1aintrorstudio)
+
+ 1. Getting the course materials from github.com
+ 1. Creating objects in R
+ 1. RStudio introduction
+
+### Lab 1b: Introduction to R  
+Chapter \@ref(lab1bintror)
+
+ 1. Functional and object oriented programming
+ 1. Functions
+ 1. Object Class; vectors, dataframes, lists
+ 1. Vector types
+ 1. Getting help
+ 1. Plots
+ 1. Data examples
+
+### Lab 1c: Dataframes, lists and matrices  
+Chapter \@ref(lab1crecursivevectors)
+
+ 1. Dataframes
+ 1. Lists
+ 1. Matrices
+
+### Lab 2: Visualize & Explore Data
+Chapter \@ref(lab2viz)
+
+ 1. Visualizations demo
+ 1. Build in datasets 
+ 1. Using the grammar of graphics with `{ggplot2}`
+ 1. Plot types
+ 1. `geom_...` and `aes()`
+ 1. Adding dimensions to a plot 
+ 1. Solving overplotting
+ 1. Plot annotation and labels
+ 1. Saving plots
+ 1. Examples of `{shiny}` apps
+
+### Lab 3a: Data Wrangling  
+Chapter \@ref(lab3awrangling)
+
+ 1. Using `{dplyr}` for data wrangling
+ 1. The `{dplyr}` verbs
+ 1. Data wrangling in combination with `{ggplot2}`
+
+### Lab 3b: Functional Programming 
+Chapter \@ref(lab3bfunctions)
+
+ 1. What is a function
+ 1. Writing function
+ 1. Function documentation
+ 1. Loops and `map` family of functions
+ 1. Scripts and the `source` function
+ 1. Why write function
+ 1. Function elements (name/arguments, body, return)
+ 1. Function documentation, Roxygen comments
+ 1. Writing error / warning /  messages
+ 
+### Lab 3c: Tidy data
+Chapter \@ref(lab3ctidydata)
+ 
+### Lab 4a: Importing data 
+Chapter \@ref(lab4aimportingdata)
+
+ 1. Paths
+ 1. Importing data functions
+ 1. Excel and other 'foreign' formats
+ 1. Reading from a zipfile/url
+
+### ### Lab 4b: Getting Open Data  
+Chapter \@ref(lab4bopendata)
+
+ 1. Open data sources
+ 1. Finding data
+ 1. Importing data into R (.csv, .tsv, .txt, .json, .xml, .xls(x)
+ 1. Using APIs (Twitter, Kaggle, Google, CBS)
+ 1. Accessing databases
+
+### Lab 5: Exploratory Data Analysis _or_ The PPDAC Cycle
+Chapter \@ref(lab5eda)
+
+ 1. The process of EDA
+ 1. Problem-Plan-Data-Analysis-Conclusion (PPDAC) Cycle
+ 1. Missingness
+ 1. Distibutions
+ 1. Finding patterns 
+ 1. Graph types
+ 1. Multidimensional data
+ 1. Principal Components
+ 
+### Lab 6a: Exploring Assumptions & Models  
+Chapter \@ref(lab6amodels)
+
+ 1. Why Assumptions?
+ 1. Distributions (Gaussian)
+ 1. Regression
+ 1. Model output ( `{broom}`)
+ 
+### Lab 6b: Statistics with R (resampling & simple regression) 
+Chapter \@ref(lab6bmanymodels)
+ 
+### Lab 7: Statistics with R (multiple regression and ANOVA) 
+Chapter \@ref(lab7atextmining)
+ 
+## Exercises
+Each masterclass/lab contains a number of exercises. Most lessons have exercises in between the demos and explanations. Usually at the end of each lessons, more exercises are included.
+
+In order for you to get the most out of this course it is important to go over each exercise and try to solve each challenge strictly from within RStudio. 
+The easiest way to make an exercise is to copy the text of the exrcise from the Bookdown website into an RMarkdown file and place R-code chunks in between containing the answers or to use the Rmd source documents from Github directly. Store each Rmd file for each lesson seperately in a convenient folder called "exercises" in your course project folder.
+
+During the classes we will also look at the solutions to the exercises together.
+
+The R code containg the demos and the answers will be made available for each lab in the github repository: https://github.com/uashogeschoolutrecht/exploratory_data_masterclasses
+
+## Getting Started {#gettingstarted}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4,
+                      warning = FALSE,
+                      error = FALSE, message = FALSE)
+```
+
+## Packages
+```{r}
+library(tidyverse)
+```
+
+
+## Preface
+
+This is an R-Markdown document. It is an example of literate programming and it illustrates how we can combine code, text and output. It addresses the issue "Write code for humans, not for computers" very nicely.
+
+Code can be recognized by a code chunck:
+
+_start code chunk_
+
+` ```{r} `
+
+`library(tidyverse)`
+
+`average <- rnorm(1000) %>%` 
+
+  `enframe()`
+
+`average %>%`
+
+  `ggplot(aes(x = value)) +`
+
+  `geom_histogram()`
+
+` ``` `
+
+_end code chunk_
+
+To run the code chunks: set the cursor between the start ` ```{r} ` and the end 
+` ``` ` of the chunk and press Ctrl, Shift, Enter, or choose "Run" in the top-right lint.
+
+## To start a new script 
+you can look under File -> New File -> RMarkdown or R Script. You will see a lot of other options as well. In this course we will not address these.
+
+## Getting started
+
+## R & RStudio
+Throughout this course you will be working with the open source programs R and RStudio. RStudio is an integrated development environment (IDE) that allows you to use R in an interactive (and graphical) way, write your scripts/code and manage your workspace. R and Rstudio are already pre-installed on the course laptops, but for home use can be downloaded for free from http://www.r-project.org and http://www.rstudio.com.
+
+## Github account and setting github credentials in RStudio
+
+ - Create an account for www.github.com
+ - Install the package `{gitr}` (M. Teunis, 2019) using the following code:
+ 
+```{r, eval = FALSE} 
+devtools::install_github("uasghogeschoolutrecht/gitr") 
+```
+
+## Getting the materials for the course (R scripts):
+```{r, include=FALSE}
+urls <- read_csv(
+        here::here(
+                "urls"
+        )
+)
+
+urls[3,1] %>% as.character() 
+```
+
+ 1. Go the following url: `r urls[3,1]`
+ 2. Copy the url address to the clipboard
+ 3. Start a new RStudio Project `File` -> `New Project`
+ 4. Select `Version Control` -> `Git` 
+ 5. Paste the url in the `Repository URL` field
+ 6. click `Create Project` and let the clone finish
+ 
+**YOU NOW HAVE THE FILES TO START THE FIRST LESSONS** 
+
+The accompanying Bookdown Webpages to this course can be found at:
+
+`r urls[2,1]`
+
+## Cloud server for RStudio
+During the course, we will be using a preinstalled version of the RStudio-IDE (integrated development environment). This IDE version runs on a remote UBUNTU 18.04 Linux server and has most of the packages that are needed to follow the course already installed. You can login at the communicated server address and with the credentials supplied at the beginning of the course. The advantage of cloud servers is that you do not need to install the software on their own laptops. 
+
+The address for the server is: `r urls[4,1]`
+
+To see what the current working directory (wd) is, you can execute the command
+
+`getwd()` 
+
+in the Console window. Try it now!
+
+If all went well the latter half of the working directory will state "/exploratory_data"
+
+## Relative paths
+The `getwd()` command gets information on the current wd. Some examples taken from the internet or classical users of R will tell you to use `setwd()` to change the working directory. However, please ignore this advice and always work from an RStudio Project in which you can use relative path. The `{here}` package can help you write clear code to achiev this. See for more details: [`{here}`](https://github.com/jennybc/here_here)
+
+## Creating a new R script
+For most analyses/projects, it is best to start by creating an R script file that will contain all the steps taken to get to a certain result. Initially this might be more like a scrapbook to note down what exactly you did. 
+
+Later you can then separate this more cleanly in a workflow (steps taken and/or functions executed) and separate files for function definitions, or even package definitions. 
+
+During this course, we will create special R scripts called RMarkdown (`.Rmd`) for every exercise that contains the steps of that particular exercise. RMarkdown helps you to create a workflow and document your steps. 
+
+Common R scripts contains all functions that can to be reused between different exercises (for instance a file named "functions.R"). 
+
+## Setting up package repositories
+Default RStudio has only enabled the CRAN repository, but there are other useful repositories that contain nice R packages. 
+
+```{r, eval = FALSE, echo=TRUE, results='asis'}
+setRepositories(graphics=TRUE)
+```
+
+## Installing a package from a repository
+As an example package (we will be using this later on), we are going to install the "beanplot" package which allows you to easily create so called beanplots. Details of what you can do with them and how to use them, will be provided later during the course. To install the package, go to the Packages window and click on the "install" icon. This will show a popup window where you can type in the name of the package. Type in beanplot and press the "Ok" button. This will download and install the beanplot package.
+
+## Do everything programmatically
+The alternative and BETTER WAY is to programmatically install packages:
+
+```{r, eval=FALSE, echo=TRUE}
+install.packages("beanplot")
+```
+
+To load this library into your workspace, type in library("beanplot") in the Console (or even better, in the R script editor window and then press the "Run" button which will execute the code on that particular line in the R script / or choose `Cntrl` and `Enter` simultaneously).
+You can now use the functions defined within this package, for instance to plot a beanplot of (not so useful) random values
+
+```{r, echo=TRUE, fig.show='asis', results='asis'}
+library(beanplot)
+beanplot(runif(100))
+``` 
+
+## Getting help
+Knowing how to get help, might be one of the most important skills when learning a new programming language. In R, there are various ways to get help. 
+
+A good start, is the overview documentation provided within R. You can get to this by executing help.start() in the Console window. This will show the help documentation in the Help window within Rstudio. There are a number of good manuals provided within this documentation, particularly useful are the "An Introduction to R" and "The R language definition" manuals. Have a quick look at both.
+
+Besides basic documentation, you also can get package specific documentation. The overview of the different packages and corresponding documentation can be found by clicking on the "Packages" link (You can also get here by going to the Packages window directly). How many packages are user specific?
+Lookup the documentation for the function sqrt(), what does it do?
+Run the examples for the function sqrt(). What does this do?
+
+## A good resource to start
+Free material on learning R is very broadly available on the web. You can start your adventuRe at:
+
+http://r4ds.had.co.nz/index.html
+
+the author Hadley Wickham is an excellent data scientist, speaker and developer at RStudio and the brain behind the "tidyverse". Garret Grolemund is an excellent speaker and the lead educator at RStudio. 
+
+---
+always_allow_html: true
+---
+
+## Case Example {#edacase}
+
+This Chapter illustrates a case example for EDA with real-life data. It takes you through some of the steps of the EDA checklist and illustrates the Problem-Plan-Data-Analysis-Conclusion, shortly 'PPDAC' cycle of EDA. More details on EDA will be discussed in Chapter \@ref(lab5eda)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE, 
+                      error = FALSE, 
+                      message = FALSE, fig.width = 8, fig.height = 6, units = "cm")
+```
+
+## Packages needed for the analysis below
+```{r}
+library(tidyverse)
+library(DiagrammeR)
+library(magrittr)
+library(ggplot2)
+library(ggpubr)
+library(ggExtra)
+library(captioner)
+
+```
+
+## The curious case of the Frederick Shipman murders
+
+[From Wikipedia](https://en.wikipedia.org/wiki/Harold_Shipman) 
+
+"Harold Frederick Shipman (14 January 1946 – 13 January 2004) was an English general practitioner and is one of the most prolific serial killers in history. On 31 January 2000, a jury found Shipman guilty of the murder of 15 patients under his care. He was sentenced to life imprisonment with the recommendation that he never be released.
+
+The Shipman Inquiry, a two-year-long investigation of all deaths certified by Shipman, which was chaired by Dame Janet Smith, examined Shipman's crimes. _The inquiry identified 215 victims and estimated his total victim count at 250, about 80% of whom were elderly women. His youngest confirmed victim was a 41-year-old man,[4] although "significant suspicion" arose that he had killed patients as young as four_." 
+
+"Thanks to David Spiegelhalter for pointing me to this nice example for my teaching. I am hoping that you will allow me to 'borrow' it from you" [@spiegelhalter2019]
+
+Some of the R-code chunks below were reproduced from the Github repository accompanying [@spiegelhalter2019]
+
+## The PPDAC cycle 
+The PPDAC Cycle [@spiegelhalter2019; @mackay2000] is a conceptualization for the iterative EDA process where you: 
+
+ 1. Start with a **PROBLEM** (or question)
+ 1. You devise a **PLAN** to solve the problem (or answer the question)
+ 1. You collect **DATA** to execute the plan (or perform an experiment)
+ 1. You **ANALYZE** the data
+ 1. Finally, you draw a **CONCLUSION** from the analysis
+ 1. You probably start the cycle again, with a different or slightly different question
+
+```{r, echo = FALSE, fig.cap="The PPDAC cycle of Exploratory Data Analysis in a diagram. Please note that sometimes shortcuts are possible and even feasible. [@spiegelhalter2019, @mackay2000]"}
+
+DiagrammeR::grViz("
+digraph rmarkdown {
+  Problem -> Plan
+  Plan -> Data
+  Data -> Analysis
+  Analysis -> Conclusion 
+  Conclusion -> Problem
+}
+")
+```
+
+## The PPDAC Cycle Starts with a relevant _PROBLEM_.
+
+(ref:shipquestion) The _PROBLEM_ in the case at hand could be: "Did the author of the Wikipedia article above get the facts straight? For example: Is it true that the victims are maninly elderly? Is the statement about the majority of the gender of the victims being female correct? Is the amount of victims right?"
+
+(ref:shipquestion)
+
+## Let's try to come up with a _PLAN_
+
+We already defined our _PROBLEM_, now we need a _PLAN_. When creating a plan it is good to think about what type of information we would need to solve our problem. Think about information in terms of variables in a dataset. In R, we usually work with tabular data in which variables are the columns of our dataset and rows are the observations.
+
+**DISCUSS WITH YOUR NEIGHBOUR**
+If we design a datatable that would provide data with which we could answer the problem, which information would we need?
+
+The data would need to include at least:
+
+ - A list with 'suspected' victims
+ - The age at deadt of each victim
+ - The gender of the victim
+
+With information on these three variables we would be able to solve at least:
+ 
+ 1. How many victims Shipman is suspected of having murdered?
+ 1. What is the gender distribution among victims?
+ 1. What is the age distribution is among victims? 
+ 
+These three subquestions solve our main question: (ref:shipquestion)
+ 
+## Let's look at the available _DATA_
+
+Now that we defined the problem and we have come up with a plan to solve it, we need _DATA_. When acquiring data you carefully need to take into consideration the quality of it. In this case we rely on the integrity of the author of "The art of Statistics" David Speigelhalter. But it is always good to take a look at the original source of the date and in many cases it is preferrable to do the acquisition of the data directly from the (original) source if possible. In later chapters you will learn techniques like webscraping and accessing databases directly from R to achieve this. 
+
+[Here is a link to the original source](https://webarchive.nationalarchives.gov.uk/20090808221518/http://www.the-shipman-inquiry.org.uk/fr_casesbyyear.asp?year=74&from=r)
+
+## Load the Shipman murders data 
+Dataset derived from: https://github.com/dspiegel29/ArtofStatistics [@spiegelhalter2019]
+
+To load the data into R you can run the following command. The datafile is in csv format: 
+
+(ref:csvformat) CSV-format is a non proprietary standard format where columns are seperated by either a `,` (comma) or a `;` (semi-colon). Which is used depends on the region of the World and whether the decimal seperator in that region is a `,` or a `.`. When reading a CSV in R, alway make sure you define the appropriate seperator.
+
+(ref:csvformat)
+
+When loading the data the `data.frame` is stored in the Global Environment of your R-session as `shipman_murders`. You can access this variable by typing its name in the `Console` or inspecting it in the RStudio interactive viewer under the `Environment` tab. 
+
+Run the code below to read the data into R.
+```{r}
+shipman_murders <- read_csv(
+  here::here(
+    "data", 
+    "00-1-shipman-confirmed-victims-x.csv"
+    )
+  )
+```
+
+**EXERCISE 1** Study the code above and discuss the following questions with your neighbour.
+
+A) Without looking in the csv file: What type of seperator does the file data: "00-1-shipman-confirmed-victims-x.csv" have? How would you be able to discover this?
+_There are multiple options._
+
+**TIPS** 
+ 
+ - Try running `help("read_csv")` and read over the manual for this function.
+ - There is also a Linux Terminal solution, do you know which?
+
+B) Can you discover what information is stored in this data by running the command `names(shipman_murders)` in the R Console?
+
+C) How many murdered people are included in the data?
+
+## Analyzing the data
+When obtaining the data it is good to review the EDA checklist to see what could be explored.
+
+When perfoming EDA consider:
+
+ 1. What question(s) are you trying to solve (or prove wrong)?
+ 1. Which information do you need and can you come up with a plan to answer the question(s)
+ 1. What kind of data do you have and how do you treat different types?
+ 1. What’s missing from the data and how do you deal with it?
+ 1. Where are the outliers and why should you care about them?
+ 1. How can you add, change or remove features to get more out of your data?
+ 1. Do you need additional data from other sources to relate to the dataset under scrutany?
+ 1. Are underlying statistical assumptions met / how is data distribution looking?
+ 1. What (exploratory) models apply or fit well to the data?
+ 1. What is the undelying (experimental) design?
+ 1. Is there multi-colinearity?
+
+If we review the list above we can already check a number of items from the list that we have taken care of. Let's take a look at the data first
+
+```{r}
+DT::datatable(shipman_murders)
+```
+
+_If you are viewing this book in a browser you should see an interactive table. Take 5 minutes to study the data and 2 additional minutes to discuss what you see with one of your fellow course participants._
+
+Try accessing the variable called `shipman_murders` by typing it's name in the Console. If all goes well this is what you see:
+
+```{r, echo=FALSE}
+shipman_murders
+```
+
+The data consists of 10 columns (called `variables` in R lingo) and 215 rows (or sometimes called `observations`, `cases`,`incidences` or in this case `subjects`)
+
+## How many people did Shipman kill?
+
+Now that we have the data loaded into R, let's see if we can answer the first of our subquestions.
+
+We could just guess from the table that the `Name` variable identifies the victim and considerig that we have 215 observations, can we conclude that there are 215 people in this list? That would indeed lead us to conclude that the number of 215 victims mentioned on the Wiki page is correct. Can you think of one or more important conditions for the data that need to be met in order for this to be the correct conclusion? 
+
+One important condition could be that there are no duplicated names in the dataset. If we want to confirm there are not, we could take a look at all 215 records and try to remember if we see duplicated names. If we look at this list often enough, this would problably work, but takes quite some time and is error prone.
+
+Now that we have the data in R, why not use The Power of R to shed light on this issue.
+
+## Detecting duplicated names:
+
+The following code:
+
+ 1. Turns all capitals in the variable names into lower case (I will explain in chapter \@ref(lab5eda)) why this is good idea
+ 1. Turns all names in the now `name` variable into lowercase. (can you think why this is a good idea)
+ 1. Removes spaces from all names (assume somebody made a typo)
+ 1. Removes all leading and trailing white spaces from the names
+ 1. Tries to find duplicates in the subject names
+ 
+```{r}
+names(shipman_murders) <- names(shipman_murders) %>%
+  tolower()
+
+shipman_murders <- shipman_murders %>%
+  mutate(name = tolower(name),
+         name = str_replace_all(string = name, pattern = " ", replacement = ""),
+         names = trimws(name))
+
+## show first five names
+shipman_murders$name[1:5]
+
+## now look at duplicates
+duplicated(shipman_murders$name) %>% which(arr.ind = TRUE) %>% length()
+
+```
+
+Let's conclude from the above, that indeed there are 215 unique names in the dataset and that no duplicates exist. So we can answer the first question on how many people Shipman killed with `215`. This number was mentioned on the Wiki as well. 
+_Can you think of an additional check for duplicated names before we move on?_
+
+There are still a number of assumptions that underly this statement and when doing data-analysis it is good practice to clearly and very explicitly state these assumptions. 
+We will first look at the other 2 questions remaining. At the end of this chapter, I will summarize some explicit assumptions to the conclusion of the complete analysis and maybe you can add more.
+
+## Lets investigate what the gender distribution was of the victims and what their ages were
+
+We can do this in several ways: 
+
+ - By just counting the number of males and females
+ - By plotting a bar graph with the number of females and males
+ - By looking at the age distribution by gender
+
+## Inspecting the variables `gender` and `age`
+Below we show the first 5 entries for both variables
+```{r}
+shipman_murders$gender[1:5]
+shipman_murders$age[1:5]
+```
+
+The `gender` variable is a so-called dummy or one-hot encoded variable. Mind that 0 stands for "female" and 1 stand for "male". 
+
+We can recode the variable by doing:
+```{r}
+fct_recode(as_factor(shipman_murders$gender), 
+           male = "1",
+           female = "0"
+           )
+
+## Writing this in a dplyr pipe:
+shipman_murders <- shipman_murders %>%
+  mutate(
+    gender_recoded = fct_recode(as_factor(gender), 
+           male = "1",
+           female = "0"
+           )
+
+  )
+
+## check recoded factor
+shipman_murders$gender_recoded[1:5]
+
+```
+
+## Counting males and females 
+Now that we recoded the variable to something more meaningful, we can answer the questions, first with a simple table
+```{r}
+names(shipman_murders)
+gender_table <- shipman_murders %>%
+  group_by(gender_recoded) %>%
+  select(gender_recoded) %>%
+  tally()
+
+knitr::kable(gender_table)
+ 
+```
+ 
+From the little table above we can concluded that Shipman indeed murdered more females than males, about `r round(178/37, digits = 0)` times as many  
+
+## Now let's look at a bar graph representing this table
+```{r}
+shipman_murders %>%
+  group_by(gender_recoded) %>%
+  select(gender_recoded) %>%
+  tally %>%
+  ggplot(aes(x = reorder(gender_recoded, n), y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  ylab("Number of victims") +
+  theme_bw()
+
+```
+
+## Let's investigate the age distributions
+Firstly, only those of the females and secondly all victims. The dashed blue line indicates the median age, the solid blue line indicates the mean. The graph shows a frequency distribution. 
+
+```{r}
+shipman_murders
+
+age_descriptors <- shipman_murders %>%
+  group_by(gender_recoded) %>%
+  dplyr::select(age, gender_recoded) %>%
+  summarise(mean_age = mean(age),
+            median_age = median(age),
+            sd_age = sd(age))
+
+age_descriptors
+  
+shipman_murders %>%
+  dplyr::filter(gender_recoded == "female") %>%
+  ggplot(aes(x = age)) +
+#  geom_freqpoly(colour = "darkred", size = 1.5) +
+  geom_histogram(alpha = 0.5, fill = "black", colour = "darkgreen") +
+  geom_vline(aes(xintercept = age_descriptors$median_age[1]), 
+             linetype = "dashed", 
+             colour = "red", 
+             size = 1) +
+  geom_vline(aes(xintercept = age_descriptors$mean_age[1]), 
+             linetype = "solid", 
+             colour = "red", 
+             size = 1) +
+  theme_bw() +
+  ggtitle("Age distributions in females, \n dashed line is the median, solid line the mean age")
+```
+
+## Distribution for both genders
+Here we include the males into the distribution analysis. We use a frequency distribution represented by a line in stead of a histogram for easier comparison. Red vertical lines are mean (solid) and median (dashed) for the females, blue vertical lines for the males.
+```{r}
+shipman_murders %>%
+#  dplyr::filter(gender_recoded == "female") %>%
+  ggplot(aes(x = age, y = ..scaled..)) +
+#  geom_freqpoly(colour = "darkred", size = 1.5) +
+  geom_density(aes(colour = gender_recoded)) +
+  geom_vline(aes(xintercept = age_descriptors$median_age[1]), 
+             linetype = "dashed", 
+             colour = "red", 
+             size = 1) +
+  geom_vline(aes(xintercept = age_descriptors$mean_age[1]), 
+             linetype = "solid", 
+             colour = "red", 
+             size = 1) +
+  geom_vline(aes(xintercept = age_descriptors$median_age[2]), 
+             linetype = "dashed", 
+             colour = "blue", 
+             size = 1) +
+  geom_vline(aes(xintercept = age_descriptors$mean_age[2]), 
+             linetype = "solid", 
+             colour = "blue", 
+             size = 1) +
+  theme_bw()
+
+```
+
+## Boxplots
+Another, more condensed and maybe clearer represnetation of the data in the figure above is a box plot showing both genders:
+
+```{r}
+shipman_murders %>%
+  ggplot(aes(y = age, x = gender_recoded)) +
+  geom_boxplot(aes(group = gender_recoded, colour = gender_recoded)) +
+  xlab(NULL) +
+  theme_bw()
+  
+  
+```
+
+## Date of death
+One question that might come to mind is when did Shipman murder all those people and is there a relationship between the age of the victim, the gender and the date on which they died. The last figure of this case example can also be found in [@spiegelhalter2019] and is the culminative graph that sums it all.
+
+Below is a reproduction of figure 0.1 from [@spiegelhalter2019], based on the code for this graph on the accompanying github repo to the book, mentioned above.
+
+```{r}
+plot <- shipman_murders %>%
+ggplot(aes(
+  x = fractionaldeathyear,
+  y = age,
+  colour = reorder(gender2, gender)
+  )) +      
+  geom_point(size = 2) +
+  labs(x = "Year", y = "Age of victim") +
+  scale_x_continuous(breaks = seq(1975, 1995, 5),
+    limits = c(1974, 1998)) +
+  scale_y_continuous(breaks = seq(40, 90, 10), limits = c(39, 95)) +
+  scale_size_continuous(name = "Size", guide = FALSE) +
+  scale_colour_brewer(palette = "Set1")  + 
+  theme_bw() +
+  theme(
+    legend.position = c(0.125, 1.12),
+    legend.background = element_rect(colour = "black"),
+    legend.title = element_blank()
+  ) 
+
+  ggMarginal(plot, type="histogram")
+```
+
+Can you spot something peculiar in the histogram for the `Year` variable?

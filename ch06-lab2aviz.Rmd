@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Lab 2a: Visualize & Explore Data {#lab2aviz}
 
 ```{r setup, include=FALSE}
@@ -7,6 +12,13 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE, 
                       fig.width = 6, fig.height = 5)
 ```
+
+## Packages
+```{r}
+library(DiagrammeR)
+library(tidyverse)
+```
+
 
 ## Introduction
 Creating plots is essential for EDA and formal inference or any data-analysis activities. There are a number of arbitrary stages in plot-making, not necessarily in any specific order or consecutiveness and also iterative in nature but these stages can help if you are just starting at it.
@@ -22,7 +34,7 @@ Here we talk about EDA and we discuss visualization as a means to generate hypot
  1. `Models`; Once hypothesis are generated and patterns have been identified it is time to try some models on the data. Visualizing models and their paramters is part of checking model quality and fit to the data 
  1. `Formal`; Visualizations are usually included in scientific publications, reports, websites etc. The requirements for these are usually different and more formal, from the ones in the previous stages.
 
-```{r, fig.cap="Visualizing stages for EDA", echo=FALSE}
+```{r, fig.cap="Visualizing stages for EDA", eval=FALSE, echo=TRUE}
 dg <- DiagrammeR::grViz("
 digraph rmarkdown {
   'New DATA' -> 'Characteristics'
@@ -36,8 +48,30 @@ digraph rmarkdown {
 }
 ")
 dg
+library(rsvg)
+library(DiagrammeRsvg)
+export_svg(dg) 
 
+dg %>% 
+  export_svg %>%
+  charToRaw %>% 
+  rsvg %>% 
+  png::writePNG(
+    here::here(
+      "images",
+      "eda_stages.png"
+    )
+  )
 ```
+
+```{r}
+knitr::include_graphics(
+  here::here(
+  "images",
+  "eda_stages.png")
+)
+```
+
 
 We will demonstrate each stage below
 
@@ -80,7 +114,7 @@ For this demo on visualizations we will use the ggplot2 package. It was build wi
 The ggplot hexagon:
 ```{r, echo=FALSE}
 knitr::include_graphics(path = here::here(
-  "images",                                                                     "hex-ggplot2.png"))
+  "images",                                                        "hex-ggplot2.png"))
 ```
 
 ### The grammar of graphics {-}
@@ -239,7 +273,7 @@ A) On the basis of the above picture: Create an EDA plan to investigate whether 
 ## plan: Get data for growth of population over the past 10 years, from most (if not all) countries of the continents Africa and Asia, check the integrety of the data, clean if neccessary, check missing values, check validity of the source of the data, check minimal and maximal values, generate summary statistics
 ## data: use Gapminder dataset in the `{dslabs}` or `{gapminder}` R package (any other ideas?).
 ## Analysis: see partly under plan for initial steps: Filter data for continents Africa and Asia, summarize data for continents, plot population size to time (years), analyze data with a regression model (linear regression?, exponential?), Determine fit and slope paramters form the models. Perform comparisons of models for best fit. Analyze if slopes are different between continents, how? Maybe two way ANOVA? or repeated measures, multilevel? 
-## Conclusions: draw conclusions about growth rate (slope paramter is proxy for growth rate)
+## Conclusions: draw conclusions about growth rate (slope parameter is proxy for growth rate)
 
 
 
@@ -691,7 +725,7 @@ gapminder %>%
 ### Interactive visualizations {-}
 In the figure above we can observe a number of countries in 'Americas' continent that have a child mortality that are above the average (over the years) of 'Africa'. Which countries are this?
 
-```{r}
+```{r, eval=FALSE}
 library(ggiraph)
 
 gapminder$country <- 
