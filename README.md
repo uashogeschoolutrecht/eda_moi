@@ -1,7 +1,7 @@
 This repo is the basis for the bookdown reader of the "Exploratory Data Analysis & Data Mining" Course of the Master of Informatics at HU University of Applied Sciences, Utrecht, The Netherlands.
 
 ## Licence
-The materials in this repo are under CC BY-NC 4.0 licence. Meaning you can use and adapt these materials for non-commercials ends as long as you provide proper credits and attribution to the copyright holder and the refereced sources (Marc A.T. Teunis, HU - 2021).
+The materials in this repo are under CC BY-NC 4.0 licence. Meaning you can use and adapt these materials for non-commercial ends as long as you provide proper credits and attribution to the copyright holder and the referenced sources (Marc A.T. Teunis, HU - 2021).
 
 ## Perequisites
 
@@ -12,6 +12,9 @@ We advise developing and working with R in RStudio. You can download R and RStud
  - [R](https://cran.r-project.org/)
  - [RStudio](https://cran.r-project.org/)
 
+### Memory and System specifications
+To run the code in this repository we recommend a system with at least 8 cores and 16 Gb of RAM. Building of the reader could consume even more resources and was preformed on a UBUNTU Virtual Machine running R Version: `4.1.1 (2021-08-10) -- "Kick Things"` and RStudio Version: `Version 1.4.1717` . This machine had 
+
 ### Docker
 To work with Docker you need to have a Docker Deamon installed. See the [Docker](https://www.docker.com/) homepage for more details
 
@@ -19,7 +22,7 @@ To work with Docker you need to have a Docker Deamon installed. See the [Docker]
 To work with Git and to be able to clone repositories you need Git installed. See the [Git](https://git-scm.com/) homepage for details.
 
 ### R package `{devtools}`
-In order to install the edamoi as a package, you need to have the R package `{devtools}` available from your R environment. Run `install.packages("devtools")` from the R Console to install it. Please be aware that for Linux based OS you will probably need underlying system dependencies to install `{devtools}`. Refere to the [Public RStudio Package Manager page for `{devtools}`](https://packagemanager.rstudio.com/client/#/repos/1/packages/devtools), to find the system requirements for your OS. 
+In order to install the edamoi as a package, you need to have the R packages `{devtools}` and `{rmarkdown}` available from your R environment. Run `install.packages(c("devtools", "rmarkdown))` from the R Console to install it. Please be aware that for Linux based OS you will probably need underlying system dependencies to install `{devtools}`. Refere to the [Public RStudio Package Manager page for `{devtools}`](https://packagemanager.rstudio.com/client/#/repos/1/packages/devtools), to find the system requirements for your OS. 
 
 ## Getting started
 This repo is basically an R package and a bookdown site. To provide a reproducible way to deploy the content on your preferred device/online, a Dockerfile is also included. The Dockerfile defines a Docker image that can be used to run and further develop the materials in RStudio and to build the bookdown site. If you are familiar with Docker, I advise you to look at section [Docker](##Docker). Below a step-wise instruction on how to get the materials and how to build the book. These steps assume you have all prerequisites listed above.
