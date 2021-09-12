@@ -1,6 +1,6 @@
 # Introduction {#intro}
 
-```{r setup, include=FALSE}
+```{r setup1, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       fig.width = 6, fig.height = 4)
 ```
@@ -274,11 +274,10 @@ Chapter \@ref(lab6amodels)
  1. Regression
  1. Model output ( `{broom}`)
  
-### Lab 6b: Statistics with R (resampling & simple regression) 
+### Lab 6b/c: Statistics with R (resampling & simple regression) 
 Chapter \@ref(lab6bmanymodels)
  
-### Lab 7: Statistics with R (multiple regression and ANOVA) 
-Chapter \@ref(lab7atextmining)
+### Lab 7: Machine learning with R
  
 ## Exercises
 Each masterclass/lab contains a number of exercises. Most lessons have exercises in between the demos and explanations. Usually at the end of each lessons, more exercises are included.
@@ -292,7 +291,7 @@ The R code containg the demos and the answers will be made available for each la
 
 ## Getting Started {#gettingstarted}
 
-```{r setup, include=FALSE}
+```{r setup2, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4,
                       warning = FALSE,
                       error = FALSE, message = FALSE)
@@ -352,7 +351,8 @@ devtools::install_github("uasghogeschoolutrecht/gitr")
 
 ## Getting the materials for the course (R scripts):
 ```{r, include=FALSE}
-urls <- read_csv(
+#library(tidyverse)
+urls <- readr::read_csv(
         here::here(
                 "urls"
         )
@@ -448,7 +448,7 @@ always_allow_html: true
 
 This Chapter illustrates a case example for EDA with real-life data. It takes you through some of the steps of the EDA checklist and illustrates the Problem-Plan-Data-Analysis-Conclusion, shortly 'PPDAC' cycle of EDA. More details on EDA will be discussed in Chapter \@ref(lab5eda)
 
-```{r setup, include=FALSE}
+```{r setup3, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
                       warning = FALSE, 
                       error = FALSE, 

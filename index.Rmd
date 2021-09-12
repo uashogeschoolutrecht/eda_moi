@@ -85,10 +85,32 @@ A full list of packages that are needed for this course is available in the pack
 ## Getting the materials
 To compile this website locally, you can clone the website repository from 
 
-https://github.com/uashogeschoolutrecht/edamoi_site. 
+```{r, include=FALSE}
+#library(tidyverse)
+urls <- readr::read_csv(
+        here::here(
+                "urls"
+        )
+)
+
+urls[3,1] %>% as.character() 
+``` 
 
 Click the Build button to build the website on you local computer. 
-This repository can also be used to acces the course materials directly in RStudio during the classes.
+This repository can also be used to acces the course materials directly in RStudio during the classes. **WARNING** You might not be able to do this on the server or locally as it will require at least 32 Gb of RAM. We advise to use the webversion that is published here
+
+
+```{r, include=FALSE}
+#library(tidyverse)
+urls <- readr::read_csv(
+        here::here(
+                "urls"
+        )
+)
+
+urls[4,1] %>% as.character() 
+``` 
+
 
 ## Getting R and RStudio
 During the course we will be working on a Cloud Computing Environment which provides webaccess to R and RStudio via a Virtual Machine. This machine runs a server edition of RStudio and has the latest R version and all the required packages available. In order to access the server you will need credentials, which you will recieve before the course starts. This is a convenient way to use R in a course and during the course we will only be using this environment. This is to ensure reproducibility and prevents a lot of trouble shooting from your side and the teacher's side.
