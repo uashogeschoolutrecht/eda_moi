@@ -1,0 +1,62 @@
+# CRISP-DM as a guide for Data Mining and EDA
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## About Data Mining & Exploration
+Data mining can be loosely defined as the process of discovering and extracting valuable insight from data. Along the same line, data exploration can be defined as the process of (visual) analysis of data in order to understand the characteristics and relations hidden in the data set. 
+In the name of this course Data Mining & Exploration, both terms are combined and in the course they are used interchangeably. The difference between both is not very important in practice. The term data exploration emphasizes the exploratory character of the activities involved. You want to get to know the data and become familiar with its characteristics. While, the term data mining emphasizes the goal: to unearth things. You want to create value from the data. One cannot do without the other.
+In real life, exploration and mining have in common that they involve dealing with the unknown. You are travelling in a territory or you are digging in material without knowing what is ahead. This is risky and hard work. You often loose track and may pass the same spot over and over again. However, both can also be very satisfying. Newly discovered scenery can be deeply touching and after hard toil, the earth may reveal the most beautiful diamonds. The same holds for mining and exploring data. It can be very satisfying the discover patterns and value in a data set.
+Although Data Mining & Exploration involves dealing with the unknown by nature, it does not mean that you should not follow a structured approach. Several approaches have been developed to help you find your way. Some are more aimed at academia or education (e.g. PPDAC, @Wolf2016), others at a specific language or tool (e.g. [SEMMA from SAS Institute](https://documentation.sas.com/doc/en/emref/14.3/p1tsqq44rg56ron17qd3m7ey4mzu.htm) or the tidy approach for R @RforDatascience). In this course, we will follow the CRISP-DM process @CrispDM2000 that was meant to be generic and tool-/industry-agnostic from the start. Since we use R very much, the tidy approach will also come along very often. We will give a brief overview of CRISP-DM here.
+
+## Overview of CRISP-DM
+CRISP-DM, the CRoss-Industry Standard Process for Data Mining, is a practical method that prescribes clear and concrete steps for data mining and exploration projects @CrispDM2000. It was developed in the second half of the 1990s as a response to the rapidly expanding data mining field. At the time, the field was immature and expertise was limited and analysts felt the need for a standardized process. Experts from a broad spectrum of industries set out to devise an approach that was generic and not aimed at a specific industry, tool or application. Their efforts resulted in the publication of CRISP-DM 1.0 in 2000 @CrispDM2000. Since its publication, CRISP-DM has guided many projects in all sorts of contexts and had proven to be very useful.  
+CRISP-DM consists of six phases (\@ref(fig:crisp-dm-process)) and each phase consists of generic tasks that can be recognized in any data mining project. The phases have no fixed sequence. Often the project will move back and forth between phases. CRISP-DM is cyclic in nature because often answering one business question with a data mining applica-tion will trigger numerous new business questions. The generic tasks in CRISP-DM each consist of specialized tasks with clearly defined deliverables.
+
+```{r, crisp-dm-process, fig.cap="Overview of the different elements of the CRISP-DM process"}
+knitr::include_graphics(
+  here::here(
+    "images",
+    "crisp-dm-process.png"
+  )
+)
+
+``` 
+
+
+## The six phases of CRISP-DM
+CRISP-DM consists of six phases. Because the phases are defined very generic they can be recognized in any data mining & exporation project. Each project will go through each phase at least once, but often phases will be repeated several times (e.g. repeated Data preparation in order to adapt to a change in modelling technique in the Model-ling phase).
+
+_1 Business Understanding_
+The project starts with understanding the business context of the project. What goal does the client want to achieve with the project? When should it be regarded a success? What are the risks and constraints? What is the definition of specific terminology? If the business objectives of the project are clear, data mining goals are defined. There is a clear distinction between the business objectives and the data mining goals. For example, if the business objective is to prevent machine failure by using data from its sensors, the data mining goal may be to predict machine failure at a certain accuracy level at least seven days ahead. This phase also involves forming a project team, selecting tools and infrastructure and writing a project plan.
+
+_2 Data Understanding_
+During this phase, the data collection starts and the aim is to explore the data and become familiar with it. First insights into relations within the data emerge and hypotheses may be formed. Properties of the dataset(s) are de-scribed and documented. Another important generic task during this phase is Verify Data Quality. Is the dataset fit for its purpose, i.e. to meet the data mining goals?
+
+_3 Data Preparation_
+Data preparation is often the most laborious phase of the project. It involves all activities to construct the final da-taset that will be used as input for the modelling phase. Especially during this phase, there is no fixed sequence of activities and many activities will be performed multiple times. The specialized tasks are:
+-	**Select**: select tables, rows and columns for the analysis
+-	**Clean**: fix data quality problems (e.g. derive replacements for missing values)
+-	**Construct**: derive and combine data to form new attributes (e.g. age from date of birth transaction date) or rows (e.g. aggregated data).
+-	**Integrate**: combine rows and columns of several tables into one
+-	**Format**: restructure the data into a format that fulfils the requirements of the modelling technique
+
+_4 Modelling_
+This phase involves the actual modelling, which may also include statistical hypotheses testing. It is highly depend-ent on the type of problem (e.g. prediction or classification) and the modelling technique and covers selecting the modelling technique, generate test design (how the outcome of the model will be evaluated), building the actual model and evaluation of its results. The latter is directly related to the data mining goals. If the data mining goals are achieved the project may move to the next phase. If not, other modelling techniques may be applied which may lead to a move back to the Data Preparation phase.
+
+_5 Evaluation_
+The aim of this phase is to evaluate how well the business objectives have been achieved. Is the model ready for deployment? This requires a careful review from both a technical and a business perspective. The project as a whole is reviewed and evaluated and next steps are defined. 
+
+_6 Deployment_
+During this phase, the results of the project are handed over from the project team to the client. It highly depends on the nature of the project how this will take place. If it is a one-off project aimed at gaining insight in a certain busi-ness aspect, this can be as clear as writing a report or preparing presentation slides. If it is a project aimed at devel-oping a model that should operate in a mission-critical system, deployment can be a large project on its own. 
+
+```{r, fig.cap="The CRISP-DM process tasks and output in detail"}
+knitr::include_graphics(
+  here::here(
+    "images",
+    "crisp-dm-tasks-deliverables.png"
+  )
+)
+
+``` 

@@ -101,3 +101,4 @@ Remotes:
   uashogeschoolutrecht/toolboxr
 SystemRequirements: pandoc (>= 2.3.1) - https://pandoc.org/
 RoxygenNote: 7.1.1
+License: CC BY 4.0
