@@ -77,7 +77,7 @@ library(tidyverse)
  1. Do you need additional data from other sources to relate to the dataset under scrutany?
  1. Are underlying statitical assumptions met / how is data distribution looking?
  1. What (exploratory) models apply or fit well to the data?
- 1. What is the undelying (experimental) design?
+ 1. What is the underlying (experimental) design?
  1. Is there multi-colinearity?
  
 We will address each of these questions with an example dataset in the demo that follows.
