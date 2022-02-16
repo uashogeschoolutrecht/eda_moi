@@ -1,3 +1,7 @@
+---
+always_allow_html: true
+---
+
 # Lab 4A; Importing data {#lab4aimportingdata}
 
 ```{r setup, include=FALSE}

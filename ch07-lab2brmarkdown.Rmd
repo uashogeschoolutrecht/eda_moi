@@ -1,3 +1,7 @@
+---
+always_allow_html: true
+---
+
 # Lab 2b; Literate Programming with RMarkdown {#rmarkdown}
 
 _This chapter is best read in the source RMarkdown file_
