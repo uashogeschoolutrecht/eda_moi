@@ -3,6 +3,14 @@ This repo is the basis for the bookdown reader of the "Exploratory Data Analysis
 ## Licence
 The materials in this repo are under CC BY-NC 4.0 licence. Meaning you can use and adapt these materials for non-commercial ends as long as you provide proper credits and attribution to the copyright holder and the referenced sources (Marc A.T. Teunis, HU - 2021).
 
+## Render book 
+The material in this repo is a bookdown project. When you clone the repo to your local computer and you have R and RStudio installed, run the commands below to get a local html version of the book in the root of the cloned github repo. Open the project as an RStudio Project:
+
+```
+install.packages("bookdown")
+bookdown::render_book()
+```
+
 ## Perequisites
 
 ### R and RStudio
